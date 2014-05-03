@@ -1,7 +1,7 @@
 # camunda BPM Developer
 
 camunda BPM developer is a web-application allowing you to implement BPMN processes using an app directly inside a web browser.
-The app has a modular architecture and may be extended through plugins.
+The app provides the following features:
 
 ## BPMN Diagram Renderer
 

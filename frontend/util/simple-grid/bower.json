@@ -1,0 +1,20 @@
+{
+  "name": "camunda-simple-grid",
+  "version": "7.2.0-SNAPSHOT",
+  "homepage": "https://github.com/camunda/camunda-bpm-developer",
+  "description": "Simple Grid built with less and Javascript.",
+  "authors": [
+    "Daniel Meyer <daniel.meyer@camunda.com>"
+  ],
+  "license": "Apache License 2.0",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+  }
+}

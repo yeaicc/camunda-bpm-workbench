@@ -17,3 +17,6 @@ dependency-reduced-pom.xml
 *.sublime-workspace
 bower_components
 node_modules
+dist
+*.sow
+*.swp
