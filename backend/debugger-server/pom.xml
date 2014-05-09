@@ -1,16 +1,14 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>org.camunda.bpm.debug</groupId>
-  <artifactId>debugger-server</artifactId>
+  <artifactId>camunda-debugger-server</artifactId>
   <name>camunda BPM - debugger - server</name>
-  
+
   <parent>
-    <groupId>org.camunda.bpm</groupId>
-    <artifactId>camunda-parent</artifactId>
-    <relativePath>../../parent</relativePath>
+    <groupId>org.camunda.bpm.debug</groupId>
+    <artifactId>camunda-debugger</artifactId>
     <version>7.2.0-SNAPSHOT</version>
   </parent>
-  
+
   <properties>
     <history.level>full</history.level>
     <mail.server.port>5025</mail.server.port>
@@ -21,10 +19,10 @@
       <groupId>org.camunda.bpm</groupId>
       <artifactId>camunda-engine</artifactId>
     </dependency>
-    
+
     <dependency>
       <groupId>org.camunda.bpm.debug</groupId>
-      <artifactId>debugger-core</artifactId>
+      <artifactId>camunda-debugger-core</artifactId>
       <version>${project.version}</version>
     </dependency>
 
