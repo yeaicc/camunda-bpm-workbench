@@ -48,6 +48,8 @@ public class BreakPoint {
    */
   protected String processDefinitionId;
 
+  protected String processInstanceId;
+
   public BreakPoint(BreakPointSpec breakPointSpec, String processDefinitionId, String activityId) {
     this.breakPointSpec = breakPointSpec;
     this.activityId = activityId;

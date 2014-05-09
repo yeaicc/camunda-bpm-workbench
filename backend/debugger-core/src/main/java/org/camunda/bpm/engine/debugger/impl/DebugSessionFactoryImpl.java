@@ -31,27 +31,26 @@ public class DebugSessionFactoryImpl extends DebugSessionFactory {
 
   protected boolean isSuspend;
 
-  protected DebugSessionImpl currentSession;
+  protected List<DebugSessionImpl> sessions = new ArrayList<DebugSessionImpl>();
 
   protected List<SuspendedExecutionImpl> suspendedExecutionImpls = new ArrayList<SuspendedExecutionImpl>();
 
   protected ProcessEngine processEngine;
 
   public synchronized DebugSession openSession(BreakPoint... breakPoints) {
-    if(currentSession != null) {
-      throw new IllegalStateException("Cannot open session: Session already open.");
+    DebugSessionImpl  newSession = new DebugSessionImpl(this, breakPoints);
 
-    }
-    else {
-      currentSession = new DebugSessionImpl(this, breakPoints);
+    LOGG.info("[DEBUGGER] "+Thread.currentThread().getName()+" opens new debug session.");
 
-      LOGG.info("[DEBUGGER] "+Thread.currentThread().getName()+" opens debug session.");
+    boolean isFirstSession = sessions.isEmpty();
 
-      // notify all suspended executions
+    sessions.add(newSession);
+
+    if(isFirstSession) {
       notifyAll();
-
-      return currentSession;
     }
+
+    return newSession;
   }
 
   public void setSuspend(boolean suspend) {
@@ -62,8 +61,8 @@ public class DebugSessionFactoryImpl extends DebugSessionFactory {
     return isSuspend;
   }
 
-  public DebugSessionImpl getCurrentSession() {
-    return currentSession;
+  public List<DebugSession> getSessions() {
+    return new ArrayList<DebugSession>(sessions);
   }
 
   /**
@@ -76,7 +75,7 @@ public class DebugSessionFactoryImpl extends DebugSessionFactory {
   public synchronized void waitForOpenSession(SuspendedExecutionImpl suspendedExecutionImpl) {
     // re-check whether no session exists. This is synchronized with the
     // openSession method.
-    if(currentSession == null) {
+    if(sessions.isEmpty()) {
       suspendedExecutionImpls.add(suspendedExecutionImpl);
       try {
         LOGG.info("[DEBUGGER] "+ suspendedExecutionImpl.getSuspendedThread().getName() + " waiting for a debug session to be opened.");
@@ -99,6 +98,19 @@ public class DebugSessionFactoryImpl extends DebugSessionFactory {
 
   public ProcessEngine getProcessEngine() {
     return processEngine;
+  }
+
+  /**
+   * @param session
+   */
+  public synchronized void close(DebugSessionImpl session) {
+
+    sessions.remove(session);
+    for (SuspendedExecutionImpl suspendedExecution : session.suspendedExecutions) {
+      suspendedExecution.resume();
+    }
+    LOGG.info("[DEBUGGER] "+Thread.currentThread().getName()+" closed debug session.");
+    
   }
 
 }

@@ -15,6 +15,8 @@ package org.camunda.bpm.engine.debugger.impl;
 import java.util.List;
 
 import org.camunda.bpm.engine.debugger.BreakPoint;
+import org.camunda.bpm.engine.debugger.DebugSession;
+import org.camunda.bpm.engine.debugger.DebugSessionFactory;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.interceptor.Command;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
@@ -36,25 +38,57 @@ public class DebugCommandContext extends CommandContext {
   }
 
   public void performOperation(AtomicOperation executionOperation, InterpretableExecution execution) {
-    final DebugSessionImpl currentSession = debugSessionFactory.getCurrentSession();
+    List<DebugSession> openSessions = debugSessionFactory.getSessions();
     final ExecutionEntity executionEntity = (ExecutionEntity) execution;
 
-    if(currentSession == null) {
+    if(openSessions.isEmpty()) {
       if(debugSessionFactory.isSuspend()) {
         debugSessionFactory.waitForOpenSession(new SuspendedExecutionImpl(executionEntity, executionOperation));
+      } else {
+        super.performOperation(executionOperation, executionEntity);
+        return;
       }
-    } else {
-      List<BreakPoint> breakPoints = currentSession.getBreakPoints();
-      for (BreakPoint breakPoint : breakPoints) {
-        if(breakPoint.breakOnOperation(executionOperation, executionEntity)) {
-          currentSession.suspend(new SuspendedExecutionImpl(executionEntity, executionOperation, breakPoint));
+    }
+
+    synchronized (DebugSessionFactory.getInstance()) {
+      DebugSessionImpl currentSession = null;
+      BreakPoint breakPoint = null;
+
+      openSessions = debugSessionFactory.getSessions();
+      for (DebugSession debugSession : openSessions) {
+        if(execution.getProcessInstanceId().equals(debugSession.getProcessInstanceId())) {
+          currentSession = (DebugSessionImpl) debugSession;
+          breakPoint = findBreakPoint(debugSession, executionOperation, executionEntity);
+          break;
+
+        } else if(debugSession.getProcessInstanceId() == null) {
+          if(currentSession == null) {
+            breakPoint = findBreakPoint(debugSession, executionOperation, execution);
+            if(breakPoint != null) {
+              currentSession = (DebugSessionImpl) debugSession;
+            }
+          }
         }
       }
 
+      if(currentSession != null && breakPoint != null) {
+        if(currentSession.getProcessInstanceId() == null) {
+          currentSession.setProcessInstanceId(execution.getProcessInstanceId());
+        }
+        currentSession.suspend(new SuspendedExecutionImpl((ExecutionEntity) execution, executionOperation, breakPoint));
+      }
     }
 
-    super.performOperation(executionOperation, executionEntity);
+    super.performOperation(executionOperation, execution);
   }
 
+  protected BreakPoint findBreakPoint(DebugSession debugSession, AtomicOperation executionOperation, InterpretableExecution execution) {
+    for (BreakPoint breakPoint : debugSession.getBreakPoints()) {
+      if(breakPoint.breakOnOperation(executionOperation, (ExecutionEntity) execution)) {
+        return breakPoint;
+      }
+    }
+    return null;
+  }
 
 }

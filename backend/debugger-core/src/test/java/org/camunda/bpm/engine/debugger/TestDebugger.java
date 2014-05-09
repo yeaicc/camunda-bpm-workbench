@@ -52,6 +52,7 @@ public class TestDebugger extends ProcessEngineTestCase {
     executionThread.join();
 
     assertEquals(0, runtimeService.createExecutionQuery().count());
+
   }
 
   protected void tearDown() throws Exception {

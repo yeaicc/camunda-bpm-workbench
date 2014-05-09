@@ -37,6 +37,8 @@ public interface DebugSession {
 
   public ProcessEngine getProcessEngine();
 
+  public String getProcessInstanceId();
+
   public void close();
 
   public void evaluateScript(String executionId, String language, String script, String cmdId);

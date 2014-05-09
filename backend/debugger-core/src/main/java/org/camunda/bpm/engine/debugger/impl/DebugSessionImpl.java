@@ -42,6 +42,9 @@ public class DebugSessionImpl implements DebugSession {
 
   protected Logger LOGG = Logger.getLogger(DebugSessionImpl.class.getName());
 
+  /** the id of the process instance associated with this session, or null if no process instance is currently associated */
+  protected String processInstanceId;
+
   protected DebugSessionFactoryImpl debugSessionFactory;
 
   protected List<BreakPoint> breakPoints = Collections.synchronizedList(new ArrayList<BreakPoint>());
@@ -197,13 +200,7 @@ public class DebugSessionImpl implements DebugSession {
   }
 
   public void close() {
-    synchronized (debugSessionFactory) {
-      debugSessionFactory.currentSession = null;
-      for (SuspendedExecutionImpl suspendedExecution : suspendedExecutions) {
-        suspendedExecution.resume();
-      }
-      LOGG.info("[DEBUGGER] "+Thread.currentThread().getName()+" closed debug session.");
-    }
+    debugSessionFactory.close(this);
   }
 
   public void evaluateScript(String executionId, String language, String script, String cmdId) {
@@ -224,5 +221,13 @@ public class DebugSessionImpl implements DebugSession {
     } else {
       throw new DebuggerException("No suspended execution exists for Id '" + executionId + "'.");
     }
+  }
+
+  public String getProcessInstanceId() {
+    return processInstanceId;
+  }
+
+  public void setProcessInstanceId(String processInstanceId) {
+    this.processInstanceId = processInstanceId;
   }
 }

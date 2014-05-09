@@ -12,6 +12,8 @@
  */
 package org.camunda.bpm.engine.debugger;
 
+import java.util.List;
+
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.debugger.impl.DebugSessionFactoryImpl;
 
@@ -27,7 +29,7 @@ public abstract class DebugSessionFactory {
     return instance;
   }
 
-  public abstract DebugSession getCurrentSession();
+  public abstract List<DebugSession> getSessions();
 
   /**
    * Open a {@link DebugSession} on the {@link ProcessEngine} provided
