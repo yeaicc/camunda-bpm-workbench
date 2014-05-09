@@ -1,6 +1,6 @@
 {
   "name": "camunda-simple-grid",
-  "main": "dist/simple-grid.js",
+  "main": "lib/js/simple-grid.js",
   "version": "7.2.0-SNAPSHOT",
   "description": "Simple Grid built with less and Javascript.",
   "author": "Daniel Meyer <daniel.meyer@camunda.com>",
