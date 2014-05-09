@@ -16,22 +16,13 @@ var CanvasController = ['$scope', function($scope) {
   $scope.diagram = null;
 
   /**
-   * Init a BpmnJs instance for the given element
-   */
-  this.initDiagram = function(element) {
-    if(!!$scope.diagram) {
-      throw "IllegalState: diagram already initialialized";
-    }
-    $scope.diagram = new BpmnViewer({ container: element, width: '100%', height: '100%'});
-  };
-
-  /**
    * Render an xml source
    *
    * @param {String} xmlSource the xml source of the diagram to open
    */
-  $scope.openXml = function(xmlSource) {
-    this.renderer.importXML(xmlSource, function(err) {
+  this.openXml = function(xmlSource) {
+
+    $scope.diagram.importXML(xmlSource, function(err) {
 
       if (err) {
         console.error(err);
@@ -41,6 +32,21 @@ var CanvasController = ['$scope', function($scope) {
       }
 
     });
+  };
+
+  /**
+   * Init a BpmnJs instance for the given element
+   */
+  this.initDiagram = function(element) {
+    if(!!$scope.diagram) {
+      throw "IllegalState: diagram already initialialized";
+    }
+
+    $scope.diagram = new BpmnViewer({ container: '#bpmn-js-canvas', width: '100%', height: '100%'});
+
+    var xml = fs.readFileSync(__dirname + '/../controller/exampleProcess.bpmn', 'utf-8');
+
+    this.openXml(xml);
   };
 
 }];
