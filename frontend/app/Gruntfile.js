@@ -1,3 +1,4 @@
+'use strict';
 
 module.exports = function (grunt) {
 
@@ -8,17 +9,19 @@ module.exports = function (grunt) {
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
+
     less: {
       development: {
         options: {
           paths: [
-            'lib/less',
+            'assets/less',
             'bower_components/bootstrap/less',
-            'bower_components/bpmn-js/example/',
-            'node_modules/camunda-simple-grid/lib/less' ]
+            'node_modules/bpmn-js/example/css/',
+            'node_modules/camunda-simple-grid/lib/less'
+          ]
         },
         files: {
-          'dist/css/developer.css': 'lib/less/developer.less'
+          'dist/css/developer.css': 'assets/less/developer.less'
         }
       }
     },
@@ -57,7 +60,7 @@ module.exports = function (grunt) {
       },
       app: {
         files: {
-          'dist/developer.js': [ 'lib/js/developer.js' ]
+          'dist/developer.js': [ 'lib/developer.js' ]
         }
       },
       watch: {
@@ -66,7 +69,7 @@ module.exports = function (grunt) {
           keepalive: true
         },
         files: {
-          'dist/developer.js': [ 'lib/**/*.js' ],
+          'dist/developer.js': [ 'lib/developer.js' ],
         }
       }
     },
@@ -90,30 +93,26 @@ module.exports = function (grunt) {
 
 
           // index.html
-          { expand: true, cwd: 'lib/', src: [ '**.html' ], dest: 'dist/' },
-
-          // root views
-          { expand: true, cwd: 'lib/js/', src: [ '*/**.html' ], dest: 'dist/views/' },
+          { expand: true, cwd: 'lib/', src: [ 'index.html' ], dest: 'dist/' },
 
           // images
-          { expand: true, cwd: 'lib/', src: [ 'img/*' ], dest: 'dist/' },
+          { expand: true, cwd: 'assets/', src: [ 'img/*' ], dest: 'dist/' },
 
           // fonts
-          { expand: true, cwd: 'lib/', src: [ 'font/developer.*' ], dest: 'dist/' },
+          { expand: true, cwd: 'assets/', src: [ 'font/developer.*' ], dest: 'dist/' },
         ]
       }
     },
     watch: {
       less: {
-        files: [ 'lib/less/*.less' ],
+        files: [ 'assets/less/*.less' ],
         tasks: [ 'less' ]
       },
       resources: {
         files: [
           'lib/index.html',
-          'lib/js/**/*.html',
-          'lib/img/*',
-          'lib/font/developer.*'
+          'assets/img/**.*',
+          'assets/font/developer.*'
         ],
         tasks: [ 'copy:resources' ]
       }
