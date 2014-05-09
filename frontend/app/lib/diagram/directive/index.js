@@ -1,10 +1,11 @@
+'use strict';
+
 var angular = require('angular'),
-    fs = require('fs');
+    fs = require('fs'),
+    BpmnViewer = require('bpmn-js').Viewer;
 
-// FIXME!
-var BpmnJs = window.BpmnJs;
 
-var ngModule = angular.module('developer.diagram.directive', []);
+var ngModule = module.exports = angular.module('developer.diagram.directive', []);
 
 var CanvasController = ['$scope', function($scope) {
 
@@ -21,7 +22,7 @@ var CanvasController = ['$scope', function($scope) {
     if(!!$scope.diagram) {
       throw "IllegalState: diagram already initialialized";
     }
-    $scope.diagram = new BpmnJs({container: element, width: '100%', height: '100%'});
+    $scope.diagram = new BpmnViewer({ container: element, width: '100%', height: '100%'});
   };
 
   /**
@@ -57,5 +58,3 @@ ngModule.directive('dbgCanvas', function() {
     }
   };
 });
-
-module.exports = ngModule;
