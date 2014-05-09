@@ -23,29 +23,36 @@
   "bugs": {
     "url": "https://app.camunda.com/jira/browse/CAM"
   },
+  "browser": {
+    "fs": false
+  },
   "homepage": "http://camunda.org/developer",
   "devDependencies": {
     "grunt": "^0.4.4",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-contrib-copy": "^0.5.0",
-    "browserify": "^3.44.2",
     "grunt-browserify": "^2.0.8",
     "grunt-contrib-less": "^0.11.0",
     "grunt-contrib-uglify": "^0.4.0",
+    "grunt-contrib-connect": "^0.7.1",
+    "grunt-karma": "^0.8.3",
     "load-grunt-tasks": "^0.4.0",
     "time-grunt": "^0.3.1",
-    "brfs": "~1.0.0",
-    "through": "^2.3.4",
-    "grunt-contrib-connect": "^0.7.1",
-    "bower": "~1.3.3"
+    "brfs": "^1.1.1",
+    "karma": "^0.12.15",
+    "karma-bro": "^0.2.2",
+    "karma-jasmine": "^0.1.5",
+    "karma-phantomjs-launcher": "^0.1.3",
+    "browserify": "^3.44.2",
+    "watchify": "^0.8.3"
   },
   "dependencies": {
     "angular": "^1.2.16",
-    "jquery": "^2.1.0",
+    "jquery": "^2.1.1",
     "camunda-simple-grid": "^7.2.0-SNAPSHOT",
-    "jquery-mousewheel": "~3.1.11",
     "didi": "0.0.4",
-    "lodash": "~2.4.1",
-    "bpmn-js": "0.0.2"
+    "jquery-mousewheel": "^3.1.11",
+    "lodash": "^2.4.1",
+    "bpmn-js": "~0.0.3"
   }
 }
