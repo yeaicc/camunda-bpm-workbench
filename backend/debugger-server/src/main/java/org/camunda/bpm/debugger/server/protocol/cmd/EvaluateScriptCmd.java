@@ -12,6 +12,8 @@
  */
 package org.camunda.bpm.debugger.server.protocol.cmd;
 
+import java.util.concurrent.Callable;
+
 import org.camunda.bpm.debugger.server.protocol.dto.EvaluateScriptData;
 import org.camunda.bpm.engine.debugger.DebugSession;
 
@@ -24,9 +26,20 @@ public class EvaluateScriptCmd extends DebugCommand<EvaluateScriptData> {
   public final static String NAME = "evaluate-script";
 
   public void execute(DebugCommandContext ctx) {
-    DebugSession debugSession = ctx.getDebugSession();
+    final DebugSession debugSession = ctx.getDebugSession();
 
-    debugSession.evaluateScript(data.getExecutionId(), data.getLanguage(), data.getScript(), data.getCmdId());
+    if(data.getExecutionId() != null) {
+      debugSession.evaluateScript(data.getLanguage(), data.getScript(), data.getCmdId(), data.getExecutionId());
+    } else {
+      ctx.executeAsync(new Callable<Void>() {
+        public Void call() throws Exception {
+          debugSession.evaluateScript(data.getLanguage(),  data.getScript(), data.getCmdId());
+          return null;
+        }
+      });
+
+    }
+
   }
 
 }

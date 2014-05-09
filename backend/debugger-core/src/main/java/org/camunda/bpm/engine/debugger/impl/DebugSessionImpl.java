@@ -23,7 +23,10 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.script.Bindings;
+import javax.script.ScriptEngine;
 import javax.script.ScriptException;
+import javax.script.SimpleBindings;
 
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineException;
@@ -32,7 +35,11 @@ import org.camunda.bpm.engine.debugger.DebugEventListener;
 import org.camunda.bpm.engine.debugger.DebugSession;
 import org.camunda.bpm.engine.debugger.DebuggerException;
 import org.camunda.bpm.engine.debugger.SuspendedExecution;
+import org.camunda.bpm.engine.impl.ProcessEngineImpl;
+import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.context.Context;
+import org.camunda.bpm.engine.impl.scripting.ScriptingEngines;
+import org.camunda.bpm.model.bpmn.Bpmn;
 
 /**
  * @author Daniel Meyer
@@ -53,9 +60,26 @@ public class DebugSessionImpl implements DebugSession {
 
   protected List<DebugEventListener> debugEventListeners = new LinkedList<DebugEventListener>();
 
+  protected Bindings globalScriptBindings;
+
   public DebugSessionImpl(DebugSessionFactoryImpl debugSessionFactory, BreakPoint[] breakPoints) {
     this.debugSessionFactory = debugSessionFactory;
     this.breakPoints.addAll(Arrays.asList(breakPoints));
+    initBindings();
+  }
+
+  protected void initBindings() {
+    globalScriptBindings = new SimpleBindings();
+    ProcessEngine processEngine = debugSessionFactory.getProcessEngine();
+    globalScriptBindings.put("processEngine", processEngine);
+    globalScriptBindings.put("runtimeService", processEngine.getRuntimeService());
+    globalScriptBindings.put("taskService", processEngine.getTaskService());
+    globalScriptBindings.put("repositoryService", processEngine.getRepositoryService());
+    globalScriptBindings.put("formService", processEngine.getFormService());
+    globalScriptBindings.put("identityService", processEngine.getIdentityService());
+    globalScriptBindings.put("authorizationService", processEngine.getAuthorizationService());
+    globalScriptBindings.put("historyService", processEngine.getHistoryService());
+    globalScriptBindings.put("Bpmn", Bpmn.INSTANCE);
   }
 
   public List<BreakPoint> getBreakPoints() {
@@ -229,5 +253,29 @@ public class DebugSessionImpl implements DebugSession {
 
   public void setProcessInstanceId(String processInstanceId) {
     this.processInstanceId = processInstanceId;
+  }
+
+  public void evaluateScript(String language, String script, String cmdId) {
+
+    DebugScriptEvaluation scriptEvaluation = new DebugScriptEvaluation(language, script, cmdId);
+
+    ProcessEngine processEngine = debugSessionFactory.getProcessEngine();
+    ProcessEngineConfigurationImpl processEngineConfiguration = ((ProcessEngineImpl)processEngine).getProcessEngineConfiguration();
+
+    ScriptingEngines scriptingEngines = processEngineConfiguration.getScriptingEngines();
+    ScriptEngine scriptEngine = scriptingEngines.getScriptEngineForLanguage(language);
+    if(scriptEngine == null) {
+      scriptEvaluation.setResult("Could not find engine for language '"+language+"'");
+      fireScriptEvaluationFailed(scriptEvaluation);
+    } else {
+      try {
+        Object result = scriptEngine.eval(script, globalScriptBindings);
+        scriptEvaluation.setResult(result);
+        fireScriptEvaluated(scriptEvaluation);
+      } catch (ScriptException e) {
+        scriptEvaluation.setScriptException(e);
+        fireScriptEvaluationFailed(scriptEvaluation);
+      }
+    }
   }
 }

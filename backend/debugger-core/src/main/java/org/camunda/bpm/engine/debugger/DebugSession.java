@@ -43,4 +43,6 @@ public interface DebugSession {
 
   public void evaluateScript(String executionId, String language, String script, String cmdId);
 
+  public void evaluateScript(String language, String script, String cmdId);
+
 }
