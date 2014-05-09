@@ -24,7 +24,9 @@
     "url": "https://app.camunda.com/jira/browse/CAM"
   },
   "browser": {
-    "fs": false
+    "fs": false,
+    "angular": "./vendor/angular.js",
+    "angular-route": "./vendor/angular-route.js"
   },
   "homepage": "http://camunda.org/developer",
   "devDependencies": {
