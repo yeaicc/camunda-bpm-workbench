@@ -42,7 +42,7 @@
       <artifactId>netty-all</artifactId>
       <version>4.0.18.Final</version>
     </dependency>
-    
+
     <dependency>
       <groupId>org.codehaus.jackson</groupId>
       <artifactId>jackson-mapper-asl</artifactId>
@@ -59,14 +59,21 @@
         <filtering>true</filtering>
       </testResource>
     </testResources>
-    
+
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
       </plugin>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>org.camunda.bpm.debugger.server.StandaloneDebugServerBootstrap</mainClass>
+        </configuration>
+      </plugin>
     </plugins>
-    
+
   </build>
 
 </project>
