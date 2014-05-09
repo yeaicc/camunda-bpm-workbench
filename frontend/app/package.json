@@ -5,7 +5,7 @@
   "author": "Daniel Meyer <daniel.meyer@camunda.com>",
   "license": "Apache License 2.0",
   "scripts": {
-    "preinstall": "npm link bpmn-js && npm link camunda-simple-grid",
+    "preinstall": "npm link camunda-simple-grid",
     "postinstall": "./node_modules/bower/bin/bower install"
   },
   "keywords": [
@@ -42,6 +42,10 @@
   "dependencies": {
     "angular": "^1.2.16",
     "jquery": "^2.1.0",
-    "camunda-simple-grid": "^7.2.0-SNAPSHOT"
+    "camunda-simple-grid": "^7.2.0-SNAPSHOT",
+    "jquery-mousewheel": "~3.1.11",
+    "didi": "0.0.4",
+    "lodash": "~2.4.1",
+    "bpmn-js": "0.0.2"
   }
 }
