@@ -17,6 +17,6 @@
   ],
   "dependencies": {
     "bootstrap": "~3.1.1",
-    "bpmn-js": "/home/meyerd/Documents/Workspace/bpmn-io/bpmn-js/#~0.0.1"
+    "bpmn-js": "./node_modules/bpmn-js/#~0.0.1"
   }
 }
