@@ -4,14 +4,15 @@ module.exports = function (grunt) {
   require('time-grunt')(grunt);
   require('load-grunt-tasks')(grunt);
 
+  var TEST_BROWSERS = [ 'PhantomJS' ];
 
   grunt.initConfig({
     pkg: grunt.file.readJSON('package.json'),
     less: {
       development: {
         options: {
-          paths: [ 
-            'lib/less', 
+          paths: [
+            'lib/less',
             'bower_components/bootstrap/less',
             'bower_components/bpmn-js/example/',
             'node_modules/camunda-simple-grid/lib/less' ]
@@ -21,16 +22,32 @@ module.exports = function (grunt) {
         }
       }
     },
+
+    karma: {
+      options: {
+        configFile: 'test/config/karma.unit.js',
+      },
+      single: {
+        singleRun: true,
+        autoWatch: false,
+
+        browsers: TEST_BROWSERS,
+
+        browserify: {
+          debug: false,
+          transform: [ 'brfs' ]
+        }
+      },
+      unit: {
+        browsers: TEST_BROWSERS
+      }
+    },
+
     browserify: {
       options: {
         transform: [ 'brfs' ],
         browserifyOptions: {
           builtins: [ 'fs' ],
-          noParse: [
-            'node_modules/angular/lib/angular.min.js',
-            'node_modules/jquery/dist/jquery.js',
-            'node_modules/lodash/dist/lodash.js'
-          ],
           commondir: false
         },
         bundleOptions: {
@@ -38,12 +55,22 @@ module.exports = function (grunt) {
           insertGlobalVars: []
         }
       },
-      development: {
+      app: {
         files: {
           'dist/developer.js': [ 'lib/js/developer.js' ]
         }
+      },
+      watch: {
+        options: {
+          watch: true,
+          keepalive: true
+        },
+        files: {
+          'dist/developer.js': [ 'lib/**/*.js' ],
+        }
       }
     },
+
     uglify: {
       dist: {
         files: {
@@ -55,8 +82,6 @@ module.exports = function (grunt) {
       resources: {
         files: [
 
-          // bpmn-io javascript
-          { expand: true, cwd: 'bower_components/bpmn-js/dist/', src: [ 'bpmn.js'], dest: 'dist/' },
           // bootstrap fonts
           { expand: true, cwd: 'bower_components/bootstrap/dist/fonts/', src: [ '*'], dest: 'dist/fonts/' },
 
@@ -83,13 +108,6 @@ module.exports = function (grunt) {
         files: [ 'lib/less/*.less' ],
         tasks: [ 'less' ]
       },
-      js: {
-        files: [
-          'lib/js/**/*.js',
-          'lib/js/**/*.html'
-        ],
-        tasks: [ 'browserify:development' ]
-      },
       resources: {
         files: [
           'lib/index.html',
@@ -111,9 +129,19 @@ module.exports = function (grunt) {
     }
   });
 
-  grunt.registerTask('build', [ 'less', 'browserify', 'copy', 'uglify' ]);
+  grunt.registerTask('test', [ 'karma:single' ]);
 
-  grunt.registerTask('auto-build', [ 'build', 'connect', 'watch' ]);
+  grunt.registerTask('auto-test', [ 'karma:unit' ]);
+
+  grunt.registerTask('build', [ 'less', 'karma:single', 'browserify:app', 'copy', 'uglify' ]);
+
+  grunt.registerTask('auto-build', [
+    'less',
+    'copy',
+    'connect',
+    'browserify:watch',
+    'watch'
+  ]);
 
   grunt.registerTask('default', [ 'build' ]);
 };
