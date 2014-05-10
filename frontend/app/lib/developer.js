@@ -6,6 +6,7 @@ var angular = require('angular');
 
 
 var ngModule = angular.module('developer', [
+  require('./app').name,
   require('./diagram').name,
   require('./debugger').name,
   require('./console').name
