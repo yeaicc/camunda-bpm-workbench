@@ -25,7 +25,7 @@ Example:
 {
   "command" : "set-breakpoints",
   "data" : {
-    breakpoints: [
+    "breakpoints": [
       { "elementId": "ServiceTask_1", "processDefinitionId": "someId",  "type": "BEFORE_ACTIVITY" },
       { "elementId": "SequenceFlow_4", "processDefinitionId": "someId", "type": "AT_TRANSITION" }
     ]
