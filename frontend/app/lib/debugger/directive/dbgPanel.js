@@ -10,35 +10,28 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.debugger.server.protocol.dto;
 
-/**
- * @author Daniel Meyer
- *
- */
-public class DeployProcessData {
+'use strict';
 
-  protected String resourceName;
+var fs = require('fs'),
+    ProcessDebugger = require('./../processDebugger');
 
-  protected String resourceData;
+var DbgController = ['$scope', function($scope) {
 
-  public DeployProcessData() {
-  }
+  // bootstrap the process debugger in the current scope
+  $scope.processDebugger = new ProcessDebugger($scope.workbench);
 
-  public String getResourceName() {
-    return resourceName;
-  }
+}];
 
-  public void setResourceName(String resourceName) {
-    this.resourceName = resourceName;
-  }
+var directiveTemplate = fs.readFileSync(__dirname + '/dbgPanel.html', { encoding: 'utf-8' });
 
-  public String getResourceData() {
-    return resourceData;
-  }
+module.exports = function() {
+  return {
+    scope: {
+      workbench : "="
+    },
+    controller: DbgController,
+    template: directiveTemplate,
+  };
+};
 
-  public void setResourceData(String resourceData) {
-    this.resourceData = resourceData;
-  }
-
-}

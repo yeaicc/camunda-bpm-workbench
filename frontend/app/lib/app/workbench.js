@@ -10,35 +10,25 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.debugger.server.protocol.dto;
 
-/**
- * @author Daniel Meyer
- *
- */
-public class DeployProcessData {
+'use strict';
 
-  protected String resourceName;
+var Workbench = (function() {
 
-  protected String resourceData;
+  function Workbench() {
 
-  public DeployProcessData() {
+    this.debugSession = null;
+
+    this.diagramProvider = null;
+
+    /**
+     * {@member} the list of currently selected process elements
+     */
+    this.selectedProcessElements = [];
   }
 
-  public String getResourceName() {
-    return resourceName;
-  }
+  return Workbench;
 
-  public void setResourceName(String resourceName) {
-    this.resourceName = resourceName;
-  }
+})();
 
-  public String getResourceData() {
-    return resourceData;
-  }
-
-  public void setResourceData(String resourceData) {
-    this.resourceData = resourceData;
-  }
-
-}
+module.exports = Workbench;

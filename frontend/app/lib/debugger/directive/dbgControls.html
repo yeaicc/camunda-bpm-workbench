@@ -1,0 +1,63 @@
+<!-- #BEGIN debugger/directive/dbgPanel.html -->
+<div class="navbar">
+
+  <button type="button" class="btn btn-xs" 
+    ng-click="processDebugger.deployProcess()"
+    ng-disabled="!processDebugger.canDeployProcess()"
+    title="Deploy">
+    <span class="glyphicon glyphicon-download-alt"></span>
+  </button>
+
+  <span class="divider"></span>
+
+  <button type="button" class="btn btn-xs"
+    ng-click="processDebugger.run()"
+    ng-disabled="!processDebugger.canRun()"
+    title="{{runMode()}}">
+    <span class="glyphicon glyphicon-play"></span>
+  </button>
+
+  <button type="button" class="btn btn-xs"
+    ng-click="processDebugger.step()"
+    ng-disabled="!processDebugger.canStep()"
+    title="Step over next operation">
+    <span class="glyphicon glyphicon-step-forward"></span>
+  </button>
+
+  <button type="button" class="btn btn-xs"
+    ng-click="processDebugger.stop()"
+    ng-disabled="!processDebugger.canStop()"
+    title="Stop (cancel) Process Instance">
+    <span class="glyphicon glyphicon-stop"></span>
+  </button>
+
+  <span class="divider"></span>
+
+  <button type="button" class="btn btn-xs"
+    ng-click="processDebugger.toggleBreakpoint()"
+    ng-disabled="!processDebugger.canToggleBreakpoint()"
+    title="Toggle Breakpoint">
+    <span class="glyphicon glyphicon-record"></span>
+  </button>
+
+  <button type="button" class="btn btn-xs pull-right"
+    ng-show="processDebugger.canCloseSession()"
+    ng-click="processDebugger.closeSession()"
+    title="Disconnect">
+    <span class="glyphicon glyphicon-log-out"></span>
+  </button>
+
+  <button type="button" class="btn btn-xs pull-right"
+    ng-show="processDebugger.canOpenSession()"
+    ng-click="processDebugger.openSession()"
+    title="Connect">
+    <span class="glyphicon glyphicon-log-in"></span>
+  </button>
+
+<!--
+  <button type="button" class="btn btn-xs pull-right">
+    <span class="glyphicon glyphicon-log-in"></span>
+  </button>
+-->
+</div>
+<!-- #END debugger/directive/dbgPanel.html -->

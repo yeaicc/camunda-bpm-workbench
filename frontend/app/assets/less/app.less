@@ -23,6 +23,8 @@
 @nav-tabs-active-link-hover-bg: #fff;
 @nav-tabs-active-link-hover-color: #333;
 
+@dbg-pn-border: 1px solid #bbb;
+
 /** the main container of the application. Takes up all the space
  * below the navbar */
 #app-main {
@@ -61,20 +63,11 @@
 
     /** panel content */
     &-content {
+      position: relative;
       height: calc(~'100% - @{app-pn-header-height}');
       overflow: auto;
-      font-size: 10pt;
+      font-size: 9pt;
       background: @component-active-color;
-
-      .table {
-        width: 100%;
-        height: 100%;
-        background: @component-active-color;
-      }
-
-      .nav-tabs {
-        background-color: @app-content-background;
-      }
 
     }
 
@@ -86,6 +79,79 @@
 
   &-diagram-wrapper {
     overflow:hidden;
+  }
+}
+/** the ctrl panels (control panels) are panels
+ * providing the controls */
+.ctrl {
+
+  /** a control panel */
+  &-pn {
+    height: 100%;
+
+    &-col {
+      float: left;
+      height: 100%;
+      width: 50%;
+      min-width: 150px;
+      border-right: @dbg-pn-border;
+    }
+
+    &-head {
+      height: 26px;
+    }
+
+    &-ctn {
+      height: calc(~'100% - 26px');
+      overflow: auto;
+    }
+
+    /** customize bootstrap controls inside a control panel */
+    .nav-tabs {
+      background-color: @app-content-background;
+    }
+
+    .navbar {
+      padding: 0px;
+      border-bottom: 1px solid #bbb;
+      min-height: 26px;
+      margin-bottom: inherit;
+      background-color: @app-content-background;
+
+      .btn {
+        background-color: transparent;
+      }
+
+      .divider {
+        height: 100%;
+        border-left: 1px solid #bbb;
+        border-right: 1px solid #fff;
+      }
+    }
+
+    &-row {
+
+      &-head {
+
+        padding: 1px;
+        padding-left: 3px;
+        border-bottom: 1px solid #ddd;
+        background-color: @app-content-background;
+
+
+        h3 {
+          font-size: inherit;
+          margin: 0px;
+          padding: 0px;
+        }
+
+      }
+
+      &-ctn {
+        border-bottom: 1px solid #ddd;
+      }
+
+    }
   }
 }
 
@@ -100,17 +166,12 @@
   &-toggle-fullscreen {
     float: right;
   }
-  
 
 }
 
 /** bpmn-js styles */
 
 #bpmn-js {
-
-  &-drop-zone {
-    height: 100%;
-  }
 
   &-canvas {
     background-color: white;
@@ -119,33 +180,42 @@
 
 }
 
-
 /** bootstrap customizations */
-.nav-tabs {
-  border-bottom: none;
-}
-/** give tabs a small top margin */
-.nav-tabs > li {
-  margin-top: 3px;
+
+/** nav styles */
+.nav {
+
+  /** customizations for tabs */
+  &-tabs {
+
+    border-bottom: @dbg-pn-border;;
+
+    /** give tabs a small top margin */
+    & > li {
+      margin-top: 3px;
+    }
+
+    /** slightly move in the first tab */
+    & > li:first-of-type {
+      margin-left: 10px;
+    }
+
+    /** same color for active and inactive tabs */
+    & > li > a {
+      color: #333;
+    }
+
+    /** active tab border color */
+    & > li.active > a,
+    & > li.active > a:hover,
+    & > li.active > a:focus {
+      border: @dbg-pn-border;
+      border-bottom-color: transparent;
+      margin-bottom: 0px;
+    }
+  }
 }
 
-/** slightly move in the first tab */
-.nav-tabs > li:first-of-type {
-  margin-left: 10px;
-}
-
-/** same color for active and inactive tabs */
-.nav-tabs > li > a {
-  color: #333;
-}
-
-/** active tab border color */
-.nav-tabs > li.active > a,
-.nav-tabs > li.active > a:hover,
-.nav-tabs > li.active > a:focus {
-  border: 1px solid #bbb;
-  border-bottom-color: transparent;
-}
 .tab-content {
   background-color: #fff;
   height: 100%;
@@ -161,7 +231,6 @@
 .table > tbody > tr > th {
   border-bottom: 1px solid #bbb;
 }
-
 
 .dbg-cmd-console {
   display:table;
@@ -225,3 +294,36 @@
   padding: 0px;
 }
 
+.dbg {
+  &-breakpoint {
+   display: table;
+   width: 100%;
+   padding-left: 5px;
+
+    &:hover {
+      background: aliceblue;
+    }
+
+    &-toggle {
+      display: table-cell;
+      min-width: 22px;
+    }
+
+    &-pos {
+      display: table-cell;
+      min-width: 10px;
+      color: #666;
+    }
+
+    &-text {
+      width: 100%;
+      display: table-cell;
+      padding-left: 2px;
+      h4 {
+        font-size: inherit;
+        margin: 0px;
+      }
+    }
+
+  }
+}

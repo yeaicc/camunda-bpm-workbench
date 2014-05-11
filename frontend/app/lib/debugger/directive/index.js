@@ -10,35 +10,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.debugger.server.protocol.dto;
 
-/**
- * @author Daniel Meyer
- *
- */
-public class DeployProcessData {
+'use strict';
 
-  protected String resourceName;
+var angular = require('angular');
 
-  protected String resourceData;
+var ngModule = angular.module('developer.debugger.directive', [])
+  .directive('dbgPanel', require('./dbgPanel'))
+  .directive('dbgControls', require('./dbgControls'));
 
-  public DeployProcessData() {
-  }
-
-  public String getResourceName() {
-    return resourceName;
-  }
-
-  public void setResourceName(String resourceName) {
-    this.resourceName = resourceName;
-  }
-
-  public String getResourceData() {
-    return resourceData;
-  }
-
-  public void setResourceData(String resourceData) {
-    this.resourceData = resourceData;
-  }
-
-}
+module.exports = ngModule;

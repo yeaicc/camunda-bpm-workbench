@@ -14,16 +14,18 @@
 'use strict';
 
 var DebugSession = require('./../debugSession'),
-    WsConnection = require('./../wsConnection');
-
+    WsConnection = require('./../wsConnection'),
+    Workbench = require('./../workbench');
 
 var Controller = ['$scope', function($scope) {
 
   var serverUrl = "ws://localhost:9090/debug-session";
 
+  // bootstrap the application services
   var connection = new WsConnection(serverUrl);
-
   var debugSession = new DebugSession(connection);
+  var workbench = new Workbench();
+  workbench.debugSession = debugSession;
 
   // trigger scope whenever an event is fired. This listener is the first to register
   // and will thus always be invoked last.
@@ -31,11 +33,11 @@ var Controller = ['$scope', function($scope) {
     $scope.$digest();
   });
 
-  // expose debug session
-  $scope.debugSession = debugSession;
-
   // open the connection to the server
   connection.open();
+
+  // expose the workbench
+  $scope.workbench = workbench;
 
 }];
 

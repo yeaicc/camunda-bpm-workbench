@@ -50,9 +50,10 @@ public class DebugCommandContext extends CommandContext {
       }
     }
 
+    DebugSessionImpl currentSession = null;
+    BreakPoint breakPoint = null;
+
     synchronized (DebugSessionFactory.getInstance()) {
-      DebugSessionImpl currentSession = null;
-      BreakPoint breakPoint = null;
 
       openSessions = debugSessionFactory.getSessions();
       for (DebugSession debugSession : openSessions) {
@@ -70,13 +71,13 @@ public class DebugCommandContext extends CommandContext {
           }
         }
       }
+    }
 
-      if(currentSession != null && breakPoint != null) {
-        if(currentSession.getProcessInstanceId() == null) {
-          currentSession.setProcessInstanceId(execution.getProcessInstanceId());
-        }
-        currentSession.suspend(new SuspendedExecutionImpl((ExecutionEntity) execution, executionOperation, breakPoint));
+    if(currentSession != null && breakPoint != null) {
+      if(currentSession.getProcessInstanceId() == null) {
+        currentSession.setProcessInstanceId(execution.getProcessInstanceId());
       }
+      currentSession.suspend(new SuspendedExecutionImpl((ExecutionEntity) execution, executionOperation, breakPoint));
     }
 
     super.performOperation(executionOperation, execution);

@@ -10,35 +10,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.debugger.server.protocol.dto;
 
-/**
- * @author Daniel Meyer
- *
- */
-public class DeployProcessData {
+'use strict';
 
-  protected String resourceName;
+var fs = require('fs');
 
-  protected String resourceData;
+var directiveTemplate = fs.readFileSync(__dirname + '/dbgControls.html', { encoding: 'utf-8' });
 
-  public DeployProcessData() {
-  }
-
-  public String getResourceName() {
-    return resourceName;
-  }
-
-  public void setResourceName(String resourceName) {
-    this.resourceName = resourceName;
-  }
-
-  public String getResourceData() {
-    return resourceData;
-  }
-
-  public void setResourceData(String resourceData) {
-    this.resourceData = resourceData;
-  }
-
-}
+module.exports = function() {
+  return {
+    template: directiveTemplate,
+  };
+};

@@ -1,8 +1,7 @@
 var angular = require('angular');
 
 var ngModule = angular.module('developer.debugger', [
-  require('./service').name
-//  require('./controller').name
+  require('./directive').name
 ]);
 
 module.exports = ngModule;

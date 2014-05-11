@@ -17,6 +17,8 @@ var fs = require('fs');
 
 var ConsoleController = [ '$scope', function($scope) {
 
+  var debugSession = $scope.workbench.debugSession;
+
   /** list of available script languages */
   var SCRIPT_LANGUAGES = [
     "Javascript",
@@ -62,7 +64,7 @@ var ConsoleController = [ '$scope', function($scope) {
 
     $scope.evaluationResults.push(cmd);
 
-    $scope.debugSession.evaluateScript(cmd);
+    debugSession.evaluateScript(cmd);
 
   };
 
@@ -95,11 +97,13 @@ var ConsoleController = [ '$scope', function($scope) {
     }
   };
 
-  $scope.debugSession.onEvent("script-evaluated", function(data) {
+  // register event listeners on the debug session
+
+  debugSession.onEvent("script-evaluated", function(data) {
     addEvaluationResults(data, false);
   });
 
-  $scope.debugSession.onEvent("script-evaluation-failed", function(data) {
+  debugSession.onEvent("script-evaluation-failed", function(data) {
     addEvaluationResults(data, true);
   });
 
@@ -112,7 +116,7 @@ var directiveTemplate = fs.readFileSync(__dirname + '/console.html', { encoding:
 module.exports = function() {
   return {
     scope: {
-      debugSession : "=debugSession"
+      workbench : "="
     },
     controller: ConsoleController,
     template: directiveTemplate,
