@@ -8,71 +8,17 @@
       <div dbg-controls></div>
     </div>
 
-    <div class="ctrl-pn-ctn">
+    <div class="ctrl-pn-ctn" ng-show="processDebugger.isSessionOpen()">
 
-      <div class="ctrl-pn-row">
-        <div class="ctrl-pn-row-head">
-          <h3>
-            <span class="glyphicon glyphicon-collapse-down"></span>
-            Executions
-          </h3>
-        </div>
-        <div class="ctrl-pn-row-ctn">
-          aaa
-        </div>
-      </div>
+      <div dbg-executions></div>
 
-      <div class="ctrl-pn-row">
-        <div class="ctrl-pn-row-head">
-          <h3>
-            <span class="glyphicon glyphicon-collapse-down"></span>
-            Breakpoints
-          </h3>
-        </div>
-        <div class="ctrl-pn-row-ctn">
+      <div dbg-breakpoints></div>
 
-          <div class="dbg-breakpoint">
-            <div class="dbg-breakpoint-toggle">
-              <input type="checkbox"></input>
-            </div>
-            <div class="dbg-breakpoint-pos">
-              <span class="glyphicon glyphicon-arrow-right"></span>
-            </div>
-            <div class="dbg-breakpoint-text">
-              <h4>
-                load order
-              </h4>
-            </div>
-          </div>
+    </div>
 
-          <div class="dbg-breakpoint">
-            <div class="dbg-breakpoint-toggle">
-              <input type="checkbox"></input>
-            </div>
-            <div class="dbg-breakpoint-pos">
-              <span class="glyphicon glyphicon-arrow-left"></span>
-            </div>
-            <div class="dbg-breakpoint-text">
-              <h4>calculate-sum</h4>
-            </div>
-          </div>
-
-          <div class="dbg-breakpoint">
-            <div class="dbg-breakpoint-toggle">
-              <input type="checkbox"></input>
-            </div>
-            <div class="dbg-breakpoint-pos">
-              <span class="glyphicon glyphicon-arrow-down"></span>
-            </div>
-            <div class="dbg-breakpoint-text">
-              <h4>s43434-3234-2434</h4>
-            </div>
-          </div>
-
-        </div>
-
-      </div>
-
+    <div class="ctrl-pn-ctn dbg-disabled" ng-show="!processDebugger.isSessionOpen()">
+      No connection to process engine.
+      Please <a href ng-click="processDebugger.openSession()">connect</a> in oder to use the debugger.
     </div>
 
   </div>
@@ -80,12 +26,12 @@
   <div class="ctrl-pn-col">
 
     <div class="ctrl-pn-head">
-      <ul class="nav nav-tabs">
+      <ul class="nav nav-tabs" ng-show="processDebugger.isSessionOpen()">
         <li class="active"><a href="#dbg-variables" data-toggle="tab">Variables</a></li>
       </ul>
     </div>
 
-    <div class="ctrl-pn-ctn">
+    <div class="ctrl-pn-ctn" ng-show="processDebugger.isSessionOpen()">
     </div>
 
   </div>

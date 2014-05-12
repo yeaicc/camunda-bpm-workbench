@@ -43,6 +43,11 @@ var WsConnection = (function() {
     this.ws = new WebSocket(this.serverUrl);
 
     var listeners = this.listeners;
+
+    this.ws.onopen = function() {
+      handleMessage({data: '{"event" : "OPEN"}'}, listeners);
+    };
+
     this.ws.onmessage = function(msg) {
       handleMessage(msg, listeners);
     };

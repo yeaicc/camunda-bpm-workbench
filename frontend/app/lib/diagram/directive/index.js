@@ -38,6 +38,7 @@ var CanvasController = ['$scope', '$rootScope', function($scope, $rootScope) {
       $scope.workbench.selectedProcessElements = selectedIds;
 
       $rootScope.$broadcast('diagram.selection.changed', selectedIds);
+      $rootScope.$digest();
     });
 
   };

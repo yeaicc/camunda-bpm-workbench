@@ -294,6 +294,12 @@
   padding: 0px;
 }
 
+.dbg-disabled {
+  padding: 10px;
+  text-align: center;
+  vertical-align: middle;
+}
+
 .dbg {
   &-breakpoint {
    display: table;
@@ -326,4 +332,37 @@
     }
 
   }
+
+  &-execution {
+   display: table;
+   width: 100%;
+   padding-left: 5px;
+
+    &:hover {
+      background: aliceblue;
+    }
+
+    &-toggle {
+      display: table-cell;
+      min-width: 22px;
+    }
+
+    &-pos {
+      display: table-cell;
+      min-width: 10px;
+      color: #666;
+    }
+
+    &-text {
+      width: 100%;
+      display: table-cell;
+      padding-left: 2px;
+      h4 {
+        font-size: inherit;
+        margin: 0px;
+      }
+    }
+
+  }
+
 }

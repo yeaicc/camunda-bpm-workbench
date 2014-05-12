@@ -1,0 +1,32 @@
+<!-- #BEGIN debugger/directive/dbgBreakpoints.html -->
+<div class="ctrl-pn-row">
+  <div class="ctrl-pn-row-head">
+    <h3>
+      <span class="glyphicon glyphicon-collapse-down"></span>
+      Breakpoints
+    </h3>
+  </div>
+  <div class="ctrl-pn-row-ctn">
+
+    <div class="dbg-breakpoint" ng-repeat="bp in processDebugger.breakpointManager.breakpoints">
+      <div class="dbg-breakpoint-toggle">
+        <input type="checkbox"
+          ng-model="bp.isActive"
+          ng-change="processDebugger.breakpointManager.updateBreakpoints()"
+          title="(de-)activate breakpoint"></input>
+      </div>
+      <div class="dbg-breakpoint-pos">
+        <span class="glyphicon glyphicon-arrow-right"
+          title="BEFORE activity"></span>
+      </div>
+      <div class="dbg-breakpoint-text">
+        <h4>
+          {{bp.elementId}}
+        </h4>
+      </div>
+    </div>
+
+  </div>
+
+</div>
+<!-- #END debugger/directive/dbgBreakpoints.html -->

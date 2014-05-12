@@ -8,6 +8,7 @@
     <bpmn2:scriptTask id="loadOrder" name="Load order" scriptFormat="Javascript">
       <bpmn2:incoming>SequenceFlow_1</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_2</bpmn2:outgoing>
+      <bpmn2:script><![CDATA[println("");]]></bpmn2:script>
     </bpmn2:scriptTask>
     <bpmn2:scriptTask id="calcSum" name="Calculate Sum" scriptFormat="Javascript">
       <bpmn2:incoming>SequenceFlow_2</bpmn2:incoming>
@@ -27,17 +28,19 @@
     <bpmn2:scriptTask id="ScriptTask_3" name="Handle large order" scriptFormat="Javascript">
       <bpmn2:incoming>SequenceFlow_4</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_5</bpmn2:outgoing>
+      <bpmn2:script><![CDATA[println("");]]></bpmn2:script>
     </bpmn2:scriptTask>
     <bpmn2:endEvent id="EndEvent_1">
       <bpmn2:incoming>SequenceFlow_5</bpmn2:incoming>
     </bpmn2:endEvent>
     <bpmn2:sequenceFlow id="SequenceFlow_5" name="" sourceRef="ScriptTask_3" targetRef="EndEvent_1"/>
     <bpmn2:sequenceFlow id="SequenceFlow_6" name="" sourceRef="ExclusiveGateway_1" targetRef="ScriptTask_4">
-      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression"><![CDATA[${sum < 100}]]></bpmn2:conditionExpression>
+      <bpmn2:conditionExpression xsi:type="bpmn2:tFormalExpression"><![CDATA[${sum <= 100}]]></bpmn2:conditionExpression>
     </bpmn2:sequenceFlow>
     <bpmn2:scriptTask id="ScriptTask_4" name="Handle Small order" scriptFormat="Javascript">
       <bpmn2:incoming>SequenceFlow_6</bpmn2:incoming>
       <bpmn2:outgoing>SequenceFlow_7</bpmn2:outgoing>
+      <bpmn2:script><![CDATA[println("");]]></bpmn2:script>
     </bpmn2:scriptTask>
     <bpmn2:endEvent id="EndEvent_2">
       <bpmn2:incoming>SequenceFlow_7</bpmn2:incoming>

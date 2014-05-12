@@ -1,0 +1,29 @@
+<!-- #BEGIN debugger/directive/dbgBreakpoints.html -->
+<div class="ctrl-pn-row">
+  <div class="ctrl-pn-row-head">
+    <h3>
+      <span class="glyphicon glyphicon-collapse-down"></span>
+      Executions
+    </h3>
+  </div>
+  <div class="ctrl-pn-row-ctn">
+
+    <div class="dbg-execution" ng-repeat="ex in processDebugger.executionManager.executions">
+
+      <div class="dbg-execution-toggle">
+      </div>
+
+      <div class="dbg-execution-pos">
+        <span class="glyphicon glyphicon-arrow-right"
+          title="suspended BEFORE activity"></span>
+      </div>
+      <div class="dbg-execution-text">
+        <h4>
+         {{ex.currentActivityId}} ({{ex.id}})
+        </h4>
+      </div>
+    </div>
+  </div>
+
+</div>
+<!-- #END debugger/directive/dbgBreakpoints.html -->

@@ -13,12 +13,12 @@
 
 'use strict';
 
-var angular = require('angular');
+var fs = require('fs');
 
-var ngModule = angular.module('developer.debugger.directive', [])
-  .directive('dbgPanel', require('./dbgPanel'))
-  .directive('dbgControls', require('./dbgControls'))
-  .directive('dbgExecutions', require('./dbgExecutions'))
-  .directive('dbgBreakpoints', require('./dbgBreakpoints'));
+var directiveTemplate = fs.readFileSync(__dirname + '/dbgExecutions.html', { encoding: 'utf-8' });
 
-module.exports = ngModule;
+module.exports = function() {
+  return {
+    template: directiveTemplate,
+  };
+};

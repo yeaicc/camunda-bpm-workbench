@@ -13,12 +13,50 @@
 
 'use strict';
 
+var BreakpointManager = require('./breakpointManager'),
+    ExecutionManager = require('./executionManager');
+
 var ProcessDebugger = (function() {
 
+  // static helper functions /////////////
+
+  function registerListeners(debugSession, processDebugger) {
+
+    debugSession.onEvent('process-deployed', function(evt) {
+      processDebugger.processDefinitionId = evt;
+    });
+
+    debugSession.onEvent('OPEN', function() {
+      processDebugger.breakpointManager.updateBreakpoints();
+    }); 
+
+  }
+
+  // class ///////////////////////////////
+
+  /**
+   * @class
+   * @classdesc the Process Debugger class
+   *
+   * @param {Workbench} workbench
+   */
   function ProcessDebugger(workbench) {
 
     /** @member the workbench */
     this.workbench = workbench;
+
+    this.breakpointManager = new BreakpointManager(workbench.debugSession);
+
+    this.executionManager = new ExecutionManager(workbench.debugSession);
+
+    /** @member {String} the Id of the currently associated process definition or 'null'*/
+    this.processDefinitionId = null;
+
+    /** @member {String} the Id of the currently associated process instance or 'null' */
+    this.processInstanceId = null;
+
+    // initialize
+    registerListeners(workbench.debugSession, this);
   }
 
   /** deploy the current diagram */
@@ -46,11 +84,28 @@ var ProcessDebugger = (function() {
     return this.isSessionOpen();
   };
 
+  ProcessDebugger.prototype.runMode = function() {
+    if(!this.canRun()) {
+      return null;
+
+    } else if(!this.processInstanceId) {
+      return "Start Process Instance";
+
+    } else {
+      return "Resume Execution";
+    }
+  };
+
   ProcessDebugger.prototype.run = function() {
+    if(this.processDefinitionId !== null) {
+      this.workbench.debugSession.startProcess({
+        'processDefinitionId': this.processDefinitionId
+      });
+    }
   };
 
   ProcessDebugger.prototype.canRun = function() {
-    return false;
+    return this.isSessionOpen() && this.processDefinitionId !== null;
   };
 
   ProcessDebugger.prototype.step = function() {
@@ -68,13 +123,21 @@ var ProcessDebugger = (function() {
   };
 
   ProcessDebugger.prototype.toggleBreakpoint = function() {
+    for(var i = 0; i<this.workbench.selectedProcessElements.length; i++) {
+      var elId = this.workbench.selectedProcessElements[i];
+      this.breakpointManager.toggleBreakpointBefore(elId, this.processDefinitionId);
+    }
   };
 
   ProcessDebugger.prototype.canToggleBreakpoint = function() {
-    return false;
+    return this.isSessionOpen() &&
+      this.processDefinitionId !== null &&
+      this.workbench.selectedProcessElements !== null &&
+      this.workbench.selectedProcessElements.length > 0;
   };
 
   ProcessDebugger.prototype.openSession = function() {
+    // (re-)connect
     this.workbench.debugSession.wsConnection.open();
   };
 
@@ -83,7 +146,11 @@ var ProcessDebugger = (function() {
   };
 
   ProcessDebugger.prototype.closeSession = function() {
+    // close connection to server
     this.workbench.debugSession.wsConnection.close();
+
+    // clear state
+    this.executionManager.clear();
   };
 
   ProcessDebugger.prototype.canCloseSession = function() {
