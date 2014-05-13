@@ -88,11 +88,10 @@ public class DebugSessionImpl implements DebugSession {
 
   public void suspend(SuspendedExecutionImpl suspendedExecution) {
 
-    suspendedExecutions.push(suspendedExecution);
-
     try {
 
       synchronized (suspendedExecutions) {
+        suspendedExecutions.push(suspendedExecution);
         suspendedExecutions.notifyAll();
       }
 
@@ -276,6 +275,20 @@ public class DebugSessionImpl implements DebugSession {
         scriptEvaluation.setScriptException(e);
         fireScriptEvaluationFailed(scriptEvaluation);
       }
+    }
+  }
+
+  public void resumeExecution(String id) {
+    SuspendedExecutionImpl suspendedExecution = null;
+    synchronized (suspendedExecutions) {
+      for (SuspendedExecutionImpl execution : suspendedExecutions) {
+        if(execution.getId().equals(id)) {
+          suspendedExecution = execution;
+        }
+      }
+    }
+    if(suspendedExecution != null) {
+      suspendedExecution.resume();
     }
   }
 }

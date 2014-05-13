@@ -18,6 +18,7 @@ import org.camunda.bpm.debugger.server.protocol.DebugProtocol;
 import org.camunda.bpm.debugger.server.protocol.Marshaller;
 import org.camunda.bpm.debugger.server.protocol.cmd.DeployProcessCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.EvaluateScriptCmd;
+import org.camunda.bpm.debugger.server.protocol.cmd.ResumeExecutionCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.SetBreakPointsCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.StartProcessCmd;
 import org.codehaus.jackson.map.ObjectMapper;
@@ -92,6 +93,7 @@ public class DebugServerConfiguration {
     protocol.registerCommandHandler(DeployProcessCmd.NAME, DeployProcessCmd.class);
     protocol.registerCommandHandler(StartProcessCmd.NAME, StartProcessCmd.class);
     protocol.registerCommandHandler(EvaluateScriptCmd.NAME, EvaluateScriptCmd.class);
+    protocol.registerCommandHandler(ResumeExecutionCmd.NAME, ResumeExecutionCmd.class);
   }
 
   protected void initNettyServer() {

@@ -33,11 +33,12 @@ var Controller = ['$scope', function($scope) {
     $scope.$digest();
   });
 
+  // expose the workbench
+  $scope.workbench = workbench;
+
   // open the connection to the server
   connection.open();
 
-  // expose the workbench
-  $scope.workbench = workbench;
 
 }];
 

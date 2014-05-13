@@ -337,9 +337,17 @@
    display: table;
    width: 100%;
    padding-left: 5px;
+   cursor: pointer;
 
     &:hover {
       background: aliceblue;
+    }
+
+    &-selected {
+      background-color: yellow;
+      &:hover {
+        background: yellow;
+      }
     }
 
     &-toggle {

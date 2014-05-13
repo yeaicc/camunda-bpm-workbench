@@ -20,6 +20,11 @@ var ExecutionManager = (function() {
   function registerListeners(debugSession, executionManager) {
     debugSession.onEvent('execution-suspended', function(data) {
       executionManager.executions.push(data);
+
+      // auto-select if it is the first execution
+      if(executionManager.executions.length == 1) {
+        executionManager.select(data);
+      }
     });
   }
 
@@ -29,11 +34,36 @@ var ExecutionManager = (function() {
 
     this.executions = [];
 
+    /** the currently selected execution */
+    this.selectedExecution = null;
+
     registerListeners(debugSession, this);
   }
 
   ExecutionManager.prototype.clear = function() {
     this.executions = [];
+    this.selectedExecution = null;
+  };
+
+  ExecutionManager.prototype.select = function(execution) {
+    if(this.isSelected(execution)) {
+      this.selectedExecution = null;
+    } else {
+      this.selectedExecution = execution;
+    }
+  };
+
+  ExecutionManager.prototype.isSelected = function(execution) {
+    return this.selectedExecution === execution;
+  };
+
+  ExecutionManager.prototype.resumeExecution = function(execution) {
+    var idx = this.executions.indexOf(execution);
+    if(idx >= 0) {
+      this.debugSession.resumeExecution(execution.id);
+      this.executions.splice(idx, 1);
+      this.selectedExecution = null;
+    }
   };
 
   return ExecutionManager;

@@ -54,6 +54,10 @@ var DebugSession = (function() {
     listeners[eventName].unshift(callback);
   };
 
+  DebugSession.prototype.isOpen = function() {
+    return this.wsConnection.isOpen();
+  };
+
   // supported commands /////////////////////////
 
   /**
@@ -124,6 +128,19 @@ var DebugSession = (function() {
     execute(cmd, this.wsConnection);
   };
 
+  /**
+   * Resume an execution
+   * @param {String} executionId a string providing the id of the execution
+   */
+  DebugSession.prototype.resumeExecution = function(id) {
+
+    var cmd = {
+      "command" : "resume-execution",
+      "data" : id
+    };
+
+    execute(cmd, this.wsConnection);
+  };
 
   // private static helpers /////////////////////
 

@@ -39,18 +39,29 @@ var WsConnection = (function() {
    */
   WsConnection.prototype.open = function() {
 
+    if(this.ws !== null) {
+      this.close();
+    }
+
     // open websocket conneciton
     this.ws = new WebSocket(this.serverUrl);
 
     var listeners = this.listeners;
+    var self = this;
 
     this.ws.onopen = function() {
       handleMessage({data: '{"event" : "OPEN"}'}, listeners);
     };
 
+    this.ws.onclose = function() {
+      handleMessage({data: '{"event" : "CLOSE"}'}, listeners);
+      self.ws = null;
+    };
+
     this.ws.onmessage = function(msg) {
       handleMessage(msg, listeners);
     };
+
   };
 
   WsConnection.prototype.send = function(msg) {
@@ -64,7 +75,6 @@ var WsConnection = (function() {
   WsConnection.prototype.close = function() {
 
     this.ws.close();
-    this.ws = null;
 
   };
 
@@ -77,6 +87,10 @@ var WsConnection = (function() {
 
     this.listeners.unshift(listener);
 
+  };
+
+  WsConnection.prototype.isOpen = function() {
+    return this.ws !== null && this.ws.readyState == 1;
   };
 
   /**

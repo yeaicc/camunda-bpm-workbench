@@ -30,6 +30,9 @@ var ProcessDebugger = (function() {
       processDebugger.breakpointManager.updateBreakpoints();
     }); 
 
+    debugSession.onEvent('CLOSE', function() {
+      processDebugger.executionManager.clear();
+    }); 
   }
 
   // class ///////////////////////////////
@@ -73,10 +76,7 @@ var ProcessDebugger = (function() {
   };
 
   ProcessDebugger.prototype.isSessionOpen = function() {
-    return this.workbench
-      .debugSession
-      .wsConnection
-      .ws !== null;
+    return this.workbench.debugSession.isOpen();
   };
 
   /** returns true if it is possible to deploy a process */
@@ -88,7 +88,7 @@ var ProcessDebugger = (function() {
     if(!this.canRun()) {
       return null;
 
-    } else if(!this.processInstanceId) {
+    } else if(this.executionManager.selectedExecution === null) {
       return "Start Process Instance";
 
     } else {
@@ -98,14 +98,30 @@ var ProcessDebugger = (function() {
 
   ProcessDebugger.prototype.run = function() {
     if(this.processDefinitionId !== null) {
-      this.workbench.debugSession.startProcess({
-        'processDefinitionId': this.processDefinitionId
-      });
+      var selectedExecution = this.executionManager.selectedExecution;
+      if(selectedExecution === null) {
+        this.workbench.debugSession.startProcess({
+          'processDefinitionId': this.processDefinitionId
+        });
+      } else {
+        this.executionManager.resumeExecution(selectedExecution);
+      }
     }
   };
 
   ProcessDebugger.prototype.canRun = function() {
-    return this.isSessionOpen() && this.processDefinitionId !== null;
+    if(!this.isSessionOpen() || this.processDefinitionId === null) {
+      return false;
+
+    } else {
+      var suspendedExecutions = this.executionManager.executions;
+      if(suspendedExecutions === null || suspendedExecutions.length === 0) {
+        return true;
+      } else {
+        return this.executionManager.selectedExecution !== null;
+      }
+    }
+
   };
 
   ProcessDebugger.prototype.step = function() {
@@ -149,8 +165,6 @@ var ProcessDebugger = (function() {
     // close connection to server
     this.workbench.debugSession.wsConnection.close();
 
-    // clear state
-    this.executionManager.clear();
   };
 
   ProcessDebugger.prototype.canCloseSession = function() {

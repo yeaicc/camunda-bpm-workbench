@@ -8,7 +8,10 @@
   </div>
   <div class="ctrl-pn-row-ctn">
 
-    <div class="dbg-execution" ng-repeat="ex in processDebugger.executionManager.executions">
+    <div class="dbg-execution"
+      ng-repeat="ex in processDebugger.executionManager.executions" 
+      ng-class="{'dbg-execution-selected': processDebugger.executionManager.isSelected(ex)}"
+      ng-click="processDebugger.executionManager.select(ex)">
 
       <div class="dbg-execution-toggle">
       </div>
