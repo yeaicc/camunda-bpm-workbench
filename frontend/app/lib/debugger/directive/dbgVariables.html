@@ -1,27 +1,11 @@
- <!-- the debugger views -->
-  <div class="tab-content">
-    <div class="tab-pane active" id="dbg-variables">
 
-      <table class="table">
-        <tr>
-          <th>
-            Name
-          </th>
-          <th>
-            Value
-          </th>
-        </tr>
-        <tr>
-          <td>
-            Name
-          </td>
-          <td>
-            Value
-          </td>
-        </tr>
-      </table>
+<div class="dbg-var" ng-repeat="variable in processDebugger.executionManager.getVariables()">
 
-    </div>
-    <div class="tab-pane" id="dbg-breakpoints">...</div>
-  </div>
+  <span class="dbg-var-name">
+    {{variable.variableName}}
+  </span>:
+  <span class="dbg-var-value">
+    {{variable.variableValue}}
+  </span>
 
+</div>

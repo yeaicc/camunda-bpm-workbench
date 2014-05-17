@@ -139,8 +139,9 @@ var ProcessDebugger = (function() {
   };
 
   ProcessDebugger.prototype.toggleBreakpoint = function() {
-    for(var i = 0; i<this.workbench.selectedProcessElements.length; i++) {
-      var elId = this.workbench.selectedProcessElements[i];
+    var selectedIds = this.workbench.diagramProvider.getSelectedElements();
+    for(var i = 0; i<selectedIds.length; i++) {
+      var elId = selectedIds[i];
       this.breakpointManager.toggleBreakpointBefore(elId, this.processDefinitionId);
     }
   };
@@ -148,8 +149,8 @@ var ProcessDebugger = (function() {
   ProcessDebugger.prototype.canToggleBreakpoint = function() {
     return this.isSessionOpen() &&
       this.processDefinitionId !== null &&
-      this.workbench.selectedProcessElements !== null &&
-      this.workbench.selectedProcessElements.length > 0;
+      this.workbench.diagramProvider.getSelectedElements() !== null &&
+      this.workbench.diagramProvider.getSelectedElements().length > 0;
   };
 
   ProcessDebugger.prototype.openSession = function() {

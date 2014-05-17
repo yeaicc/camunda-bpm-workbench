@@ -13,25 +13,24 @@
 
 'use strict';
 
-var Workbench = (function() {
+var fs = require('fs');
 
-  function Workbench() {
+var directiveTemplate = fs.readFileSync(__dirname + '/dgrCanvas.html', { encoding: 'utf-8' });
 
-    /**
-     * The debug session with the server
-     */
-    this.debugSession = null;
+var demoProcess = fs.readFileSync(__dirname + '/exampleProcess.bpmn', { encoding: 'utf-8' });
 
-    /**
-     * The diagram provider allows interacting with the diagram
-     */
-    this.diagramProvider = null;
+module.exports = function() {
+  return {
+    scope: {
+      "diagramManager": "="
+    },
+    template: directiveTemplate,
+    link: function(scope, element) {
+      // initialize the diagram
+      scope.diagramManager.initDiagram(element);
+      // open the example diagram
+      scope.diagramManager.openXml(demoProcess);
+    }
+  };
+};
 
-    this.update = null;
-  }
-
-  return Workbench;
-
-})();
-
-module.exports = Workbench;

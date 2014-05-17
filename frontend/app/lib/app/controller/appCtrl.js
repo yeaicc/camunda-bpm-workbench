@@ -17,6 +17,7 @@ var DebugSession = require('./../debugSession'),
     WsConnection = require('./../wsConnection'),
     Workbench = require('./../workbench');
 
+
 var Controller = ['$scope', function($scope) {
 
   var serverUrl = "ws://localhost:9090/debug-session";
@@ -25,12 +26,19 @@ var Controller = ['$scope', function($scope) {
   var connection = new WsConnection(serverUrl);
   var debugSession = new DebugSession(connection);
   var workbench = new Workbench();
+
+  // register the debugsession
   workbench.debugSession = debugSession;
 
-  // trigger scope whenever an event is fired. This listener is the first to register
-  // and will thus always be invoked last.
-  debugSession.onEvent('*', function() {
+  // register the update function
+  workbench.update = function() {
     $scope.$digest();
+  };
+
+  // trigger scope whenever an event is fired. This listener is the first to register
+  // and will always be invoked last.
+  debugSession.onEvent('*', function() {
+    workbench.update();
   });
 
   // expose the workbench
@@ -38,7 +46,6 @@ var Controller = ['$scope', function($scope) {
 
   // open the connection to the server
   connection.open();
-
 
 }];
 

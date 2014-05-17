@@ -18,6 +18,8 @@ import org.camunda.bpm.debugger.server.protocol.DebugProtocol;
 import org.camunda.bpm.debugger.server.protocol.Marshaller;
 import org.camunda.bpm.debugger.server.protocol.cmd.DeployProcessCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.EvaluateScriptCmd;
+import org.camunda.bpm.debugger.server.protocol.cmd.GetProcessDefinitionXmlCmd;
+import org.camunda.bpm.debugger.server.protocol.cmd.ListProcessesDefinitionsCommand;
 import org.camunda.bpm.debugger.server.protocol.cmd.ResumeExecutionCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.SetBreakPointsCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.StartProcessCmd;
@@ -86,14 +88,17 @@ public class DebugServerConfiguration {
   protected void initProtocol() {
     if(protocol == null) {
       protocol = new DebugProtocol(this);
-    }
 
-    // configure the protocol with the default handlers
-    protocol.registerCommandHandler(SetBreakPointsCmd.NAME, SetBreakPointsCmd.class);
-    protocol.registerCommandHandler(DeployProcessCmd.NAME, DeployProcessCmd.class);
-    protocol.registerCommandHandler(StartProcessCmd.NAME, StartProcessCmd.class);
-    protocol.registerCommandHandler(EvaluateScriptCmd.NAME, EvaluateScriptCmd.class);
-    protocol.registerCommandHandler(ResumeExecutionCmd.NAME, ResumeExecutionCmd.class);
+      // configure the protocol with the default handlers
+      protocol.registerCommandHandler(SetBreakPointsCmd.NAME, SetBreakPointsCmd.class);
+      protocol.registerCommandHandler(DeployProcessCmd.NAME, DeployProcessCmd.class);
+      protocol.registerCommandHandler(StartProcessCmd.NAME, StartProcessCmd.class);
+      protocol.registerCommandHandler(EvaluateScriptCmd.NAME, EvaluateScriptCmd.class);
+      protocol.registerCommandHandler(ResumeExecutionCmd.NAME, ResumeExecutionCmd.class);
+      protocol.registerCommandHandler(ListProcessesDefinitionsCommand.NAME, ListProcessesDefinitionsCommand.class);
+      protocol.registerCommandHandler(GetProcessDefinitionXmlCmd.NAME, GetProcessDefinitionXmlCmd.class);
+
+    }
   }
 
   protected void initNettyServer() {

@@ -10,28 +10,22 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.camunda.bpm.debugger.server.protocol.evt;
 
-'use strict';
+import java.util.List;
 
-var Workbench = (function() {
+import org.camunda.bpm.debugger.server.protocol.dto.ProcessDefinitionDto;
 
-  function Workbench() {
+/**
+ * @author Daniel Meyer
+ *
+ */
+public class ProcessDefinitionsListEvt extends EventDto<List<ProcessDefinitionDto>> {
 
-    /**
-     * The debug session with the server
-     */
-    this.debugSession = null;
+  public static final String NAME = "process-definitions-list";
 
-    /**
-     * The diagram provider allows interacting with the diagram
-     */
-    this.diagramProvider = null;
-
-    this.update = null;
+  public ProcessDefinitionsListEvt(List<ProcessDefinitionDto> data) {
+    super(NAME, data);
   }
 
-  return Workbench;
-
-})();
-
-module.exports = Workbench;
+}

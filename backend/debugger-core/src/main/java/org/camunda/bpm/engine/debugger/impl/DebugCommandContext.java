@@ -21,8 +21,8 @@ import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.interceptor.Command;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
 import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
-import org.camunda.bpm.engine.impl.pvm.runtime.InterpretableExecution;
 
 /**
  * @author Daniel Meyer
@@ -37,7 +37,7 @@ public class DebugCommandContext extends CommandContext {
     this.debugSessionFactory = debugSessionFactory;
   }
 
-  public void performOperation(AtomicOperation executionOperation, InterpretableExecution execution) {
+  public void performOperation(AtomicOperation executionOperation, ExecutionEntity execution) {
     List<DebugSession> openSessions = debugSessionFactory.getSessions();
     final ExecutionEntity executionEntity = (ExecutionEntity) execution;
 
@@ -83,7 +83,7 @@ public class DebugCommandContext extends CommandContext {
     super.performOperation(executionOperation, execution);
   }
 
-  protected BreakPoint findBreakPoint(DebugSession debugSession, AtomicOperation executionOperation, InterpretableExecution execution) {
+  protected BreakPoint findBreakPoint(DebugSession debugSession, AtomicOperation executionOperation, ActivityExecution execution) {
     for (BreakPoint breakPoint : debugSession.getBreakPoints()) {
       if(breakPoint.breakOnOperation(executionOperation, (ExecutionEntity) execution)) {
         return breakPoint;

@@ -13,25 +13,12 @@
 
 'use strict';
 
-var Workbench = (function() {
+var fs = require('fs');
 
-  function Workbench() {
+var directiveTemplate = fs.readFileSync(__dirname + '/dbgVariables.html', { encoding: 'utf-8' });
 
-    /**
-     * The debug session with the server
-     */
-    this.debugSession = null;
-
-    /**
-     * The diagram provider allows interacting with the diagram
-     */
-    this.diagramProvider = null;
-
-    this.update = null;
-  }
-
-  return Workbench;
-
-})();
-
-module.exports = Workbench;
+module.exports = function() {
+  return {
+    template: directiveTemplate,
+  };
+};

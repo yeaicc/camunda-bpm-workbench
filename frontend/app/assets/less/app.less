@@ -104,6 +104,10 @@
     &-ctn {
       height: calc(~'100% - 26px');
       overflow: auto;
+
+      .nav-tab-ctn {
+        padding: 5px;
+      } 
     }
 
     /** customize bootstrap controls inside a control panel */
@@ -372,5 +376,16 @@
     }
 
   }
+  &-var {
+    font-family: monospace;
 
+    &-name {
+      display: inline;
+      color: #990066;
+    }
+    &-value {
+      display: inline;
+      color: #333;
+    }
+  }
 }

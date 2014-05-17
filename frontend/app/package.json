@@ -26,7 +26,8 @@
   "browser": {
     "fs": false,
     "angular": "./vendor/angular.js",
-    "angular-route": "./vendor/angular-route.js"
+    "angular-route": "./vendor/angular-route.js",
+    "angular-ui-bootstrap": "./vendor/angular-ui-bootstrap.js"
   },
   "homepage": "http://camunda.org/developer",
   "devDependencies": {

@@ -27,11 +27,14 @@
 
     <div class="ctrl-pn-head">
       <ul class="nav nav-tabs" ng-show="processDebugger.isSessionOpen()">
-        <li class="active"><a href="#dbg-variables" data-toggle="tab">Variables</a></li>
+        <li class="active"><a href>Variables</a></li>
       </ul>
     </div>
 
-    <div class="ctrl-pn-ctn" ng-show="processDebugger.isSessionOpen()">
+    <div class="ctrl-pn-ctn" ng-show="processDebugger.isSessionOpen()"> 
+      <div class="nav-tab-ctn">
+        <div dbg-variables></div>
+      </div>
     </div>
 
   </div>

@@ -31,7 +31,7 @@ var DebugSession = (function() {
     /**
      * @member {array} a list of event liseners on the debug session
      */
-    this.eventListeners = [];
+    this.eventListeners = {};
 
     // register as message listener on the connection:
     var listeners = this.eventListeners;
@@ -46,12 +46,50 @@ var DebugSession = (function() {
    * @param {string} eventName the name of the event or '*' for global event listeners
    * @param {function} callback the callback function invoked if an event is received.
    */
-  DebugSession.prototype.onEvent = function(eventName, callback) {
+  DebugSession.prototype.onEvent = function(eventName, callback, once) {
+    if(once) {
+      callback.once = true;
+    }
     var listeners = this.eventListeners;
     if(listeners[eventName] === undefined) {
       listeners[eventName] = [];
     }
     listeners[eventName].unshift(callback);
+  };
+
+  DebugSession.prototype.removeListener = function(evt, listener) {
+    var idx = this.eventListeners[evt].indexOf(listener);
+    if(idx > -1) {
+      this.eventListners[evt].splice(idx,1);
+    }
+  };
+
+  DebugSession.prototype.promise = function(evtName) {
+
+    // buffered event
+    var bufferedEvent = null;
+    var callback = null;
+
+    var listener = function(data) {
+      if(!!callback) {
+        callback(data);
+      } else {
+        bufferedEvent = data;
+      }
+    };
+
+    this.onEvent(evtName, listener, true);
+
+    return {
+      success : function(callb) {
+        if(!!bufferedEvent) {
+          callb(bufferedEvent);
+        } else {
+          callback = callb;
+        }
+      }
+    };
+
   };
 
   DebugSession.prototype.isOpen = function() {
@@ -142,6 +180,36 @@ var DebugSession = (function() {
     execute(cmd, this.wsConnection);
   };
 
+  /**
+   * Command requesting the server to list process definitions
+   * @return promise which can be used for getting notified about the result.
+   */
+  DebugSession.prototype.listProcessDefinitions = function() {
+    var cmd = {
+      "command" : "list-process-definitions",
+      "data": {}
+    };
+
+    execute(cmd, this.wsConnection);
+
+    return this.promise("process-definitions-list");
+  };
+
+  /**
+   * Command requesting the server to list process definitions
+   * @return promise which can be used for getting notified about the result.
+   */
+  DebugSession.prototype.getProcessDefinitionXml = function(processDefId) {
+    var cmd = {
+      "command" : "get-process-definition-xml",
+      "data": processDefId
+    };
+
+    execute(cmd, this.wsConnection);
+
+    return this.promise("process-definition-xml");
+  };
+
   // private static helpers /////////////////////
 
   /**
@@ -194,6 +262,9 @@ var DebugSession = (function() {
   function notifyListeners(listeners, eventObject) {
     for(var i = 0; i < listeners.length; i++) {
       listeners[i](eventObject.data);
+      if(listeners[i].once) {
+        listeners.shift(i,1);
+      }
     }
   }
 

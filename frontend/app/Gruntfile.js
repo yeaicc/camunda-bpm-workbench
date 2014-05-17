@@ -88,10 +88,6 @@ module.exports = function (grunt) {
           // bootstrap fonts
           { expand: true, cwd: 'bower_components/bootstrap/dist/fonts/', src: [ '*'], dest: 'dist/fonts/' },
 
-          // bootstrap javascript
-          { expand: true, cwd: 'bower_components/bootstrap/dist/js/', src: [ '*.min.js'], dest: 'dist/' },
-
-
           // index.html
           { expand: true, cwd: 'lib/', src: [ 'index.html' ], dest: 'dist/' },
 

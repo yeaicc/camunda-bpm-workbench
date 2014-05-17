@@ -13,25 +13,25 @@
 
 'use strict';
 
-var Workbench = (function() {
+var fs = require('fs'),
+    DiagramManager = require('./../diagramManager');
 
-  function Workbench() {
+var directiveTemplate = fs.readFileSync(__dirname + '/dgrPanel.html', { encoding: 'utf-8' });
 
-    /**
-     * The debug session with the server
-     */
-    this.debugSession = null;
+var DiagramController = ['$scope', function($scope) {
 
-    /**
-     * The diagram provider allows interacting with the diagram
-     */
-    this.diagramProvider = null;
+  // initialize a new diagram manager
+  $scope.diagramManager = new DiagramManager($scope.workbench);
 
-    this.update = null;
-  }
+}];
 
-  return Workbench;
+module.exports = function() {
+  return {
+    scope: {
+      workbench : '='
+    },
+    controller: DiagramController,
+    template: directiveTemplate
+  };
+};
 
-})();
-
-module.exports = Workbench;

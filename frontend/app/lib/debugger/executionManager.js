@@ -66,6 +66,12 @@ var ExecutionManager = (function() {
     }
   };
 
+  ExecutionManager.prototype.getVariables = function() {
+    if(this.selectedExecution !== null) {
+      return this.selectedExecution.variables;
+    }
+  };
+
   return ExecutionManager;
 })();
 

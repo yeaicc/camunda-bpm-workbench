@@ -10,28 +10,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.camunda.bpm.debugger.server.protocol.evt;
 
-'use strict';
+/**
+ * @author Daniel Meyer
+ *
+ */
+public class ProcessDefinitionXmlEvt extends EventDto<String> {
 
-var Workbench = (function() {
+  public final static String NAME = "process-definition-xml";
 
-  function Workbench() {
-
-    /**
-     * The debug session with the server
-     */
-    this.debugSession = null;
-
-    /**
-     * The diagram provider allows interacting with the diagram
-     */
-    this.diagramProvider = null;
-
-    this.update = null;
+  public ProcessDefinitionXmlEvt(String data) {
+    super(NAME, data);
   }
 
-  return Workbench;
-
-})();
-
-module.exports = Workbench;
+}
