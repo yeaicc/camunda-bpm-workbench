@@ -59,6 +59,10 @@ var DiagramManager = (function() {
 
       getSelectedElements : function() {
         return diagramManager.selectedElements;
+      },
+
+      getProcessDefinition : function() {
+        return diagramManager.processDefinition;
       }
 
    };
@@ -79,6 +83,8 @@ var DiagramManager = (function() {
 
     this.currentXmlSource = null;
 
+    this.processDefinition = null;
+
     this.selectedElements = [];
 
     this.workbench.diagramProvider = getDiagramProvider(this);
@@ -96,24 +102,28 @@ var DiagramManager = (function() {
     registerListeners(this.renderer, this);
   };
 
-  /**
-   * Render an xml source
-   *
-   * @param {String} xmlSource the xml source of the diagram to open
-   */
-  DiagramManager.prototype.openXml = function(xmlSource) {
+  DiagramManager.prototype.openProcess = function(data) {
+
+    var diagramExists = this.currentXmlSource !== null;
+    this.currentXmlSource = data.xml;
+    this.processDefinition = data.processDefinition;
 
     var self = this;
-    this.renderer.importXML(xmlSource, function(err) {
+    this.renderer.importXML(this.currentXmlSource, function(err) {
 
       if (err) {
         console.error(err);
 
       } else {
-        self.currentXmlSource = xmlSource;
+
+      }
+
+      if(diagramExists) {
+        self.workbench.eventBus.fireEvent("diagram-changed", self.processDefinition);
       }
 
     });
+
   };
 
   return DiagramManager;

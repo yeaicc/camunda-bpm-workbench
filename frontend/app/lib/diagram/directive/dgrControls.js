@@ -19,12 +19,12 @@ var openDeployedProcessTemplate = fs.readFileSync(__dirname + '/dialog/openDeplo
     { encoding: 'utf-8' });
 
 
-var OpenDeployedProcessCtrl = ['$scope', '$modalInstance', 'DebugSession', 
-    function($scope, $modalInstance, DebugSession) {
+var OpenDeployedProcessCtrl = ['$scope', '$modalInstance', 'ServerSession', 
+    function($scope, $modalInstance, ServerSession) {
 
   $scope.processList = [];
 
-  DebugSession.listProcessDefinitions().success(function(definitions) {
+  ServerSession.listProcessDefinitions().success(function(definitions) {
     $scope.processList = definitions;
     $scope.$digest();
   });
@@ -48,8 +48,8 @@ var Controller = ['$scope', '$modal', function($scope, $modal) {
       template: openDeployedProcessTemplate,
       controller: OpenDeployedProcessCtrl,
       resolve: {
-        "DebugSession": function() {
-          return $scope.workbench.debugSession;
+        "ServerSession": function() {
+          return $scope.workbench.serverSession;
         }
       }
     });
@@ -57,12 +57,15 @@ var Controller = ['$scope', '$modal', function($scope, $modal) {
     modalInstance.result.then(function(processDef) {
       // dialog closed
 
-      $scope.workbench.debugSession
+      $scope.workbench.serverSession
         .getProcessDefinitionXml(processDef.id)
         .success(function(data) {
 
-        $scope.diagramManager.openXml(data);
-
+          // open the diagram
+          $scope.diagramManager.openProcess({
+            xml: data,
+            processDefinition: processDef
+          });
       });
 
     });

@@ -20,17 +20,29 @@ var ProcessDebugger = (function() {
 
   // static helper functions /////////////
 
-  function registerListeners(debugSession, processDebugger) {
+  function diagramChanged(processDebugger, processDefinitionId) {
+    if(processDebugger.processDefinitionId !== processDefinitionId) {
+      processDebugger.processDefinitionId = processDefinitionId;
+      processDebugger.breakpointManager.clear();
+      processDebugger.executionManager.resumeAllExecutions();
+    }
+  }
 
-    debugSession.onEvent('process-deployed', function(evt) {
-      processDebugger.processDefinitionId = evt;
+  function registerListeners(eventBus, processDebugger) {
+
+    eventBus.onEvent('process-deployed', function(evt) {
+      diagramChanged(processDebugger, evt);
     });
 
-    debugSession.onEvent('OPEN', function() {
+    eventBus.onEvent('diagram-changed', function(evt) {
+      diagramChanged(processDebugger, evt.id);
+    });
+
+    eventBus.onEvent('OPEN', function() {
       processDebugger.breakpointManager.updateBreakpoints();
     }); 
 
-    debugSession.onEvent('CLOSE', function() {
+    eventBus.onEvent('CLOSE', function() {
       processDebugger.executionManager.clear();
     }); 
   }
@@ -48,9 +60,9 @@ var ProcessDebugger = (function() {
     /** @member the workbench */
     this.workbench = workbench;
 
-    this.breakpointManager = new BreakpointManager(workbench.debugSession);
+    this.breakpointManager = new BreakpointManager(workbench.serverSession);
 
-    this.executionManager = new ExecutionManager(workbench.debugSession);
+    this.executionManager = new ExecutionManager(workbench.serverSession);
 
     /** @member {String} the Id of the currently associated process definition or 'null'*/
     this.processDefinitionId = null;
@@ -59,7 +71,7 @@ var ProcessDebugger = (function() {
     this.processInstanceId = null;
 
     // initialize
-    registerListeners(workbench.debugSession, this);
+    registerListeners(workbench.eventBus, this);
   }
 
   /** deploy the current diagram */
@@ -67,7 +79,7 @@ var ProcessDebugger = (function() {
     var self = this;
     this.workbench.diagramProvider.getBpmnXml(function(err, xml) {
 
-      self.workbench.debugSession.deployProcess({
+      self.workbench.serverSession.deployProcess({
         resourceName: 'process.bpmn',
         resourceData: xml
       });
@@ -76,7 +88,7 @@ var ProcessDebugger = (function() {
   };
 
   ProcessDebugger.prototype.isSessionOpen = function() {
-    return this.workbench.debugSession.isOpen();
+    return this.workbench.serverSession.isOpen();
   };
 
   /** returns true if it is possible to deploy a process */
@@ -100,7 +112,7 @@ var ProcessDebugger = (function() {
     if(this.processDefinitionId !== null) {
       var selectedExecution = this.executionManager.selectedExecution;
       if(selectedExecution === null) {
-        this.workbench.debugSession.startProcess({
+        this.workbench.serverSession.startProcess({
           'processDefinitionId': this.processDefinitionId
         });
       } else {
@@ -155,7 +167,7 @@ var ProcessDebugger = (function() {
 
   ProcessDebugger.prototype.openSession = function() {
     // (re-)connect
-    this.workbench.debugSession.wsConnection.open();
+    this.workbench.serverSession.wsConnection.open();
   };
 
   ProcessDebugger.prototype.canOpenSession = function() {
@@ -164,7 +176,7 @@ var ProcessDebugger = (function() {
 
   ProcessDebugger.prototype.closeSession = function() {
     // close connection to server
-    this.workbench.debugSession.wsConnection.close();
+    this.workbench.serverSession.wsConnection.close();
 
   };
 

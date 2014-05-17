@@ -31,7 +31,6 @@ public class ListProcessesDefinitionsCommand extends DebugCommand<Object> {
     List<ProcessDefinition> processes = ctx.getProcessEngine()
       .getRepositoryService()
       .createProcessDefinitionQuery()
-      .latestVersion()
       .list();
 
     ctx.fireEvent(new ProcessDefinitionsListEvt(ProcessDefinitionDto.fromList(processes)));

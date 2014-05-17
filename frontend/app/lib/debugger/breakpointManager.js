@@ -63,10 +63,10 @@ var BreakpointManager = (function() {
    * @classdesc The breakpoint manager allows managing
    * breakpoints
    */
-  function BreakpointManager(debugSession) {
+  function BreakpointManager(serverSession) {
 
     /** @member {DebugSession} the debug session */
-    this.debugSession = debugSession;
+    this.serverSession = serverSession;
 
     /** @private The list of breakpoints. */
     this.breakpoints = [];
@@ -78,15 +78,26 @@ var BreakpointManager = (function() {
    */
   BreakpointManager.prototype.updateBreakpoints = function() {
 
-    var breakpointDtos = [];
-    for (var i = 0; i<this.breakpoints.length; i++) {
-      var bp = this.breakpoints[i];
-      if(bp.isActive) {
-        breakpointDtos.push(bp.asDto());
+    if(this.serverSession.isOpen()) {
+
+      var breakpointDtos = [];
+      for (var i = 0; i<this.breakpoints.length; i++) {
+        var bp = this.breakpoints[i];
+        if(bp.isActive) {
+          breakpointDtos.push(bp.asDto());
+        }
       }
+
+      this.serverSession.setBreakpoints(breakpointDtos);
     }
 
-    this.debugSession.setBreakpoints(breakpointDtos);
+  };
+
+  /** clears all breakpoints, here and on the server */
+  BreakpointManager.prototype.clear= function() {
+
+    this.breakpoints = [];
+    this.updateBreakpoints();
 
   };
 

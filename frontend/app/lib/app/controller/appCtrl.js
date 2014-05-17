@@ -13,8 +13,9 @@
 
 'use strict';
 
-var DebugSession = require('./../debugSession'),
-    WsConnection = require('./../wsConnection'),
+var ServerSession = require('./../serverSession'),
+    WsConnection = require('./../../util/wsConnection'),
+    EventBus = require('./../../util/eventBus'),
     Workbench = require('./../workbench');
 
 
@@ -22,13 +23,18 @@ var Controller = ['$scope', function($scope) {
 
   var serverUrl = "ws://localhost:9090/debug-session";
 
+  // the global event bus
+  var eventBus = new EventBus();
+
   // bootstrap the application services
   var connection = new WsConnection(serverUrl);
-  var debugSession = new DebugSession(connection);
+  var serverSession = new ServerSession(connection, eventBus);
   var workbench = new Workbench();
 
+  workbench.eventBus = eventBus;
+
   // register the debugsession
-  workbench.debugSession = debugSession;
+  workbench.serverSession = serverSession;
 
   // register the update function
   workbench.update = function() {
@@ -37,7 +43,7 @@ var Controller = ['$scope', function($scope) {
 
   // trigger scope whenever an event is fired. This listener is the first to register
   // and will always be invoked last.
-  debugSession.onEvent('*', function() {
+  eventBus.onEvent('*', function() {
     workbench.update();
   });
 

@@ -17,8 +17,8 @@ var ExecutionManager = (function() {
 
   // static helper functions /////////////
 
-  function registerListeners(debugSession, executionManager) {
-    debugSession.onEvent('execution-suspended', function(data) {
+  function registerListeners(eventBus, executionManager) {
+    eventBus.onEvent('execution-suspended', function(data) {
       executionManager.executions.push(data);
 
       // auto-select if it is the first execution
@@ -28,16 +28,16 @@ var ExecutionManager = (function() {
     });
   }
 
-  function ExecutionManager(debugSession) {
+  function ExecutionManager(serverSession) {
 
-    this.debugSession = debugSession;
+    this.serverSession = serverSession;
 
     this.executions = [];
 
     /** the currently selected execution */
     this.selectedExecution = null;
 
-    registerListeners(debugSession, this);
+    registerListeners(serverSession.eventBus, this);
   }
 
   ExecutionManager.prototype.clear = function() {
@@ -60,9 +60,15 @@ var ExecutionManager = (function() {
   ExecutionManager.prototype.resumeExecution = function(execution) {
     var idx = this.executions.indexOf(execution);
     if(idx >= 0) {
-      this.debugSession.resumeExecution(execution.id);
+      this.serverSession.resumeExecution(execution.id);
       this.executions.splice(idx, 1);
       this.selectedExecution = null;
+    }
+  };
+
+  ExecutionManager.prototype.resumeAllExecutions = function(execution) {
+    for (var i = 0; i < this.executions.length; i++) {
+      this.resumeExecution(this.executions[i]);
     }
   };
 

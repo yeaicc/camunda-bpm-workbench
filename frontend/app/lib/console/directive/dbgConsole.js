@@ -17,7 +17,7 @@ var fs = require('fs');
 
 var ConsoleController = [ '$scope', function($scope) {
 
-  var debugSession = $scope.workbench.debugSession;
+  var serverSession = $scope.workbench.serverSession;
 
   /** list of available script languages */
   var SCRIPT_LANGUAGES = [
@@ -64,7 +64,7 @@ var ConsoleController = [ '$scope', function($scope) {
 
     $scope.evaluationResults.push(cmd);
 
-    debugSession.evaluateScript(cmd);
+    serverSession.evaluateScript(cmd);
 
   };
 
@@ -99,11 +99,11 @@ var ConsoleController = [ '$scope', function($scope) {
 
   // register event listeners on the debug session
 
-  debugSession.onEvent("script-evaluated", function(data) {
+  serverSession.eventBus.onEvent("script-evaluated", function(data) {
     addEvaluationResults(data, false);
   });
 
-  debugSession.onEvent("script-evaluation-failed", function(data) {
+  serverSession.eventBus.onEvent("script-evaluation-failed", function(data) {
     addEvaluationResults(data, true);
   });
 

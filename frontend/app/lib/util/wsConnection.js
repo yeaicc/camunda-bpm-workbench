@@ -15,6 +15,12 @@
 
 var WsConnection = (function() {
 
+  /**
+   * @class
+   * @classdesc Wrapper for an underlying websocket connection
+   *
+   * The connection may be open and closed.
+   */
   function WsConnection(serverUrl) {
 
     /**

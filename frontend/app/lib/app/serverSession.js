@@ -13,15 +13,16 @@
 
 'use strict';
 
-var DebugSession = (function() {
+var ServerSession = (function() {
 
   /**
    * @class
    * @classdesc a debug session with the server
    *
    * @param {WsConnection} wsConnection the connection to the backend server
+   * @param {EventBus} eventBus the event bus on which we can fire events
    */
-  function DebugSession(wsConnection) {
+  function ServerSession(wsConnection, eventBus) {
 
     /**
      * @member {WsConnection} the connection to the backend server 
@@ -29,42 +30,17 @@ var DebugSession = (function() {
     this.wsConnection = wsConnection;
 
     /**
-     * @member {array} a list of event liseners on the debug session
+     * @member {EventBus} the event bus
      */
-    this.eventListeners = {};
+    this.eventBus = eventBus;
 
     // register as message listener on the connection:
-    var listeners = this.eventListeners;
     wsConnection.onMessage(function(msg) {
-      handleMessage(msg, listeners);
+      handleMessage(msg, eventBus);
     });
   }
 
-  /**
-   * Register an event listener for a particular event or all evnets.
-   *
-   * @param {string} eventName the name of the event or '*' for global event listeners
-   * @param {function} callback the callback function invoked if an event is received.
-   */
-  DebugSession.prototype.onEvent = function(eventName, callback, once) {
-    if(once) {
-      callback.once = true;
-    }
-    var listeners = this.eventListeners;
-    if(listeners[eventName] === undefined) {
-      listeners[eventName] = [];
-    }
-    listeners[eventName].unshift(callback);
-  };
-
-  DebugSession.prototype.removeListener = function(evt, listener) {
-    var idx = this.eventListeners[evt].indexOf(listener);
-    if(idx > -1) {
-      this.eventListners[evt].splice(idx,1);
-    }
-  };
-
-  DebugSession.prototype.promise = function(evtName) {
+  ServerSession.prototype.promise = function(evtName) {
 
     // buffered event
     var bufferedEvent = null;
@@ -78,7 +54,7 @@ var DebugSession = (function() {
       }
     };
 
-    this.onEvent(evtName, listener, true);
+    this.eventBus.onEvent(evtName, listener, true);
 
     return {
       success : function(callb) {
@@ -92,7 +68,7 @@ var DebugSession = (function() {
 
   };
 
-  DebugSession.prototype.isOpen = function() {
+  ServerSession.prototype.isOpen = function() {
     return this.wsConnection.isOpen();
   };
 
@@ -106,7 +82,7 @@ var DebugSession = (function() {
    *
    * @param {Array} an array of breakpoints
    */
-  DebugSession.prototype.setBreakpoints = function(breakpoints) {
+  ServerSession.prototype.setBreakpoints = function(breakpoints) {
 
     var cmd = {
       "command" : "set-breakpoints",
@@ -126,7 +102,7 @@ var DebugSession = (function() {
    *
    * @param {Object} input for the script evaluation
    */
-  DebugSession.prototype.evaluateScript = function(scriptInfo) {
+  ServerSession.prototype.evaluateScript = function(scriptInfo) {
 
     var cmd = {
       "command" : "evaluate-script",
@@ -141,7 +117,7 @@ var DebugSession = (function() {
    * @param {String} resourceData the resource data of the form 
    * { "resourceName": "process.bpmn", "resourceData": "..." }
    */
-  DebugSession.prototype.deployProcess = function(resourceData) {
+  ServerSession.prototype.deployProcess = function(resourceData) {
 
     var cmd = {
       "command" : "deploy-process",
@@ -156,7 +132,7 @@ var DebugSession = (function() {
    * @param {String} startProcessData command data of the form 
    * { "processDefinitionId": "someProcessDefinitionId" }
    */
-  DebugSession.prototype.startProcess = function(startProcessData) {
+  ServerSession.prototype.startProcess = function(startProcessData) {
 
     var cmd = {
       "command" : "start-process",
@@ -170,7 +146,7 @@ var DebugSession = (function() {
    * Resume an execution
    * @param {String} executionId a string providing the id of the execution
    */
-  DebugSession.prototype.resumeExecution = function(id) {
+  ServerSession.prototype.resumeExecution = function(id) {
 
     var cmd = {
       "command" : "resume-execution",
@@ -184,7 +160,7 @@ var DebugSession = (function() {
    * Command requesting the server to list process definitions
    * @return promise which can be used for getting notified about the result.
    */
-  DebugSession.prototype.listProcessDefinitions = function() {
+  ServerSession.prototype.listProcessDefinitions = function() {
     var cmd = {
       "command" : "list-process-definitions",
       "data": {}
@@ -199,7 +175,7 @@ var DebugSession = (function() {
    * Command requesting the server to list process definitions
    * @return promise which can be used for getting notified about the result.
    */
-  DebugSession.prototype.getProcessDefinitionXml = function(processDefId) {
+  ServerSession.prototype.getProcessDefinitionXml = function(processDefId) {
     var cmd = {
       "command" : "get-process-definition-xml",
       "data": processDefId
@@ -241,34 +217,16 @@ var DebugSession = (function() {
   }
 
 
-  function handleMessage(evt, eventListeners) {
+  function handleMessage(evt, eventBus) {
 
     // unmarshall the event
     var eventObject = unmarshall(evt.data);
 
-    // (1) invoke scoped listeners
-    var listeners = eventListeners[eventObject.event];
-    if(!!listeners && listeners.length > 0) {
-      notifyListeners(listeners, eventObject);
-    }
-
-    // (2) invoke global listeners
-    listeners = eventListeners['*'];
-    if(!!listeners && listeners.length > 0) {
-      notifyListeners(listeners, eventObject);
-    }
+    // fire event on bus
+    eventBus.fireEvent(eventObject.event, eventObject.data);
   }
 
-  function notifyListeners(listeners, eventObject) {
-    for(var i = 0; i < listeners.length; i++) {
-      listeners[i](eventObject.data);
-      if(listeners[i].once) {
-        listeners.shift(i,1);
-      }
-    }
-  }
-
-  return DebugSession;
+  return ServerSession;
 })();
 
-module.exports = DebugSession;
+module.exports = ServerSession;

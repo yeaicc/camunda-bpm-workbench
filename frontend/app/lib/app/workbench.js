@@ -18,14 +18,19 @@ var Workbench = (function() {
   function Workbench() {
 
     /**
-     * The debug session with the server
+     * The session with the server
      */
-    this.debugSession = null;
+    this.serverSession = null;
 
     /**
      * The diagram provider allows interacting with the diagram
      */
     this.diagramProvider = null;
+
+    /**
+     * The workbench event bus
+     */
+    this.eventBus = null;
 
     this.update = null;
   }

@@ -29,7 +29,7 @@ module.exports = function() {
       // initialize the diagram
       scope.diagramManager.initDiagram(element);
       // open the example diagram
-      scope.diagramManager.openXml(demoProcess);
+      scope.diagramManager.openProcess({xml : demoProcess});
     }
   };
 };
