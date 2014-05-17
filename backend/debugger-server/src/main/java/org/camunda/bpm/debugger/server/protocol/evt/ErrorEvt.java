@@ -10,24 +10,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.engine.debugger;
+package org.camunda.bpm.debugger.server.protocol.evt;
 
-import org.camunda.bpm.engine.debugger.impl.DebugScriptEvaluation;
-import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
-import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
+import org.camunda.bpm.debugger.server.protocol.dto.ErrorData;
 
 /**
  * @author Daniel Meyer
  *
  */
-public interface DebugEventListener {
+public class ErrorEvt extends EventDto<ErrorData> {
 
-  public void onExecutionSuspended(SuspendedExecution execution);
+  protected final static String NAME = "server-error";
 
-  public void onScriptEvaluated(DebugScriptEvaluation scriptEvaluation);
-
-  public void onScriptEvaluationFailed(DebugScriptEvaluation scriptEvaluation);
-
-  public void onException(Exception e, ExecutionEntity execution, AtomicOperation operation);
+  public ErrorEvt(ErrorData data) {
+    super(NAME, data);
+  }
 
 }

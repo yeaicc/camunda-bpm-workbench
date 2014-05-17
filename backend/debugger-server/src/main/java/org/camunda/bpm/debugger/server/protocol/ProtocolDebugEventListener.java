@@ -14,8 +14,10 @@ package org.camunda.bpm.debugger.server.protocol;
 
 import io.netty.channel.Channel;
 
+import org.camunda.bpm.debugger.server.protocol.dto.ErrorData;
 import org.camunda.bpm.debugger.server.protocol.dto.ScriptEvaluationData;
 import org.camunda.bpm.debugger.server.protocol.dto.SuspendedExecutionData;
+import org.camunda.bpm.debugger.server.protocol.evt.ErrorEvt;
 import org.camunda.bpm.debugger.server.protocol.evt.ExecutionSuspendedEvt;
 import org.camunda.bpm.debugger.server.protocol.evt.ScriptEvaluatedEvt;
 import org.camunda.bpm.debugger.server.protocol.evt.ScriptEvaluationFailedEvt;
@@ -23,6 +25,8 @@ import org.camunda.bpm.engine.debugger.DebugEventListener;
 import org.camunda.bpm.engine.debugger.DebugSession;
 import org.camunda.bpm.engine.debugger.SuspendedExecution;
 import org.camunda.bpm.engine.debugger.impl.DebugScriptEvaluation;
+import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
 
 /**
  * {@link DebugEventListener} implementation used to listen to events
@@ -54,6 +58,10 @@ public class ProtocolDebugEventListener implements DebugEventListener {
 
   public void onScriptEvaluationFailed(DebugScriptEvaluation scriptEvaluation) {
     protocol.fireEvent(channel, new ScriptEvaluationFailedEvt(new ScriptEvaluationData(scriptEvaluation)));
+  }
+
+  public void onException(Exception e, ExecutionEntity execution, AtomicOperation operation) {
+    protocol.fireEvent(channel, new ErrorEvt(new ErrorData(e)));
   }
 
 }

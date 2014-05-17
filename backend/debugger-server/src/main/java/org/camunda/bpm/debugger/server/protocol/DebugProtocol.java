@@ -27,6 +27,8 @@ import org.camunda.bpm.debugger.server.DebugServerConfiguration;
 import org.camunda.bpm.debugger.server.netty.ChannelAttributes;
 import org.camunda.bpm.debugger.server.protocol.cmd.DebugCommand;
 import org.camunda.bpm.debugger.server.protocol.cmd.DebugCommandContext;
+import org.camunda.bpm.debugger.server.protocol.dto.ErrorData;
+import org.camunda.bpm.debugger.server.protocol.evt.ErrorEvt;
 import org.camunda.bpm.debugger.server.protocol.evt.EventDto;
 import org.camunda.bpm.engine.debugger.DebugSession;
 import org.camunda.bpm.engine.debugger.DebugSessionFactory;
@@ -92,6 +94,7 @@ public class DebugProtocol {
       }
 
     } catch (Exception e) {
+      fireEvent(ch, new ErrorEvt(new ErrorData(e)));
       LOGG.log(Level.WARNING, "Error while processing payload "+commandPayload, e);
     }
   }

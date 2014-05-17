@@ -97,6 +97,14 @@ var ConsoleController = [ '$scope', function($scope) {
     }
   };
 
+  function logError(error) {
+    $scope.evaluationResults.push({
+      script : error.errorType,
+      result : error.errorMessage,
+      evaluationFailed : true
+    });
+  }
+
   // register event listeners on the debug session
 
   serverSession.eventBus.onEvent("script-evaluated", function(data) {
@@ -105,6 +113,10 @@ var ConsoleController = [ '$scope', function($scope) {
 
   serverSession.eventBus.onEvent("script-evaluation-failed", function(data) {
     addEvaluationResults(data, true);
+  });
+
+  serverSession.eventBus.onEvent("server-error", function(data) {
+    logError(data);
   });
 
   // init

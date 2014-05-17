@@ -38,6 +38,8 @@ import org.camunda.bpm.engine.debugger.SuspendedExecution;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.context.Context;
+import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
 import org.camunda.bpm.engine.impl.scripting.ScriptingEngines;
 import org.camunda.bpm.model.bpmn.Bpmn;
 
@@ -114,7 +116,6 @@ public class DebugSessionImpl implements DebugSession {
               Object result = Context.getProcessEngineConfiguration()
                 .getScriptingEngines()
                 .evaluate(scriptEvaluation.script, scriptEvaluation.language, suspendedExecution.executionEntity);
-
               scriptEvaluation.result = result;
 
               fireScriptEvaluated(scriptEvaluation);
@@ -171,6 +172,16 @@ public class DebugSessionImpl implements DebugSession {
         eventListener.onExecutionSuspended(suspendedExecution);
       } catch(Exception e) {
         LOGG.log(Level.WARNING, "Exception while invoking debug event listener", e);
+      }
+    }
+  }
+
+  protected void fireErrorOccured(Exception e, ExecutionEntity execution, AtomicOperation operation) {
+    for (DebugEventListener eventListener : debugEventListeners) {
+      try {
+        eventListener.onException(e, execution, operation);
+      } catch(Exception ex) {
+        LOGG.log(Level.WARNING, "Exception while invoking debug event listener", ex);
       }
     }
   }
@@ -291,4 +302,9 @@ public class DebugSessionImpl implements DebugSession {
       suspendedExecution.resume();
     }
   }
+
+  public void execption(Exception e, ExecutionEntity execution, AtomicOperation executionOperation) {
+    fireErrorOccured(e, execution, executionOperation);
+  }
+
 }

@@ -14,7 +14,7 @@ package org.camunda.bpm.engine.debugger;
 
 import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
 
-import static org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation.*;
+import static org.camunda.bpm.engine.impl.pvm.runtime.operation.PvmAtomicOperation.*;
 
 /**
  * @author Daniel Meyer
@@ -25,7 +25,7 @@ public enum BreakPointSpecs implements BreakPointSpec {
   /**
    * Breakpoint before an activity
    */
-  BEFORE_ACTIVITY(ACTIVITY_START, TRANSITION_CREATE_SCOPE),
+  BEFORE_ACTIVITY(PROCESS_START_INITIAL, ACTIVITY_START, TRANSITION_CREATE_SCOPE),
 
   /**
    * Breakpoint after an activity

@@ -73,14 +73,24 @@ public class DebugCommandContext extends CommandContext {
       }
     }
 
+    boolean isSuspended = false;
     if(currentSession != null && breakPoint != null) {
       if(currentSession.getProcessInstanceId() == null) {
         currentSession.setProcessInstanceId(execution.getProcessInstanceId());
       }
+      isSuspended = true;
       currentSession.suspend(new SuspendedExecutionImpl((ExecutionEntity) execution, executionOperation, breakPoint));
     }
 
-    super.performOperation(executionOperation, execution);
+    try {
+      super.performOperation(executionOperation, execution);
+    } catch(RuntimeException e) {
+      if(isSuspended) {
+        // hand exception to debug session
+        currentSession.execption(e, execution, executionOperation);
+      }
+      throw e;
+    }
   }
 
   protected BreakPoint findBreakPoint(DebugSession debugSession, AtomicOperation executionOperation, ActivityExecution execution) {
