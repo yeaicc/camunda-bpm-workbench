@@ -2,11 +2,22 @@
 <div class="navbar">
 
   <button type="button" class="btn btn-xs" 
-    ng-click="openDeployedProcess()"
-    title="Open deployed process">
+    ng-click="openFsProcess()"
+    title="Open process from your filesystem">
     <span class="glyphicon glyphicon-folder-open"></span>
-     Deployed
+     &nbsp; File System
   </button>
+
+  <button type="button" class="btn btn-xs" 
+    ng-click="openDeployedProcess()"
+    title="Open a deployed process">
+    <span class="glyphicon glyphicon-open"></span>
+     Deployed Process
+  </button>
+
+  <div class="hidden">
+    <input type="file" id="dgr-uploader" onchange="this.update()"></input>
+  </div>
 
 </div>
 <!-- #END diagram/directive/dgrControls.html -->

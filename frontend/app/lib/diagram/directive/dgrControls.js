@@ -13,7 +13,8 @@
 
 'use strict';
 
-var fs = require('fs');
+var fs = require('fs'),
+    jquery = require('jquery');
 
 var openDeployedProcessTemplate = fs.readFileSync(__dirname + '/dialog/openDeployedProcess.html',
     { encoding: 'utf-8' });
@@ -69,6 +70,30 @@ var Controller = ['$scope', '$modal', function($scope, $modal) {
       });
 
     });
+  };
+
+  $scope.openFsProcess = function() {
+
+    // Yo!
+
+    var obj = jquery('#dgr-uploader');
+    obj[0].update = function() {
+      var file = this.files[0];
+      if(file !== null) {
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          $scope.diagramManager.openProcess({
+          xml: e.target.result,
+          processDefinition: null
+        });
+
+        };
+        reader.readAsText(file);
+      }
+    };
+
+    obj.click();
+
   };
 
 }];
