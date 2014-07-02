@@ -13,12 +13,20 @@
 
 'use strict';
 
-var angular = require('angular');
+var directive = function() {
+  return function(scope, element, attrs) {
 
-var ngModule = angular.module('developer.console.directive', [])
-  .directive('ngEnter', require('./ngEnter'))
-  .directive('ngUp', require('./ngUp'))
-  .directive('ngDown', require('./ngDown'))
-  .directive('dbgConsole', require('./dbgConsole'));
+    element.bind("keydown keypress", function(event) {
+      if(event.which === 38 && !event.shiftKey) {
 
-module.exports = ngModule;
+        scope.$apply(function(){
+          scope.$eval(attrs.ngUp, {'event': event});
+        });
+
+        event.preventDefault();
+      }
+    });
+  };
+};
+
+module.exports = directive;

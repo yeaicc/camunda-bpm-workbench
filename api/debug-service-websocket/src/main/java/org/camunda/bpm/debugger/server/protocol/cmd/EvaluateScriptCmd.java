@@ -29,7 +29,7 @@ public class EvaluateScriptCmd extends DebugCommand<EvaluateScriptData> {
     final DebugSession debugSession = ctx.getDebugSession();
 
     if(data.getExecutionId() != null) {
-      debugSession.evaluateScript(data.getLanguage(), data.getScript(), data.getCmdId(), data.getExecutionId());
+      debugSession.evaluateScript(data.getExecutionId(), data.getLanguage(), data.getScript(), data.getCmdId());
     } else {
       ctx.executeAsync(new Callable<Void>() {
         public Void call() throws Exception {

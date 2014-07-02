@@ -2,7 +2,7 @@
 <div id="dbg-cmd-console">
   <div class="dbg-cmd-row dbg-cmd-row-hist" ng-repeat="result in evaluationResults">
     <div class="dbg-cmd-detail">
-      <span>&gt;</span>
+      <span class="glyphicon glyphicon-chevron-right"></span>
     </div>
     <div class="dbg-cmd-main">
       <p class="text-muted">
@@ -22,10 +22,15 @@
 
   <div class="dbg-cmd-row">
     <div class="dbg-cmd-detail">
-      <span>&gt;</span>
+      <span class="glyphicon glyphicon-chevron-right"></span>
     </div>
     <div class="dbg-cmd-main">
-      <textarea class="dbg-cmd-line" ng-model="script" ng-enter="evaluate()" ng-expandable spellcheck="false"></textarea> 
+      <textarea class="dbg-cmd-line" ng-model="script" 
+        ng-enter="evaluate()"
+        ng-up="historyPrevious()"
+        ng-down="historyNext()"
+        ng-expandable 
+        spellcheck="false"></textarea> 
     </div>
     <div class="dbg-cmd-detail dbg-cmd-lang">
       <div class="dropdown">
@@ -33,7 +38,7 @@
           {{scriptLanguage}}
           <span class="caret"></span>
         </button>
-        <ul class="dropdown-menu dropdown-menu-left" data-parent="dbg" >
+        <ul class="dropdown-menu dropdown-menu-left" data-parent="dbg">
           <li ng-repeat="lang in scriptLanguages"><a href ng-click="selectLanguage(lang)">{{lang}}</a></li>
         </ul>
       </div>

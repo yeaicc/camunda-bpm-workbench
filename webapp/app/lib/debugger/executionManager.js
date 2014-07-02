@@ -28,16 +28,16 @@ var ExecutionManager = (function() {
     });
   }
 
-  function ExecutionManager(serverSession) {
+  function ExecutionManager(workbench) {
 
-    this.serverSession = serverSession;
-
+    this.workbench = workbench;
+    this.serverSession = workbench.serverSession;
     this.executions = [];
 
     /** the currently selected execution */
     this.selectedExecution = null;
 
-    registerListeners(serverSession.eventBus, this);
+    registerListeners(this.serverSession.eventBus, this);
   }
 
   ExecutionManager.prototype.clear = function() {
@@ -46,11 +46,17 @@ var ExecutionManager = (function() {
   };
 
   ExecutionManager.prototype.select = function(execution) {
+    var eventName;
+
     if(this.isSelected(execution)) {
+      eventName = "execution-deselected";
       this.selectedExecution = null;
     } else {
+      eventName = "execution-selected";
       this.selectedExecution = execution;
     }
+
+    this.workbench.eventBus.fireEvent(eventName, execution);
   };
 
   ExecutionManager.prototype.isSelected = function(execution) {
@@ -66,7 +72,7 @@ var ExecutionManager = (function() {
     }
   };
 
-  ExecutionManager.prototype.resumeAllExecutions = function(execution) {
+  ExecutionManager.prototype.resumeAllExecutions = function() {
     for (var i = 0; i < this.executions.length; i++) {
       this.resumeExecution(this.executions[i]);
     }

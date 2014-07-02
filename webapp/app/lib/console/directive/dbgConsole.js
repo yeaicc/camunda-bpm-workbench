@@ -18,6 +18,7 @@ var fs = require('fs');
 var ConsoleController = [ '$scope', function($scope) {
 
   var serverSession = $scope.workbench.serverSession;
+  var eventBus = $scope.workbench.eventBus;
 
   /** list of available script languages */
   var SCRIPT_LANGUAGES = [
@@ -46,6 +47,11 @@ var ConsoleController = [ '$scope', function($scope) {
   $scope.evaluationResults = [];
 
   /**
+   * the current position in history
+   */
+  $scope.historyCurrent = 0;
+
+  /**
    * currently selected script language
    */
   $scope.scriptLanguage = null;
@@ -53,28 +59,47 @@ var ConsoleController = [ '$scope', function($scope) {
   $scope.scriptLanguages = SCRIPT_LANGUAGES;
 
   $scope.evaluate = function() {
-    var cmdId = nextId++;
 
-    var cmd = {
-      "cmdId" : cmdId,
-      "language": $scope.scriptLanguage,
-      "executionId": $scope.executionId,
-      "script": $scope.script,
-    };
+    if("clear" === $scope.script) {
+      $scope.evaluationResults = [];
 
-    $scope.evaluationResults.push(cmd);
+    } else {
+      var cmdId = nextId++;
 
-    serverSession.evaluateScript(cmd);
+      var cmd = {
+        "cmdId" : cmdId,
+        "language": $scope.scriptLanguage,
+        "executionId": $scope.executionId,
+        "script": $scope.script,
+      };
 
+      $scope.evaluationResults.push(cmd);
+      serverSession.evaluateScript(cmd);
+    }
+
+    $scope.historyCurrent = 0;
+    $scope.script = "";
   };
 
-  $scope.$on("executionSelected", function(e, execution) {
-    if(!!execution) {
-      $scope.executionId = execution.id;
-    } else {
-      $scope.executionId =null; 
+  $scope.historyPrevious = function() {
+    var entry = $scope.evaluationResults.length - $scope.historyCurrent -1;
+    if(entry >= 0) {
+      $scope.script = $scope.evaluationResults[entry].script;
+      $scope.historyCurrent++;
     }
-  });
+  };
+
+  $scope.historyNext = function() {
+    var entry = $scope.historyCurrent - 1;
+    if(entry >= 0) {
+      $scope.historyCurrent--;
+      if(entry === 0) {
+        $scope.script = "";
+      } else {
+        $scope.script = $scope.evaluationResults[$scope.evaluationResults.length- entry].script;
+      }
+    }
+  };
 
   function addEvaluationResults(data, failed) {
     var cmdId = data.cmdId;
@@ -117,6 +142,14 @@ var ConsoleController = [ '$scope', function($scope) {
 
   serverSession.eventBus.onEvent("server-error", function(data) {
     logError(data);
+  });
+
+  eventBus.onEvent("execution-selected", function(data) {
+    $scope.executionId = data.id;
+  });
+
+  eventBus.onEvent("execution-deselected", function() {
+    $scope.executionId = null;
   });
 
   // init

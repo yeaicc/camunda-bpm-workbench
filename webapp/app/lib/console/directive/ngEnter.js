@@ -50,18 +50,24 @@ function setCursorPosition(el, selectionStart, selectionEnd) {
 var directive = function() {
   return function(scope, element, attrs) {
 
-    var rows = 0;
+    var rows = 1;
 
-    function addRow() {
+    function setRows(rows) {
       var cpos = getCursorPosition(element);
       var textContent = element.val();
       textContent = [textContent.slice(0, cpos), "\n", textContent.slice(cpos)].join('');
       element.val(textContent);
       setCursorPosition(element, cpos+1);
-      element.attr("rows", ++rows);
+      element.attr("rows", rows);
     }
 
-    addRow();
+    function reset() {
+      rows = 1;
+      element.val("");
+      setRows(rows);
+    }
+
+    reset();
 
     element.bind("keydown keypress", function(event) {
       if(event.which === 13) {
@@ -69,11 +75,13 @@ var directive = function() {
 
           scope.$apply(function(){
             scope.$eval(attrs.ngEnter, {'event': event});
+            reset();
           });
 
-        } else {
-          addRow();
 
+        } else {
+          rows++;
+          setRows(rows);
         }
 
         event.preventDefault();

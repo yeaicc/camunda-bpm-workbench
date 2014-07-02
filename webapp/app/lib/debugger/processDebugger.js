@@ -62,7 +62,7 @@ var ProcessDebugger = (function() {
 
     this.breakpointManager = new BreakpointManager(workbench);
 
-    this.executionManager = new ExecutionManager(workbench.serverSession);
+    this.executionManager = new ExecutionManager(workbench);
 
     /** @member {String} the Id of the currently associated process definition or 'null'*/
     this.processDefinitionId = null;
