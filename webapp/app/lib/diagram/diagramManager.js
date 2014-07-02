@@ -13,7 +13,7 @@
 
 'use strict';
 
-var BpmnJS = require('bpmn-js/lib/Modeler');
+var BpmnJS = require('bpmn-js');
 
 
 var DiagramManager = (function() {
@@ -99,6 +99,8 @@ var DiagramManager = (function() {
   DiagramManager.prototype.initDiagram = function(element) {
 
     var bpmnJSModules = BpmnJS.prototype._modules.concat([
+      require('bpmn-js/lib/features/zoomscroll'),
+      require('bpmn-js/lib/features/movecanvas'),
       require('./debug-overlay'),
       {
         workbench: [ 'value', this.workbench ]

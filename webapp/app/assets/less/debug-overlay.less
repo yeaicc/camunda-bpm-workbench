@@ -1,7 +1,8 @@
 .djs-shape {
 
   .dbg-active-marker,
-  .dbg-controls {
+  .dbg-controls,
+  .dbg-status {
     visibility: hidden;
   }
 
@@ -9,26 +10,65 @@
     visibility: hidden;
 
     fill: none;
-    stroke-width: 2px;
-    stroke: green;
+    stroke-width: 4px;
+    stroke: #b5152b;
+    opacity: 0.7;
   }
 
   .dbg-toggle-breakpoint {
     fill: white;
-    stroke: fuchsia;
+    stroke: #b5152b;
     stroke-width: 2px;
   }
 
-  &.dbg-breakpoint-active .dbg-toggle-breakpoint {
-    fill: fuchsia;
-    stroke: none;
+  &.dbg-breakpoint-active {
+
+    .dbg-toggle-breakpoint {
+      fill: #b5152b;
+      stroke: none;
+    }
+
+    &:not(.dbg-suspended) .dbg-status {
+      visibility: visible;
+    }
   }
 
-  &.dbg-suspended .dbg-suspended-marker {
+  &.dbg-suspended {
+
+    .dbg-suspended-marker {
+      visibility: visible;
+    }
+
+    .dbg-controls {
+      visibility: visible;
+    }
+
+    .dbg-status {
+      visibility: hidden;
+    }
+
+    .dbg-play {
+      opacity: 1;
+    }
+  }
+
+  &:hover:not(.dbg-suspended) .dbg-status,
+  &.selected:not(.dbg-suspended) .dbg-status {
     visibility: visible;
   }
 
-  &.hover .dbg-controls {
-    visibility: visible;
+  .dbg-controls > line {
+    stroke: white;
+  }
+
+  .dbg-controls .bg,
+  .dbg-status .bg {
+    fill: #CCC;
+  }
+
+  .dbg-play {
+    fill: white;
+    opacity: 0.2;
+    stroke-linejoin: round;
   }
 }

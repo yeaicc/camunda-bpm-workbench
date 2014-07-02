@@ -112,6 +112,22 @@ var ProcessDebugger = (function() {
     }
   };
 
+  ProcessDebugger.prototype.runActivity = function(id) {
+
+    if (!this.canRun()) {
+      return null;
+    }
+
+    var executions = this.executionManager.executions;
+
+    for (var i = 0, execution; !!(execution = executions[i]); i++) {
+
+      if (execution.currentActivityId === id) {
+        this.executionManager.resumeExecution(execution);
+      }
+    }
+  };
+
   ProcessDebugger.prototype.run = function() {
     if(this.processDefinitionId !== null) {
       var selectedExecution = this.executionManager.selectedExecution;

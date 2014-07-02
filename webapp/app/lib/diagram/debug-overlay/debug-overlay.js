@@ -21,13 +21,36 @@ function DebugOverlay(eventBus, bpmnRegistry, elementRegistry, workbench) {
       class: 'dbg-suspended-marker'
     });
 
-    var buttonGroup = group.group().attr({ class: 'dbg-controls' }).translate(0, bbox.height - 5);
+    var statusGroup = group.group().attr({ class: 'dbg-status' }).translate(-15, bbox.height - 10);
 
-    buttonGroup
-      .circle(12, 12, 12)
+    statusGroup.rect(0, 0, 30, 30, 10, 10).attr({ class: 'bg' });
+
+    statusGroup
+      .circle(15, 15, 10)
         .attr({ class: 'dbg-toggle-breakpoint' })
         .click(function() {
           self.toggleBreakpoint(semantic);
+        });
+
+
+    var buttonGroup = group.group().attr({ class: 'dbg-controls' }).translate(-15, bbox.height - 10);
+
+    buttonGroup.rect(0, 0, 65, 30, 10, 10).attr({ class: 'bg' });
+
+    buttonGroup
+      .circle(15, 15, 10)
+        .attr({ class: 'dbg-toggle-breakpoint' })
+        .click(function() {
+          self.toggleBreakpoint(semantic);
+        });
+
+    buttonGroup.line(34, 5, 34, 25);
+
+    buttonGroup
+      .path('M 43,5 L 60,15 L 43,25 Z')
+        .attr({ class: 'dbg-play' })
+        .click(function() {
+          self.resume(semantic);
         });
   }
 
@@ -56,6 +79,7 @@ function DebugOverlay(eventBus, bpmnRegistry, elementRegistry, workbench) {
   }
 
   function breakpointRemovedListener(e) {
+    console.log('breakpoint removed (!!!)', e);
     self.setBreakpointState(e.elementId, false);
   }
 
@@ -86,13 +110,14 @@ DebugOverlay.prototype.setBreakpointState = function(id, active) {
   gfx[active ? 'addClass' : 'removeClass']('dbg-breakpoint-active');
 };
 
-DebugOverlay.prototype.toggleBreakpoint = function(e) {
-  this._workbench.processDebugger.toggleBreakpoint(e.id);
+DebugOverlay.prototype.toggleBreakpoint = function(semantic) {
+  this._workbench.processDebugger.toggleBreakpoint(semantic.id);
   this._workbench.update();
 };
 
-DebugOverlay.prototype.updateOverlays = function(e) {
-  console.log('DebugOverlay#updateOverlays', e);
+DebugOverlay.prototype.resume = function(semantic) {
+  this._workbench.processDebugger.runActivity(semantic.id);
+  this._workbench.update();
 };
 
 

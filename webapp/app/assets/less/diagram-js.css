@@ -4,9 +4,10 @@
 .djs-outline {
   fill: none;
   visibility: hidden;
+  shape-rendering: crispEdges;
 }
 
-.djs-group.hover .djs-outline,
+.djs-group:hover .djs-outline,
 .djs-group.selected .djs-outline {
   visibility: visible;
   stroke-dasharray: 2,4;
