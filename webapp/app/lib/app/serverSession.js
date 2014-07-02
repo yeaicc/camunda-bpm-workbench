@@ -125,6 +125,8 @@ var ServerSession = (function() {
     };
 
     execute(cmd, this.wsConnection);
+
+    return this.promise("process-deployed");
   };
 
   /**

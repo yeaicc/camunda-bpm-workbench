@@ -75,13 +75,15 @@ var ProcessDebugger = (function() {
   }
 
   /** deploy the current diagram */
-  ProcessDebugger.prototype.deployProcess = function() {
+  ProcessDebugger.prototype.deployProcess = function(callback) {
     var self = this;
     this.workbench.diagramProvider.getBpmnXml(function(err, xml) {
 
       self.workbench.serverSession.deployProcess({
         resourceName: 'process.bpmn',
         resourceData: xml
+      }).success(function(data) {
+        callback(data);
       });
 
     });
@@ -150,12 +152,24 @@ var ProcessDebugger = (function() {
     return false;
   };
 
-  ProcessDebugger.prototype.toggleBreakpoint = function(id) {
+  ProcessDebugger.prototype.doToggleBreakpoint = function(id) {
     var selectedIds = (id && [id]) || this.workbench.diagramProvider.getSelectedElements();
 
     for(var i = 0; i<selectedIds.length; i++) {
       var elId = selectedIds[i];
       this.breakpointManager.toggleBreakpointBefore(elId, this.processDefinitionId);
+    }
+  };
+
+  ProcessDebugger.prototype.toggleBreakpoint = function(id) {
+    var self = this;
+    if(!this.processDefinitionId) {
+      this.deployProcess(function(data) {
+        self.processDefinitionId = data;
+        self.doToggleBreakpoint(id);
+      });
+    } else {
+      self.doToggleBreakpoint(id);
     }
   };
 
