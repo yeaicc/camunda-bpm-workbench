@@ -40,7 +40,8 @@ import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
-import org.camunda.bpm.engine.impl.scripting.ScriptingEngines;
+import org.camunda.bpm.engine.impl.scripting.ExecutableScript;
+import org.camunda.bpm.engine.impl.scripting.engine.ScriptingEngines;
 import org.camunda.bpm.model.bpmn.Bpmn;
 
 /**
@@ -113,9 +114,14 @@ public class DebugSessionImpl implements DebugSession {
             DebugScriptEvaluation scriptEvaluation = suspendedExecution.debugScriptEvaluation;
 
             try {
+              ExecutableScript executableScript = Context.getProcessEngineConfiguration()
+                .getScriptFactory()
+                .createScript(scriptEvaluation.script, scriptEvaluation.language);
+
               Object result = Context.getProcessEngineConfiguration()
-                .getScriptingEngines()
-                .evaluate(scriptEvaluation.script, scriptEvaluation.language, suspendedExecution.executionEntity);
+                .getScriptingEnvironment()
+                .execute(executableScript, suspendedExecution.executionEntity);
+
               scriptEvaluation.result = result;
 
               fireScriptEvaluated(scriptEvaluation);

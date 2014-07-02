@@ -33,7 +33,7 @@
     
     <property name="processEnginePlugins">
       <list>
-        <bean class="org.camunda.bpm.engine.debugger.DebuggerPlugin" />
+        <bean class="org.camunda.bpm.dev.debug.DebuggerPlugin" />
       </list>
     </property>
 	
