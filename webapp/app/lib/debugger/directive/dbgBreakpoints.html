@@ -12,7 +12,7 @@
       <div class="dbg-breakpoint-toggle">
         <input type="checkbox"
           ng-model="bp.isActive"
-          ng-change="processDebugger.breakpointManager.updateBreakpoints()"
+          ng-change="processDebugger.breakpointManager.toggleBreakpointActive(bp)"
           title="(de-)activate breakpoint"></input>
       </div>
       <div class="dbg-breakpoint-pos">

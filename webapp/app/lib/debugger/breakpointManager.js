@@ -14,8 +14,8 @@
 'use strict';
 
 var BEFORE_ACTIVITY = 'BEFORE_ACTIVITY';
-var AFTER_ACTIVITY = 'AFTER_ACTIVITY';
-var AT_TRANSITION = 'AT_TRANSITION';
+//var AFTER_ACTIVITY = 'AFTER_ACTIVITY';
+//var AT_TRANSITION = 'AT_TRANSITION';
 
 var Breakpoint = (function() {
 
@@ -95,6 +95,24 @@ var BreakpointManager = (function() {
 
   };
 
+  /**
+   * updates an individual breakpoint
+   */
+  BreakpointManager.prototype.toggleBreakpointActive = function(bp) {
+    var eventName;
+    if(bp.isActive) {
+      eventName = 'breakpoint-added';
+    } else {
+      eventName = 'breakpoint-removed';
+    }
+
+    // update breakpoints on server
+    this.updateBreakpoints();
+
+    // fire event
+    this.workbench.eventBus.fireEvent(eventName, bp);
+  };
+
   /** clears all breakpoints, here and on the server */
   BreakpointManager.prototype.clear= function() {
 
@@ -149,7 +167,7 @@ var BreakpointManager = (function() {
    * @param {string} the id of the process definition
    */
   BreakpointManager.prototype.toggleBreakpointBefore = function(elementId, processDefinitionId) {
-    this.toggleBreakpoint(elementId, processDefinitionId, BEFORE_ACTIVITY);  
+    this.toggleBreakpoint(elementId, processDefinitionId, BEFORE_ACTIVITY);
   }; 
 
   /**
