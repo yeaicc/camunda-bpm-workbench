@@ -125,6 +125,8 @@ public class DebugSessionImpl implements DebugSession {
               scriptEvaluation.result = result;
 
               fireScriptEvaluated(scriptEvaluation);
+              // fire execution update
+              fireExecutionUpdated(suspendedExecution);
 
             } catch(ProcessEngineException e) {
               LOGG.log(Level.WARNING, "[DEBUGGER] exception while evaluating script in Thread " +
@@ -280,8 +282,6 @@ public class DebugSessionImpl implements DebugSession {
         if(!suspendedExecution.isResumed) {
           // evaluate script in suspended execution
           suspendedExecution.evaluateScript(language, script, cmdId);
-          // fire execution update
-          fireExecutionUpdated(suspendedExecution);
         }
       }
     } else {

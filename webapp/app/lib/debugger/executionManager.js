@@ -26,7 +26,26 @@ var ExecutionManager = (function() {
         executionManager.select(data);
       }
     });
+
+    eventBus.onEvent('execution-updated', function(data) {
+      var executions = executionManager.executions;
+      var idx = -1;
+      for(var i = 0; i < executions.length; i++) {
+        if(executions[i].id === data.id) {
+          idx = i;
+          break;
+        }
+      }
+      if(idx >= 0) {
+        executionManager.executions[i] = data;
+        if(executionManager.selectedExecution && executionManager.selectedExecution.id === data.id) {
+          executionManager.selectedExecution = data;
+        }
+      }
+    });
+
   }
+
 
   function ExecutionManager(workbench) {
 
