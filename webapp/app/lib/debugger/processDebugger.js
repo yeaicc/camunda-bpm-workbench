@@ -31,11 +31,11 @@ var ProcessDebugger = (function() {
   function registerListeners(eventBus, processDebugger) {
 
     eventBus.onEvent('process-deployed', function(evt) {
-      diagramChanged(processDebugger, evt);
+      eventBus.fireEvent('diagram-changed', evt);
     });
 
     eventBus.onEvent('diagram-changed', function(evt) {
-      diagramChanged(processDebugger, evt.id);
+      diagramChanged(processDebugger, evt);
     });
 
     eventBus.onEvent('OPEN', function() {
@@ -83,7 +83,9 @@ var ProcessDebugger = (function() {
         resourceName: 'process.bpmn',
         resourceData: xml
       }).success(function(data) {
-        callback(data);
+        if(!!callback) {
+          callback(data);
+        }
       });
 
     });

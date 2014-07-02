@@ -129,12 +129,11 @@ var DiagramManager = (function() {
       if (err) {
         console.error(err);
 
-      } else {
-
       }
-
-      if(diagramExists) {
-        self.workbench.eventBus.fireEvent("diagram-changed", self.processDefinition);
+      if(self.processDefinition) {
+        self.workbench.eventBus.fireEvent("diagram-changed", self.processDefinition.id);
+      } else {
+        self.workbench.eventBus.fireEvent("diagram-changed");
       }
 
     });

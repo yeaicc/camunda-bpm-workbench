@@ -74,6 +74,7 @@ var EventBus = (function() {
       listeners[i](eventObject);
       if(listeners[i].once) {
         listeners.shift(i,1);
+        i--;
       }
     }
   }

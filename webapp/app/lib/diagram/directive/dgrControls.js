@@ -96,6 +96,10 @@ var Controller = ['$scope', '$modal', function($scope, $modal) {
 
   };
 
+  $scope.isDeployed = function() {
+    return !!$scope.workbench.processDebugger.processDefinitionId;
+  };
+
 }];
 
 

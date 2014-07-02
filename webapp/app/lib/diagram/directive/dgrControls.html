@@ -19,5 +19,10 @@
     <input type="file" id="dgr-uploader" onchange="this.update()"></input>
   </div>
 
+  <div class="pull-right">
+    <span class="badge alert-info" ng-show="isDeployed()">Deployed</span>
+    <span class="badge alert-warning" ng-show="!isDeployed()">Not Deployed</span>
+  </div>
+
 </div>
 <!-- #END diagram/directive/dgrControls.html -->
