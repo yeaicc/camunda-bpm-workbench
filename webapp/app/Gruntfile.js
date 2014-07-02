@@ -81,6 +81,16 @@ module.exports = function (grunt) {
         }
       }
     },
+
+    jshint: {
+      lib: [
+        ['lib']
+      ],
+      options: {
+        jshintrc: true
+      }
+    },
+
     copy: {
       resources: {
         files: [
