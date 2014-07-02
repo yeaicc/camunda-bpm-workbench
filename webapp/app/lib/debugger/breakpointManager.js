@@ -63,10 +63,12 @@ var BreakpointManager = (function() {
    * @classdesc The breakpoint manager allows managing
    * breakpoints
    */
-  function BreakpointManager(serverSession) {
+  function BreakpointManager(workbench) {
 
     /** @member {DebugSession} the debug session */
-    this.serverSession = serverSession;
+    this.serverSession = workbench.serverSession;
+
+    this.workbench = workbench;
 
     /** @private The list of breakpoints. */
     this.breakpoints = [];
@@ -116,18 +118,27 @@ var BreakpointManager = (function() {
       }
     }
 
+    var eventName,
+        changedBreakpoint;
+
     if(removeIdx >= 0) {
       // remove existing breakpoint
+      eventName = "breakpoint-removed";
+      changedBreakpoint = this.breakpoints[removeIdx];
       this.breakpoints.splice(removeIdx, 1);
 
     } else {
       // add new breakpoint
-      this.breakpoints.push(new Breakpoint(elementId, processDefinitionId, type));
+      eventName = "breakpoint-added";
+      changedBreakpoint = new Breakpoint(elementId, processDefinitionId, type);
+      this.breakpoints.push(changedBreakpoint);
 
     }
 
     this.updateBreakpoints();
 
+    // fire event
+    this.workbench.eventBus.fireEvent(eventName, changedBreakpoint);
   };
 
   /**

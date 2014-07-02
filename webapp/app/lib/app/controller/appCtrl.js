@@ -21,6 +21,14 @@ var ServerSession = require('./../serverSession'),
 
 var Controller = ['$scope', function($scope) {
 
+  $scope.safeDigest = function(fn) {
+  var phase = this.$root.$$phase;
+    // only apply if not already in digest / apply
+    if(phase !== '$apply' && phase !== '$digest') {
+      this.$apply(fn);
+    }
+  };
+
   var serverUrl = "ws://localhost:9090/debug-session";
 
   // the global event bus
@@ -38,7 +46,7 @@ var Controller = ['$scope', function($scope) {
 
   // register the update function
   workbench.update = function() {
-    $scope.$digest();
+    $scope.safeDigest();
   };
 
   // trigger scope whenever an event is fired. This listener is the first to register
@@ -56,3 +64,4 @@ var Controller = ['$scope', function($scope) {
 }];
 
 module.exports = Controller;
+

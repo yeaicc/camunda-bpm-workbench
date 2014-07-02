@@ -60,7 +60,7 @@ var ProcessDebugger = (function() {
     /** @member the workbench */
     this.workbench = workbench;
 
-    this.breakpointManager = new BreakpointManager(workbench.serverSession);
+    this.breakpointManager = new BreakpointManager(workbench);
 
     this.executionManager = new ExecutionManager(workbench.serverSession);
 
