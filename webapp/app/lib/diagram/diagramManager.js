@@ -13,7 +13,11 @@
 
 'use strict';
 
-var BpmnViewer = require('bpmn-js').Viewer;
+var BpmnJS = require('bpmn-js/lib/Modeler');
+
+var bpmnJSModules = BpmnJS.prototype._modules.concat([
+
+]);
 
 var DiagramManager = (function() {
 
@@ -38,7 +42,7 @@ var DiagramManager = (function() {
   function getDiagramProvider(diagramManager) {
 
     // expose the diagram provider
-    // The diagram is the public API provided by this component 
+    // The diagram is the public API provided by this component
     // to the rest of the application
     return {
       /**
@@ -78,7 +82,7 @@ var DiagramManager = (function() {
     /** @member {Workbench} the current workbench */
     this.workbench = workbench;
 
-    /** @member {BpmnViewer} the bpmn viewer */
+    /** @member {BpmnJS} the bpmn viewer */
     this.renderer = null;
 
     this.currentXmlSource = null;
@@ -97,7 +101,13 @@ var DiagramManager = (function() {
    */
   DiagramManager.prototype.initDiagram = function(element) {
     // construct new renderer
-    this.renderer = new BpmnViewer({container: element, width: '100%', height: '100%' });
+    this.renderer = new BpmnJS({
+      container: element,
+      width: '100%',
+      height: '100%',
+      modules: bpmnJSModules
+    });
+
     // register listeners on the renderer
     registerListeners(this.renderer, this);
   };
