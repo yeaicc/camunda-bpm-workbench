@@ -84,6 +84,11 @@ public class DebugCommandContext extends CommandContext {
 
     try {
       super.performOperation(executionOperation, execution);
+      // check whether process instance is ended:
+      ExecutionEntity processInstance = execution.getProcessInstance();
+      if(processInstance.isEnded()) {
+        currentSession.setProcessInstanceId(null);
+      }
     } catch(RuntimeException e) {
       if(isSuspended) {
         // hand exception to debug session
