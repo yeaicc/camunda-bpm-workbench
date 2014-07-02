@@ -16,7 +16,6 @@ module.exports = function (grunt) {
           paths: [
             'assets/less',
             'bower_components/bootstrap/less',
-            'node_modules/bpmn-js/example/css/',
             'node_modules/camunda-simple-grid/lib/less'
           ]
         },
@@ -66,7 +65,12 @@ module.exports = function (grunt) {
       watch: {
         options: {
           watch: true,
-          keepalive: true
+          keepalive: true,
+          bundleOptions: {
+            detectGlobals: false,
+            insertGlobalVars: [],
+            debug: true
+          }
         },
         files: {
           'dist/developer.js': [ 'lib/developer.js' ],
