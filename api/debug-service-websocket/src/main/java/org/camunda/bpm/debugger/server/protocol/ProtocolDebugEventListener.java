@@ -19,6 +19,8 @@ import org.camunda.bpm.debugger.server.protocol.dto.ScriptEvaluationData;
 import org.camunda.bpm.debugger.server.protocol.dto.SuspendedExecutionData;
 import org.camunda.bpm.debugger.server.protocol.evt.ErrorEvt;
 import org.camunda.bpm.debugger.server.protocol.evt.ExecutionSuspendedEvt;
+import org.camunda.bpm.debugger.server.protocol.evt.ExecutionUnsuspendedEvt;
+import org.camunda.bpm.debugger.server.protocol.evt.ExecutionUpdatedEvt;
 import org.camunda.bpm.debugger.server.protocol.evt.ScriptEvaluatedEvt;
 import org.camunda.bpm.debugger.server.protocol.evt.ScriptEvaluationFailedEvt;
 import org.camunda.bpm.dev.debug.DebugEventListener;
@@ -52,6 +54,14 @@ public class ProtocolDebugEventListener implements DebugEventListener {
     protocol.fireEvent(channel, new ExecutionSuspendedEvt(new SuspendedExecutionData(execution)));
   }
 
+  public void onExecutionUpdated(SuspendedExecution execution) {
+    protocol.fireEvent(channel, new ExecutionUpdatedEvt(new SuspendedExecutionData(execution)));
+  }
+
+  public void onExecutionUnsuspended(SuspendedExecution execution) {
+    protocol.fireEvent(channel, new ExecutionUnsuspendedEvt(new SuspendedExecutionData(execution)));
+  }
+
   public void onScriptEvaluated(DebugScriptEvaluation scriptEvaluation) {
     protocol.fireEvent(channel, new ScriptEvaluatedEvt(new ScriptEvaluationData(scriptEvaluation)));
   }
@@ -63,5 +73,6 @@ public class ProtocolDebugEventListener implements DebugEventListener {
   public void onException(Exception e, ExecutionEntity execution, AtomicOperation operation) {
     protocol.fireEvent(channel, new ErrorEvt(new ErrorData(e)));
   }
+
 
 }

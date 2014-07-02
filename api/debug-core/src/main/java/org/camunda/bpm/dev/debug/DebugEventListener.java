@@ -24,6 +24,10 @@ public interface DebugEventListener {
 
   public void onExecutionSuspended(SuspendedExecution execution);
 
+  public void onExecutionUpdated(SuspendedExecution suspendedExecution);
+
+  public void onExecutionUnsuspended(SuspendedExecution suspendedExecution);
+
   public void onScriptEvaluated(DebugScriptEvaluation scriptEvaluation);
 
   public void onScriptEvaluationFailed(DebugScriptEvaluation scriptEvaluation);

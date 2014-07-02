@@ -145,6 +145,9 @@ public class DebugSessionImpl implements DebugSession {
       LOGG.info("[DEBUGGER] thread " + suspendedExecution.getSuspendedThread().getName() + " interrupted at breakpoint " + suspendedExecution.getBreakPoint()  + ".");
 
     } finally {
+
+      fireExecutionUnsuspended(suspendedExecution);
+
       synchronized (suspendedExecutions) {
         suspendedExecutions.remove(suspendedExecution);
       }
@@ -172,10 +175,30 @@ public class DebugSessionImpl implements DebugSession {
     }
   }
 
-  private void fireExecutionSuspended(SuspendedExecutionImpl suspendedExecution) {
+  protected void fireExecutionSuspended(SuspendedExecutionImpl suspendedExecution) {
     for (DebugEventListener eventListener : debugEventListeners) {
       try {
         eventListener.onExecutionSuspended(suspendedExecution);
+      } catch(Exception e) {
+        LOGG.log(Level.WARNING, "Exception while invoking debug event listener", e);
+      }
+    }
+  }
+
+  protected void fireExecutionUnsuspended(SuspendedExecutionImpl suspendedExecution) {
+    for (DebugEventListener eventListener : debugEventListeners) {
+      try {
+        eventListener.onExecutionUnsuspended(suspendedExecution);
+      } catch(Exception e) {
+        LOGG.log(Level.WARNING, "Exception while invoking debug event listener", e);
+      }
+    }
+  }
+
+  protected void fireExecutionUpdated(SuspendedExecutionImpl suspendedExecution) {
+    for (DebugEventListener eventListener : debugEventListeners) {
+      try {
+        eventListener.onExecutionUpdated(suspendedExecution);
       } catch(Exception e) {
         LOGG.log(Level.WARNING, "Exception while invoking debug event listener", e);
       }
@@ -255,7 +278,10 @@ public class DebugSessionImpl implements DebugSession {
     if(suspendedExecution != null) {
       synchronized (suspendedExecution) {
         if(!suspendedExecution.isResumed) {
+          // evaluate script in suspended execution
           suspendedExecution.evaluateScript(language, script, cmdId);
+          // fire execution update
+          fireExecutionUpdated(suspendedExecution);
         }
       }
     } else {
