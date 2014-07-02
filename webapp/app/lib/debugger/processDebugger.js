@@ -40,11 +40,11 @@ var ProcessDebugger = (function() {
 
     eventBus.onEvent('OPEN', function() {
       processDebugger.breakpointManager.updateBreakpoints();
-    }); 
+    });
 
     eventBus.onEvent('CLOSE', function() {
       processDebugger.executionManager.clear();
-    }); 
+    });
   }
 
   // class ///////////////////////////////
@@ -150,8 +150,9 @@ var ProcessDebugger = (function() {
     return false;
   };
 
-  ProcessDebugger.prototype.toggleBreakpoint = function() {
-    var selectedIds = this.workbench.diagramProvider.getSelectedElements();
+  ProcessDebugger.prototype.toggleBreakpoint = function(id) {
+    var selectedIds = (id && [id]) || this.workbench.diagramProvider.getSelectedElements();
+
     for(var i = 0; i<selectedIds.length; i++) {
       var elId = selectedIds[i];
       this.breakpointManager.toggleBreakpointBefore(elId, this.processDefinitionId);

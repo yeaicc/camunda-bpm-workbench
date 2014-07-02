@@ -1,0 +1,34 @@
+.djs-shape {
+
+  .dbg-active-marker,
+  .dbg-controls {
+    visibility: hidden;
+  }
+
+  .dbg-suspended-marker {
+    visibility: hidden;
+
+    fill: none;
+    stroke-width: 2px;
+    stroke: green;
+  }
+
+  .dbg-toggle-breakpoint {
+    fill: white;
+    stroke: fuchsia;
+    stroke-width: 2px;
+  }
+
+  &.dbg-breakpoint-active .dbg-toggle-breakpoint {
+    fill: fuchsia;
+    stroke: none;
+  }
+
+  &.dbg-suspended .dbg-suspended-marker {
+    visibility: visible;
+  }
+
+  &.hover .dbg-controls {
+    visibility: visible;
+  }
+}

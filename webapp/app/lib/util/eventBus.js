@@ -46,6 +46,10 @@ var EventBus = (function() {
     listeners[eventName].unshift(callback);
   };
 
+  EventBus.prototype.off = function(eventName, callback) {
+    console.warn('not implemented EventBus#off', eventName, callback);
+  };
+
   EventBus.prototype.fireEvent = function(eventName, eventPayload) {
     fireEvent(eventName, eventPayload, this.eventListeners);
   };

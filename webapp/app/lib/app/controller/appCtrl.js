@@ -16,6 +16,7 @@
 var ServerSession = require('./../serverSession'),
     WsConnection = require('./../../util/wsConnection'),
     EventBus = require('./../../util/eventBus'),
+    ProcessDebugger = require('../../debugger/processDebugger'),
     Workbench = require('./../workbench');
 
 
@@ -54,6 +55,9 @@ var Controller = ['$scope', function($scope) {
   eventBus.onEvent('*', function() {
     workbench.update();
   });
+
+  var processDebugger = new ProcessDebugger(workbench);
+  workbench.processDebugger = processDebugger;
 
   // expose the workbench
   $scope.workbench = workbench;

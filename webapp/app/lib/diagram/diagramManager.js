@@ -15,9 +15,6 @@
 
 var BpmnJS = require('bpmn-js/lib/Modeler');
 
-var bpmnJSModules = BpmnJS.prototype._modules.concat([
-
-]);
 
 var DiagramManager = (function() {
 
@@ -100,6 +97,14 @@ var DiagramManager = (function() {
    * @param {Element} element the Dom Element on which the diagram renderer should be created.
    */
   DiagramManager.prototype.initDiagram = function(element) {
+
+    var bpmnJSModules = BpmnJS.prototype._modules.concat([
+      require('./debug-overlay'),
+      {
+        workbench: [ 'value', this.workbench ]
+      }
+    ]);
+
     // construct new renderer
     this.renderer = new BpmnJS({
       container: element,

@@ -13,13 +13,12 @@
 
 'use strict';
 
-var fs = require('fs'),
-    ProcessDebugger = require('./../processDebugger');
+var fs = require('fs');
 
 var DbgController = ['$scope', function($scope) {
 
   // bootstrap the process debugger in the current scope
-  $scope.processDebugger = new ProcessDebugger($scope.workbench);
+  $scope.processDebugger = $scope.workbench.processDebugger;
 
 }];
 
