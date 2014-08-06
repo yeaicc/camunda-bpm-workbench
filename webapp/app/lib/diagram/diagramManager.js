@@ -46,7 +46,7 @@ var DiagramManager = (function() {
        * returns the semantic information about an element by id
        */
       getBpmnElement : function(id) {
-        return diagramManager.renderer.get('bpmnRegistry').getSemantic(id);
+        return diagramManager.renderer.get('elementRegistry').getById(id);
       },
 
       getBpmnXml : function(done) {
@@ -122,7 +122,7 @@ var DiagramManager = (function() {
   DiagramManager.prototype.openProcess = function(data) {
 
     var diagramExists = this.currentXmlSource !== null;
-    this.currentXmlSource = data.xml;
+    this.currentXmlSource =data.xml;
     this.processDefinition = data.processDefinition;
 
     var self = this;
