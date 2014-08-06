@@ -1,7 +1,7 @@
 'use strict';
 
 
-function DebugOverlay(eventBus, renderer, elementRegistry, workbench) {
+function DebugOverlay(eventBus, elementRegistry, workbench) {
 
   var self = this;
 
@@ -59,7 +59,7 @@ function DebugOverlay(eventBus, renderer, elementRegistry, workbench) {
     var gfx = e.gfx,
         element = e.element;
 
-    var semantic = renderer.getSemantic(element);
+    var semantic = element.businessObject;
 
     if (element.type !== 'label' && semantic.$instanceOf('bpmn:FlowNode')) {
       addDebugControls(element, gfx, semantic);
@@ -121,6 +121,6 @@ DebugOverlay.prototype.resume = function(semantic) {
 };
 
 
-DebugOverlay.$inject = [ 'eventBus', 'renderer', 'elementRegistry', 'workbench' ];
+DebugOverlay.$inject = [ 'eventBus', 'elementRegistry', 'workbench' ];
 
 module.exports = DebugOverlay;
