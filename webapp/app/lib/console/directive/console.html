@@ -1,25 +1,5 @@
 <!-- #BEGIN console/directive/console.html -->
 <div id="dbg-cmd-console">
-    <div class="dbg-cmd-row dbg-cmd-row-hist" ng-repeat="result in evaluationResults" ng-scroll-link>
-        <div class="dbg-cmd-detail">
-            <span class="glyphicon glyphicon-chevron-right"></span>
-        </div>
-        <div class="dbg-cmd-main">
-            <p class="text-muted">
-        {{result.script}}
-      </p>
-            <p ng-if="result.evaluationFailed" class="text-danger">
-        {{result.result}}
-      </p>
-            <p ng-if="!result.evaluationFailed">
-        {{result.result}}
-      </p>
-        </div>
-        <div class="dbg-cmd-detail dbg-cmd-lang">
-            {{result.language}}
-        </div>
-    </div>
-
     <div class="dbg-cmd-row">
         <div class="dbg-cmd-detail">
             <span class="glyphicon glyphicon-chevron-right"></span>
@@ -44,5 +24,26 @@
             </div>
         </div>
     </div>
+
+    <div class="dbg-cmd-row dbg-cmd-row-hist" ng-repeat="result in evaluationResults">
+        <div class="dbg-cmd-detail">
+            <span class="glyphicon glyphicon-chevron-right"></span>
+        </div>
+        <div class="dbg-cmd-main">
+            <p class="text-muted">
+        {{result.script}}
+      </p>
+            <p ng-if="result.evaluationFailed" class="text-danger">
+        {{result.result}}
+      </p>
+            <p ng-if="!result.evaluationFailed">
+        {{result.result}}
+      </p>
+        </div>
+        <div class="dbg-cmd-detail dbg-cmd-lang">
+            {{result.language}}
+        </div>
+    </div>
+
 </div>
 <!-- #END console/directive/console.html -->

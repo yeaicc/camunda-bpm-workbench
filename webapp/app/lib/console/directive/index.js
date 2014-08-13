@@ -19,8 +19,6 @@ var ngModule = angular.module('developer.console.directive', [])
   .directive('ngEnter', require('./ngEnter'))
   .directive('ngUp', require('./ngUp'))
   .directive('ngDown', require('./ngDown'))
-  .directive('dbgConsole', require('./dbgConsole'))
-  .directive('ngScrollLink', require('./ngScrollLink'))
-  .directive('ngScrollDown', require('./ngScrollDown'));
+  .directive('dbgConsole', require('./dbgConsole'));
 
 module.exports = ngModule;

@@ -47,6 +47,11 @@ var ConsoleController = [ '$scope', function($scope) {
   $scope.evaluationResults = [];
 
   /**
+   * the list of executed commands
+   */
+  $scope.scripts = [];
+
+  /**
    * the current position in history
    */
   $scope.historyCurrent = 0;
@@ -70,10 +75,11 @@ var ConsoleController = [ '$scope', function($scope) {
         "cmdId" : cmdId,
         "language": $scope.scriptLanguage,
         "executionId": $scope.executionId,
-        "script": $scope.script,
+        "script": $scope.script
       };
 
-      $scope.evaluationResults.push(cmd);
+      $scope.evaluationResults.unshift(cmd);
+      $scope.scripts.push($scope.script);
       serverSession.evaluateScript(cmd);
     }
 
@@ -82,9 +88,9 @@ var ConsoleController = [ '$scope', function($scope) {
   };
 
   $scope.historyPrevious = function() {
-    var entry = $scope.evaluationResults.length - $scope.historyCurrent -1;
+    var entry = $scope.scripts.length - $scope.historyCurrent -1;
     if(entry >= 0) {
-      $scope.script = $scope.evaluationResults[entry].script;
+      $scope.script = $scope.scripts[entry];
       $scope.historyCurrent++;
     }
   };
@@ -96,7 +102,7 @@ var ConsoleController = [ '$scope', function($scope) {
       if(entry === 0) {
         $scope.script = "";
       } else {
-        $scope.script = $scope.evaluationResults[$scope.evaluationResults.length- entry].script;
+        $scope.script = $scope.scripts[$scope.evaluationResults.length - entry];
       }
     }
   };
