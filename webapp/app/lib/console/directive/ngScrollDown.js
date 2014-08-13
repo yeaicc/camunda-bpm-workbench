@@ -15,7 +15,7 @@
 
 var scrollDown = function(scope, element, attr) {
   scope.$on('content-finish', function() {
-    var contentHeight = element.outerHeight();
+    var contentHeight = element.children().outerHeight();
     console.log('Content-height: ' + contentHeight);
     element.scrollTop(contentHeight);
   });
