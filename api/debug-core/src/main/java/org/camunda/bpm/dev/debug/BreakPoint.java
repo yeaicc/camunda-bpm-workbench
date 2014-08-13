@@ -72,7 +72,7 @@ public class BreakPoint {
 
     shouldBreak &= breakPointSpec.breakOnOperation(operation);
 
-    if (condition != null) {
+    if (shouldBreak && condition != null) {
       shouldBreak &= condition.evaluate(execution);
     }
 
