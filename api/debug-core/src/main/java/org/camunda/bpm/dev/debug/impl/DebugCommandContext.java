@@ -59,12 +59,26 @@ public class DebugCommandContext extends CommandContext {
       for (DebugSession debugSession : openSessions) {
         if(execution.getProcessInstanceId().equals(debugSession.getProcessInstanceId())) {
           currentSession = (DebugSessionImpl) debugSession;
-          breakPoint = findBreakPoint(debugSession, executionOperation, executionEntity);
+
+          try {
+            breakPoint = findBreakPoint(debugSession, executionOperation, executionEntity);
+          } catch (RuntimeException e) {
+            currentSession.execption(e, execution, executionOperation);
+            throw e;
+          }
+
           break;
 
         } else if(debugSession.getProcessInstanceId() == null) {
           if(currentSession == null) {
-            breakPoint = findBreakPoint(debugSession, executionOperation, execution);
+            try {
+              breakPoint = findBreakPoint(debugSession, executionOperation, execution);
+
+            } catch (RuntimeException e) {
+              ((DebugSessionImpl) debugSession).execption(e, execution, executionOperation);
+              throw e;
+            }
+
             if(breakPoint != null) {
               currentSession = (DebugSessionImpl) debugSession;
             }

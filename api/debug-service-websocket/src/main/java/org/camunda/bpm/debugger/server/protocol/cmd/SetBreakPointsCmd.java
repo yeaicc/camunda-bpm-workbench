@@ -20,6 +20,7 @@ import org.camunda.bpm.debugger.server.protocol.dto.SetBreakPointsData;
 import org.camunda.bpm.dev.debug.BreakPoint;
 import org.camunda.bpm.dev.debug.BreakPointSpecs;
 import org.camunda.bpm.dev.debug.DebugSession;
+import org.camunda.bpm.dev.debug.ScriptBreakPointCondition;
 
 /**
  * @author Daniel Meyer
@@ -35,10 +36,18 @@ public class SetBreakPointsCmd extends DebugCommand<SetBreakPointsData> {
 
     List<BreakPoint> breakPoints = new ArrayList<BreakPoint>();
     for (BreakPointDto dto : data.getBreakpoints()) {
+      ScriptBreakPointCondition condition = null;
+      if (dto.getCondition() != null) {
+        condition = new ScriptBreakPointCondition();
+        condition.setScript(dto.getCondition().getScript());
+        condition.setScriptingLanguage(dto.getCondition().getLanguage());
+      }
+
       breakPoints.add(new BreakPoint(
           Enum.valueOf(BreakPointSpecs.class, dto.getType()),
           dto.getProcessDefinitionId(),
-          dto.getElementId()));
+          dto.getElementId(),
+          condition));
     }
 
     debugSession.setBreakpoints(breakPoints);

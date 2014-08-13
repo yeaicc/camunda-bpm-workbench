@@ -15,12 +15,7 @@
 
 var angular = require('angular');
 
-var ngModule = angular.module('developer.console.directive', [
-  require('../../util/scripting/directive').name
-])
-  .directive('ngEnter', require('./ngEnter'))
-  .directive('ngUp', require('./ngUp'))
-  .directive('ngDown', require('./ngDown'))
-  .directive('dbgConsole', require('./dbgConsole'));
+var ngModule = angular.module('developer.util.scripting.directive', [])
+  .directive('scriptLanguageSelector', require('./scriptLanguageSelector'));
 
 module.exports = ngModule;

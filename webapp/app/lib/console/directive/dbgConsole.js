@@ -20,15 +20,6 @@ var ConsoleController = [ '$scope', function($scope) {
   var serverSession = $scope.workbench.serverSession;
   var eventBus = $scope.workbench.eventBus;
 
-  /** list of available script languages */
-  var SCRIPT_LANGUAGES = [
-    "Javascript",
-    "Ruby",
-    "Groovy",
-    "Juel",
-    "Python"
-  ];
-
   var nextId = 0;
 
   /**
@@ -60,8 +51,6 @@ var ConsoleController = [ '$scope', function($scope) {
    * currently selected script language
    */
   $scope.scriptLanguage = null;
-
-  $scope.scriptLanguages = SCRIPT_LANGUAGES;
 
   $scope.evaluate = function() {
 
@@ -118,15 +107,6 @@ var ConsoleController = [ '$scope', function($scope) {
     }
   }
 
-  $scope.selectLanguage = function(lang) {
-    $scope.scriptLanguage = lang;
-    $scope.scriptLanguages = [];
-    for(var i=0; i<SCRIPT_LANGUAGES.length; i++) {
-      if(SCRIPT_LANGUAGES[i] != lang) {
-        $scope.scriptLanguages.push(SCRIPT_LANGUAGES[i]);
-      }
-    }
-  };
 
   function logError(error) {
     $scope.evaluationResults.push({
@@ -159,7 +139,7 @@ var ConsoleController = [ '$scope', function($scope) {
   });
 
   // init
-  $scope.selectLanguage("Javascript");
+  $scope.scriptLanguage = 'Javascript';
 }];
 
 var directiveTemplate = fs.readFileSync(__dirname + '/console.html', { encoding: 'utf-8' });

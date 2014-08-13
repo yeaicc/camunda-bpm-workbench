@@ -32,6 +32,7 @@ var Breakpoint = (function() {
     this.processDefinitionId = processDefinitionId;
     this.type = type;
     this.isActive = true;
+    this.condition = {script: null, scriptLanguage: 'Javascript'};
   }
 
   /**
@@ -49,7 +50,11 @@ var Breakpoint = (function() {
     return {
       "elementId" : this.elementId,
       "processDefinitionId" : this.processDefinitionId,
-      "type": this.type
+      "type": this.type,
+      "condition": {
+        "script": this.condition.script,
+        "language": this.condition.scriptLanguage
+      }
     };
   };
 

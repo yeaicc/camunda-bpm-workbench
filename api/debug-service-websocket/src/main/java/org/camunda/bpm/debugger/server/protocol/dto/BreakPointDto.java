@@ -24,6 +24,8 @@ public class BreakPointDto {
 
   protected String type;
 
+  protected ScriptData condition;
+
   public String getElementId() {
     return elementId;
   }
@@ -46,6 +48,14 @@ public class BreakPointDto {
 
   public void setType(String type) {
     this.type = type;
+  }
+
+  public ScriptData getCondition() {
+    return condition;
+  }
+
+  public void setCondition(ScriptData condition) {
+    this.condition = condition;
   }
 
 }

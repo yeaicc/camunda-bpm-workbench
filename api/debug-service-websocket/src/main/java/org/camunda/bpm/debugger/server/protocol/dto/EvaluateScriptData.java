@@ -16,20 +16,10 @@ package org.camunda.bpm.debugger.server.protocol.dto;
  * @author Daniel Meyer
  *
  */
-public class EvaluateScriptData {
+public class EvaluateScriptData extends ScriptData {
 
-  protected String language;
   protected String executionId;
-  protected String script;
   protected String cmdId;
-
-  public String getLanguage() {
-    return language;
-  }
-
-  public void setLanguage(String language) {
-    this.language = language;
-  }
 
   public String getExecutionId() {
     return executionId;
@@ -37,14 +27,6 @@ public class EvaluateScriptData {
 
   public void setExecutionId(String executionId) {
     this.executionId = executionId;
-  }
-
-  public String getScript() {
-    return script;
-  }
-
-  public void setScript(String script) {
-    this.script = script;
   }
 
   public String getCmdId() {

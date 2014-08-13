@@ -15,7 +15,9 @@
 
 var angular = require('angular');
 
-var ngModule = angular.module('developer.debugger.directive', [])
+var ngModule = angular.module('developer.debugger.directive', [
+  require('../../util/scripting/directive').name
+])
   .directive('dbgPanel', require('./dbgPanel'))
   .directive('dbgControls', require('./dbgControls'))
   .directive('dbgExecutions', require('./dbgExecutions'))

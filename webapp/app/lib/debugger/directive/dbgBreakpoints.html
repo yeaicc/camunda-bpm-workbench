@@ -9,20 +9,36 @@
   <div class="ctrl-pn-row-ctn">
 
     <div class="dbg-breakpoint" ng-repeat="bp in processDebugger.breakpointManager.breakpoints">
-      <div class="dbg-breakpoint-toggle">
-        <input type="checkbox"
-          ng-model="bp.isActive"
-          ng-change="processDebugger.breakpointManager.toggleBreakpointActive(bp)"
-          title="(de-)activate breakpoint"></input>
+      <div>
+        <div class="dbg-breakpoint-toggle">
+          <input type="checkbox"
+            ng-model="bp.isActive"
+            ng-change="processDebugger.breakpointManager.toggleBreakpointActive(bp)"
+            title="(de-)activate breakpoint"></input>
+        </div>
+
+        <div class="dbg-breakpoint-pos">
+          <span class="glyphicon glyphicon-arrow-right"
+            title="BEFORE activity"></span>
+        </div>
+        <div class="dbg-breakpoint-text">
+          <h4>
+            {{bp.elementId}}
+          </h4>
+        </div>
+
+        <div class="dbg-breakpoint-condition-toggle">
+          <button type="button" class="btn btn-default" ng-click="showCondition = !showCondition">
+            Condition
+          </button>
+        </div>
       </div>
-      <div class="dbg-breakpoint-pos">
-        <span class="glyphicon glyphicon-arrow-right"
-          title="BEFORE activity"></span>
-      </div>
-      <div class="dbg-breakpoint-text">
-        <h4>
-          {{bp.elementId}}
-        </h4>
+
+      <div ng-show="showCondition" class="dbg-breakpoint-condition">
+        <div class="dbg-breakpoint-text">
+          <textarea class="dbg-breakpoint-condition-text" ng-model="bp.condition.script" spellcheck="false" ng-blur="processDebugger.breakpointManager.updateBreakpoints()"></textarea>
+        </div>
+        <div script-language-selector class="dbg-breakpoint-condition-lang" language="bp.condition.scriptLanguage"/>
       </div>
     </div>
 

@@ -43,7 +43,7 @@ public class TestDebugger extends ProcessEngineTestCase {
     };
     executionThread.start();
 
-    BreakPoint b1 = new BreakPoint(BEFORE_ACTIVITY, processDefinitionId, "serviceTask1");
+    BreakPoint b1 = new BreakPoint(BEFORE_ACTIVITY, processDefinitionId, "serviceTask1", null);
 
     DebugSession session = debugSessionFactory.openSession(b1);
 

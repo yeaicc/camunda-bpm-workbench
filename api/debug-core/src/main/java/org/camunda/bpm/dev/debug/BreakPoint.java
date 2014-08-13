@@ -50,10 +50,13 @@ public class BreakPoint {
 
   protected String processInstanceId;
 
-  public BreakPoint(BreakPointSpec breakPointSpec, String processDefinitionId, String activityId) {
+  protected BreakPointCondition condition;
+
+  public BreakPoint(BreakPointSpec breakPointSpec, String processDefinitionId, String activityId, BreakPointCondition condition) {
     this.breakPointSpec = breakPointSpec;
     this.activityId = activityId;
     this.processDefinitionId = processDefinitionId;
+    this.condition = condition;
   }
 
   public boolean breakOnOperation(AtomicOperation operation, ExecutionEntity execution) {
@@ -68,6 +71,10 @@ public class BreakPoint {
     }
 
     shouldBreak &= breakPointSpec.breakOnOperation(operation);
+
+    if (condition != null) {
+      shouldBreak &= condition.evaluate(execution);
+    }
 
     return shouldBreak;
   }
