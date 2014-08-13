@@ -13,14 +13,17 @@
 
 'use strict';
 
-var angular = require('angular');
+var scrollDown = function(scope, element, attr) {
+  scope.$on('content-finish', function() {
+    var contentHeight = element.outerHeight();
+    console.log('Content-height: ' + contentHeight);
+    element.scrollTop(contentHeight);
+  });
+};
 
-var ngModule = angular.module('developer.console.directive', [])
-  .directive('ngEnter', require('./ngEnter'))
-  .directive('ngUp', require('./ngUp'))
-  .directive('ngDown', require('./ngDown'))
-  .directive('dbgConsole', require('./dbgConsole'))
-  .directive('ngScrollLink', require('./ngScrollLink'))
-  .directive('ngScrollDown', require('./ngScrollDown'));
-
-module.exports = ngModule;
+module.exports = function() {
+  return {
+    restrict: 'A',
+    link: scrollDown
+  };
+};
