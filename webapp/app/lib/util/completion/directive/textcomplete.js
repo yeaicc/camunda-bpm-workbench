@@ -1,6 +1,9 @@
 var $ = require('jquery');
 
-var autocompleteTemplate = '<div class="autocomplete" ng-show="hints.length"><ul><li ng-repeat="hint in hints" ng-class="{selected: $index == selectedIndex}">{{ hint.completedIdentifier }}: {{hint.completedType}}</li></ul></div>';
+var autocompleteTemplate =
+  '<div class="autocomplete" ng-show="hints.length">' +
+  '<ul><li ng-repeat="hint in hints" ng-class="{selected: $index == selectedIndex}">{{ hint.completedIdentifier }}: {{hint.completedType}}</li></ul>' +
+  '</div>';
 
 var directive = [ '$compile', function($compile) {
     return {
@@ -11,16 +14,17 @@ var directive = [ '$compile', function($compile) {
       },
       link: function(scope, element, attrs) {
 
+        var lastStatementRegex = new RegExp('([^\\s]*(\\([^\)]*\\))?)*$');
+
         $compile(autocompleteTemplate)(scope).appendTo(element.parent());
 
         var extrapolatePartialInput = function(element) {
           var caretPos = element.get(0).selectionStart;
           var pretext = element.val().substring(0, caretPos);
 
-          var splitText = pretext.split(" ");
-          var partialInput = splitText[splitText.length - 1];
+          var matches = lastStatementRegex.exec(pretext);
+          var partialInput = matches[0];
 
-          console.log(partialInput);
           return partialInput;
         }
 
@@ -28,7 +32,8 @@ var directive = [ '$compile', function($compile) {
           var caretPos = element.get(0).selectionStart;
           var pretext = element.val().substring(0, caretPos);
 
-          var partialInputBegin = pretext.lastIndexOf(" ");
+          var partialInput = lastStatementRegex.exec(pretext)[0];
+          var partialInputBegin = pretext.length - partialInput.length - 1;
 
           var newVal = element.val().substring(0, partialInputBegin + 1) + replacement + element.val().substring(caretPos);
           element.val(newVal);
@@ -37,15 +42,30 @@ var directive = [ '$compile', function($compile) {
           element.trigger('input');
         }
 
+        var updateHints = function(partialInput) {
+          scope.textcomplete({ partialInput: partialInput }).success(function(hints) {
+            scope.hints = hints;
+          });
+        }
+
+        var tryUpdateHints = function(partialInput) {
+          if (scope.hints) {
+            updateHints(partialInput);
+          }
+        }
+
+        element.bind("keyup", function(event) {
+          tryUpdateHints(extrapolatePartialInput(element));
+        });
+
         element.bind("keydown keypress", function(event) {
 
           // ctrl + space
           if (event.which === 32 && event.ctrlKey) {
             event.preventDefault();
 
-            var result = scope.textcomplete({ partialInput: extrapolatePartialInput(element) }).success(function(hints) {
-              scope.hints = hints;
-            });
+            updateHints(extrapolatePartialInput(element));
+            return;
           }
 
           if (scope.hints) {
