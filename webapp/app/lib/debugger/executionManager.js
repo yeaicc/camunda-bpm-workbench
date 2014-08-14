@@ -88,6 +88,7 @@ var ExecutionManager = (function() {
       this.serverSession.resumeExecution(execution.id);
       this.executions.splice(idx, 1);
       this.selectedExecution = null;
+      this.workbench.eventBus.fireEvent("execution-deselected", execution);
     }
   };
 
