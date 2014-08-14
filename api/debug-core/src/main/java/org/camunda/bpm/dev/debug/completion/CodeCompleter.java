@@ -83,6 +83,7 @@ public class CodeCompleter {
 
           CodeCompletionHint hint = new CodeCompletionHint();
           hint.setCompletedIdentifier(objectPath + method.getName() + splitter.generateFunctionArgs(parameters));
+          hint.setCompletedMethod(method.getName() + splitter.generateFunctionArgs(parameters));
           hint.setCompletedType(method.getReturnType().getSimpleName());
           hints.add(hint);
         }
@@ -152,6 +153,7 @@ public class CodeCompleter {
         if (binding.getKey().startsWith(prefix)) {
           CodeCompletionHint completionHint = new CodeCompletionHint();
           completionHint.setCompletedIdentifier(binding.getKey());
+          completionHint.setCompletedMethod(binding.getKey());
           completionHint.setCompletedType(binding.getValue().getClass().getSimpleName());
           result.add(completionHint);
         }

@@ -2,7 +2,7 @@ var $ = require('jquery');
 
 var autocompleteTemplate =
   '<div class="autocomplete" ng-show="hints.length">' +
-  '<ul><li ng-repeat="hint in hints" ng-class="{selected: $index == selectedIndex}">{{ hint.completedIdentifier }}: {{hint.completedType}}</li></ul>' +
+  '<ul><li ng-repeat="hint in hints" ng-class="{selected: $index == selectedIndex}">{{ hint.completedMethod }}: {{hint.completedType}}</li></ul>' +
   '</div>';
 
 var directive = [ '$compile', function($compile) {
