@@ -12,8 +12,28 @@
  */
 package org.camunda.bpm.dev.debug.impl;
 
-import org.camunda.bpm.dev.debug.*;
-import org.camunda.bpm.dev.debug.completion.CodeCompleter;
+import java.util.ArrayDeque;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Deque;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
+import javax.script.Bindings;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
+import javax.script.SimpleBindings;
+
+import org.camunda.bpm.dev.debug.BreakPoint;
+import org.camunda.bpm.dev.debug.DebugEventListener;
+import org.camunda.bpm.dev.debug.DebugSession;
+import org.camunda.bpm.dev.debug.DebuggerException;
+import org.camunda.bpm.dev.debug.Script;
+import org.camunda.bpm.dev.debug.SuspendedExecution;
 import org.camunda.bpm.dev.debug.completion.CodeCompleterBuilder;
 import org.camunda.bpm.dev.debug.completion.CodeCompletionHint;
 import org.camunda.bpm.engine.ProcessEngine;
@@ -29,16 +49,11 @@ import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
 import org.camunda.bpm.engine.impl.scripting.ExecutableScript;
 import org.camunda.bpm.engine.impl.scripting.SourceExecutableScript;
+import org.camunda.bpm.engine.impl.scripting.engine.ResolverFactory;
+import org.camunda.bpm.engine.impl.scripting.engine.ScriptBindingsFactory;
 import org.camunda.bpm.engine.impl.scripting.engine.ScriptingEngines;
+import org.camunda.bpm.engine.impl.scripting.engine.VariableScopeResolverFactory;
 import org.camunda.bpm.model.bpmn.Bpmn;
-
-import javax.script.Bindings;
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * @author Daniel Meyer
@@ -387,18 +402,25 @@ public class DebugSessionImpl implements DebugSession {
   }
 
   public List<CodeCompletionHint> completePartialInput(String prefix, String scopeId) {
-    ProcessEngineConfigurationImpl processEngineConfiguration = ((ProcessEngineImpl) getProcessEngine()).getProcessEngineConfiguration();
+    CodeCompleterBuilder builder = new CodeCompleterBuilder().bindings(globalScriptBindings);
 
-    ExecutionEntity executionEntity = getSuspendedExecution(scopeId).getExecution();
+    if (scopeId != null) {
+      SuspendedExecutionImpl suspendedExecution = getSuspendedExecution(scopeId);
+      synchronized (suspendedExecution) {
+        if(!suspendedExecution.isResumed) {
+          ExecutionEntity executionEntity = getSuspendedExecution(scopeId).getExecution();
 
-    ScriptingEngines scriptingEngines = processEngineConfiguration.getScriptingEngines();
-    Bindings scopeBindings = scriptingEngines.getScriptBindingsFactory().createBindings(executionEntity, new SimpleBindings());
+          VariableScopeResolverFactory resolverFactory = new VariableScopeResolverFactory();
+          List<ResolverFactory> resolverFactories = new ArrayList<ResolverFactory>();
+          resolverFactories.add(resolverFactory);
+          ScriptBindingsFactory bindingsFactory = new ScriptBindingsFactory(resolverFactories);
+          Bindings scopeBindings = bindingsFactory.createBindings(executionEntity, new SimpleBindings());
+          builder.bindings(scopeBindings);
+        }
+      }
+    }
 
-    CodeCompleter completer = new CodeCompleterBuilder()
-      .bindings(globalScriptBindings)
-      .bindings(scopeBindings)
-      .buildCompleter();
-    return completer.complete(prefix);
+    return builder.buildCompleter().complete(prefix);
   }
 
 }
