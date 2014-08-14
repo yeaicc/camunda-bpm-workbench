@@ -401,7 +401,17 @@ public class DebugSessionImpl implements DebugSession {
   }
 
   public List<CodeCompletionHint> completePartialInput(String prefix, String scopeId) {
-    CodeCompleter completer = new CodeCompleterBuilder().globalBindings(globalScriptBindings).buildCompleter();
+    ProcessEngineConfigurationImpl processEngineConfiguration = ((ProcessEngineImpl) getProcessEngine()).getProcessEngineConfiguration();
+
+    ExecutionEntity executionEntity = getSuspendedExecution(scopeId).getExecution();
+
+    ScriptingEngines scriptingEngines = processEngineConfiguration.getScriptingEngines();
+    Bindings scopeBindings = scriptingEngines.getScriptBindingsFactory().createBindings(executionEntity, new SimpleBindings());
+
+    CodeCompleter completer = new CodeCompleterBuilder()
+      .bindings(globalScriptBindings)
+      .bindings(scopeBindings)
+      .buildCompleter();
     return completer.complete(prefix);
   }
 

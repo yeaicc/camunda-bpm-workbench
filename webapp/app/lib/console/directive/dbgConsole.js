@@ -108,7 +108,10 @@ var ConsoleController = [ '$scope', function($scope) {
   }
 
   $scope.fetchHints = function(partialInput) {
-    return serverSession.completeCodePrefix({"prefix": partialInput});
+    return serverSession.completeCodePrefix({
+      "prefix": partialInput,
+      "executionId": $scope.executionId
+    });
   }
 
   function logError(error) {

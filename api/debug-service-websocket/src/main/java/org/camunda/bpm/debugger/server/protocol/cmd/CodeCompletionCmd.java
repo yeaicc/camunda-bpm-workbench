@@ -13,7 +13,7 @@ public class CodeCompletionCmd extends DebugCommand<CodeCompletionRequestData> {
   public final static String NAME = "code-completion";
 
   public void execute(DebugCommandContext ctx) {
-    List<CodeCompletionHint> codeCompletionHints = ctx.getDebugSession().completePartialInput(data.getPrefix(), null);
+    List<CodeCompletionHint> codeCompletionHints = ctx.getDebugSession().completePartialInput(data.getPrefix(), data.getExecutionId());
 
     ctx.fireEvent(new CodeCompletionEvt(CodeCompletionDto.fromList(codeCompletionHints)));
   }

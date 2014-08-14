@@ -13,7 +13,6 @@
 package org.camunda.bpm.dev.debug.completion;
 
 import java.lang.reflect.Method;
-import java.lang.reflect.Parameter;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -29,16 +28,20 @@ import org.camunda.bpm.engine.impl.scripting.ExecutableScript;
 
 public class CodeCompleter {
 
-  protected Set<Bindings> collectedBindings;
+  protected Set<Bindings> variableBindings;
   protected PrefixSplitter splitter;
 
   public CodeCompleter() {
-    this.collectedBindings = new HashSet<Bindings>();
+    this.variableBindings = new HashSet<Bindings>();
     this.splitter = new DefaultPrefixSplitter();
   }
 
-  public void addBindings(Bindings bindings) {
-    this.collectedBindings.add(bindings);
+  public void addVariableBindings(Bindings bindings) {
+    this.variableBindings.add(bindings);
+  }
+
+  public void setVariableBindings(Set<Bindings> bindings) {
+    this.variableBindings = bindings;
   }
 
   public void setSplitter(PrefixSplitter splitter) {
@@ -93,11 +96,11 @@ public class CodeCompleter {
   }
 
   protected String[] extractParameterNames(Method method) {
-    Parameter[] parameters = method.getParameters();
+    Class<?>[] parameters = method.getParameterTypes();
     String[] extractedNames = new String[parameters.length];
 
     for (int i = 0; i < parameters.length; i++) {
-      extractedNames[i] = parameters[i].getType().getSimpleName();
+      extractedNames[i] = parameters[i].getSimpleName();
     }
 
     return extractedNames;
@@ -120,7 +123,7 @@ public class CodeCompleter {
 
       for (Class<?> currentType : currentTypes) {
         for (Method method : currentType.getMethods()) {
-          if (method.getName().equals(methodName) && method.getParameterCount() == args.length) {
+          if (method.getName().equals(methodName) && method.getParameterTypes().length == args.length) {
             referencedTypes.add(method.getReturnType());
           }
         }
@@ -133,7 +136,7 @@ public class CodeCompleter {
   }
 
   protected Class<?> resolveRootType(String name) {
-    for (Bindings bindings : collectedBindings) {
+    for (Bindings bindings : variableBindings) {
       for (Map.Entry<String, Object> binding : bindings.entrySet()) {
         if (binding.getKey().equals(name)) {
           return binding.getValue().getClass();
@@ -147,7 +150,7 @@ public class CodeCompleter {
   protected List<CodeCompletionHint> completeFromBindings(String prefix) {
     List<CodeCompletionHint> result = new ArrayList<CodeCompletionHint>();
 
-    for (Bindings bindings : collectedBindings) {
+    for (Bindings bindings : variableBindings) {
       for (Map.Entry<String, Object> binding : bindings.entrySet()) {
         if (binding.getKey().startsWith(prefix)) {
           CodeCompletionHint completionHint = new CodeCompletionHint();

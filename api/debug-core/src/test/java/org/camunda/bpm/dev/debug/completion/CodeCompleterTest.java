@@ -33,7 +33,7 @@ public class CodeCompleterTest {
     Bindings bindings = new SimpleBindings();
     bindings.put("runtimeService", new RuntimeServiceImpl());
 
-    completer.addBindings(bindings);
+    completer.addVariableBindings(bindings);
   }
 
   @Test
