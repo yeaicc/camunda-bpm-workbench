@@ -48,45 +48,47 @@ function setCursorPosition(el, selectionStart, selectionEnd) {
 }
 
 var directive = function() {
-  return function(scope, element, attrs) {
+  return {
+    link: function(scope, element, attrs) {
 
-    var rows = 1;
+      var rows = 1;
 
-    function setRows(rows) {
-      var cpos = getCursorPosition(element);
-      var textContent = element.val();
-      textContent = [textContent.slice(0, cpos), "\n", textContent.slice(cpos)].join('');
-      element.val(textContent);
-      setCursorPosition(element, cpos+1);
-      element.attr("rows", rows);
-    }
-
-    function reset() {
-      rows = 1;
-      element.val("");
-      setRows(rows);
-    }
-
-    reset();
-
-    element.bind("keydown keypress", function(event) {
-      if(event.which === 13) {
-        if(!event.shiftKey) {
-
-          scope.$apply(function(){
-            scope.$eval(attrs.ngEnter, {'event': event});
-            reset();
-          });
-
-
-        } else {
-          rows++;
-          setRows(rows);
-        }
-
-        event.preventDefault();
+      function setRows(rows) {
+        var cpos = getCursorPosition(element);
+        var textContent = element.val();
+        textContent = [textContent.slice(0, cpos), "\n", textContent.slice(cpos)].join('');
+        element.val(textContent);
+        setCursorPosition(element, cpos + 1);
+        element.attr("rows", rows);
       }
-    });
+
+      function reset() {
+        rows = 1;
+        element.val("");
+        setRows(rows);
+      }
+
+      reset();
+
+      element.bind("keydown keypress", function (event) {
+        if (event.which === 13) {
+          if (!event.shiftKey) {
+
+            scope.$apply(function () {
+              scope.$eval(attrs.ngEnter, {'event': event});
+              reset();
+            });
+
+
+          } else {
+            rows++;
+            setRows(rows);
+          }
+
+          event.preventDefault();
+        }
+      });
+    }
   };
 };
 

@@ -309,6 +309,7 @@
 .dbg-cmd-main {
   width: 100%;
   word-break: break-all;
+  position: relative;
 }
 
 .dbg-cmd-line {
@@ -433,4 +434,36 @@
       color: #333;
     }
   }
+}
+
+.autocomplete {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  z-index: 10;
+}
+
+.autocomplete > * {
+  position: absolute;
+  width: 100%;
+
+  border: solid 1px #CCC;
+
+  background: white;
+
+  list-style: none;
+  padding: 0;
+}
+
+.autocomplete li {
+  border-bottom: solid 1px #EEE;
+  line-height: 20px;
+
+  &.selected {
+    background: aliceblue;
+  }
+}
+
+.autocomplete li:last-child {
+  border-bottom: none;
 }

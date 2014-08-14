@@ -52,6 +52,7 @@ var ConsoleController = [ '$scope', function($scope) {
    */
   $scope.scriptLanguage = null;
 
+
   $scope.evaluate = function() {
 
     if("clear" === $scope.script) {
@@ -107,6 +108,9 @@ var ConsoleController = [ '$scope', function($scope) {
     }
   }
 
+  $scope.fetchHints = function(partialInput) {
+    return serverSession.completeCodePrefix({"prefix": partialInput});
+  }
 
   function logError(error) {
     $scope.evaluationResults.push({
@@ -130,6 +134,7 @@ var ConsoleController = [ '$scope', function($scope) {
     logError(data);
   });
 
+
   eventBus.onEvent("execution-selected", function(data) {
     $scope.executionId = data.id;
   });
@@ -140,6 +145,7 @@ var ConsoleController = [ '$scope', function($scope) {
 
   // init
   $scope.scriptLanguage = 'Javascript';
+
 }];
 
 var directiveTemplate = fs.readFileSync(__dirname + '/console.html', { encoding: 'utf-8' });

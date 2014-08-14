@@ -16,6 +16,7 @@ import org.camunda.bpm.debugger.server.netty.AbstractNettyServer;
 import org.camunda.bpm.debugger.server.netty.DefaultNettyServer;
 import org.camunda.bpm.debugger.server.protocol.DebugProtocol;
 import org.camunda.bpm.debugger.server.protocol.Marshaller;
+import org.camunda.bpm.debugger.server.protocol.cmd.CodeCompletionCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.DeployProcessCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.EvaluateScriptCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.GetProcessDefinitionXmlCmd;
@@ -97,7 +98,7 @@ public class DebugServerConfiguration {
       protocol.registerCommandHandler(ResumeExecutionCmd.NAME, ResumeExecutionCmd.class);
       protocol.registerCommandHandler(ListProcessesDefinitionsCommand.NAME, ListProcessesDefinitionsCommand.class);
       protocol.registerCommandHandler(GetProcessDefinitionXmlCmd.NAME, GetProcessDefinitionXmlCmd.class);
-
+      protocol.registerCommandHandler(CodeCompletionCmd.NAME, CodeCompletionCmd.class);
     }
   }
 

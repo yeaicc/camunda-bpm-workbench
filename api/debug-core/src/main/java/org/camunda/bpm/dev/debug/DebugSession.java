@@ -15,6 +15,7 @@ package org.camunda.bpm.dev.debug;
 import java.util.Collection;
 import java.util.List;
 
+import org.camunda.bpm.dev.debug.completion.CodeCompletionHint;
 import org.camunda.bpm.engine.ProcessEngine;
 
 /**
@@ -46,5 +47,7 @@ public interface DebugSession {
   public void evaluateScript(String language, String script, String cmdId);
 
   public void resumeExecution(String id);
+
+  public List<CodeCompletionHint> completePartialInput(String prefix, String scopeId);
 
 }

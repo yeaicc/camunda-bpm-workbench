@@ -188,6 +188,17 @@ var ServerSession = (function() {
     return this.promise("process-definition-xml");
   };
 
+  ServerSession.prototype.completeCodePrefix = function(completionRequest) {
+    var cmd = {
+      "command" : "code-completion",
+      "data": completionRequest
+    };
+
+    execute(cmd, this.wsConnection);
+
+    return this.promise("code-completion-hints");
+  }
+
   // private static helpers /////////////////////
 
   /**

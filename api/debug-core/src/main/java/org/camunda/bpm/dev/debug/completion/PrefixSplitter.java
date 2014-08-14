@@ -10,18 +10,23 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+package org.camunda.bpm.dev.debug.completion;
 
-'use strict';
 
-var angular = require('angular');
+/**
+ * Implement for language-specific parsing of code completion paths
+ *
+ * @author Thorben Lindhauer
+ */
+public interface PrefixSplitter {
 
-var ngModule = angular.module('developer.console.directive', [
-  require('../../util/scripting/directive').name,
-  require('../../util/completion/directive').name
-])
-  .directive('ngEnter', require('./ngEnter'))
-  .directive('ngUp', require('./ngUp'))
-  .directive('ngDown', require('./ngDown'))
-  .directive('dbgConsole', require('./dbgConsole'));
+  String[] split(String prefix);
 
-module.exports = ngModule;
+  int lastSplit(String path);
+
+  String[] extractMethodArgs(String methodInvocation);
+
+  String extractMethodName(String methodInvocation);
+
+  String generateFunctionArgs(String[] parameterNames);
+}

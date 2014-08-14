@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.Deque;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,6 +34,9 @@ import org.camunda.bpm.dev.debug.DebugEventListener;
 import org.camunda.bpm.dev.debug.DebugSession;
 import org.camunda.bpm.dev.debug.DebuggerException;
 import org.camunda.bpm.dev.debug.SuspendedExecution;
+import org.camunda.bpm.dev.debug.completion.CodeCompleter;
+import org.camunda.bpm.dev.debug.completion.CodeCompleterBuilder;
+import org.camunda.bpm.dev.debug.completion.CodeCompletionHint;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
@@ -337,6 +341,11 @@ public class DebugSessionImpl implements DebugSession {
 
   public void execption(Exception e, ExecutionEntity execution, AtomicOperation executionOperation) {
     fireErrorOccured(e, execution, executionOperation);
+  }
+
+  public List<CodeCompletionHint> completePartialInput(String prefix, String scopeId) {
+    CodeCompleter completer = new CodeCompleterBuilder().globalBindings(globalScriptBindings).buildCompleter();
+    return completer.complete(prefix);
   }
 
 }
