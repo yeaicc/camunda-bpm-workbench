@@ -112,6 +112,26 @@ var ServerSession = (function() {
     execute(cmd, this.wsConnection);
   };
 
+  /** Get Script */
+  ServerSession.prototype.getScript = function(scriptInfo) {
+    var cmd = {
+      "command" : "get-script",
+      "data" : scriptInfo
+    };
+
+    execute(cmd, this.wsConnection);
+  };
+
+  /** Update script */
+  ServerSession.prototype.updateScript = function(scriptInfo) {
+    var cmd = {
+      "command" : "update-script",
+      "data" : scriptInfo
+    };
+
+    execute(cmd, this.wsConnection);
+  };
+
   /**
    * Deploys a process
    * @param {String} resourceData the resource data of the form 

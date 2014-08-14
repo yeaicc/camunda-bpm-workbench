@@ -35,7 +35,7 @@ var ConsoleController = [ '$scope', function($scope) {
   /**
    * the list of script evaluations already performed (history)
    */
-  $scope.evaluationResults = [];
+  $scope.commandResults = [];
 
   /**
    * the list of executed commands
@@ -56,19 +56,18 @@ var ConsoleController = [ '$scope', function($scope) {
   $scope.evaluate = function() {
 
     if("clear" === $scope.script) {
-      $scope.evaluationResults = [];
+      $scope.commandResults = [];
 
     } else {
-      var cmdId = nextId++;
 
       var cmd = {
-        "cmdId" : cmdId,
+        "cmdId" : $scope.dbgCmdId++,
         "language": $scope.scriptLanguage,
         "executionId": $scope.executionId,
         "script": $scope.script
       };
 
-      $scope.evaluationResults.unshift(cmd);
+      $scope.commandResults.unshift(cmd);
       $scope.scripts.push($scope.script);
       serverSession.evaluateScript(cmd);
     }
@@ -92,15 +91,15 @@ var ConsoleController = [ '$scope', function($scope) {
       if(entry === 0) {
         $scope.script = "";
       } else {
-        $scope.script = $scope.scripts[$scope.evaluationResults.length - entry];
+        $scope.script = $scope.scripts[$scope.commandResults.length - entry];
       }
     }
   };
 
-  function addEvaluationResults(data, failed) {
+  function addcommandResults(data, failed) {
     var cmdId = data.cmdId;
-    for(var i = 0; i < $scope.evaluationResults.length; i++) {
-      var result = $scope.evaluationResults[i];
+    for(var i = 0; i < $scope.commandResults.length; i++) {
+      var result = $scope.commandResults[i];
       if(result.cmdId == cmdId) {
         result.result = data.result;
         result.evaluationFailed = failed;
@@ -113,7 +112,7 @@ var ConsoleController = [ '$scope', function($scope) {
   }
 
   function logError(error) {
-    $scope.evaluationResults.push({
+    $scope.commandResults.push({
       script : error.errorType,
       result : error.errorMessage,
       evaluationFailed : true
@@ -123,11 +122,11 @@ var ConsoleController = [ '$scope', function($scope) {
   // register event listeners on the debug session
 
   serverSession.eventBus.onEvent("script-evaluated", function(data) {
-    addEvaluationResults(data, false);
+    addcommandResults(data, false);
   });
 
   serverSession.eventBus.onEvent("script-evaluation-failed", function(data) {
-    addEvaluationResults(data, true);
+    addcommandResults(data, true);
   });
 
   serverSession.eventBus.onEvent("server-error", function(data) {
@@ -153,7 +152,9 @@ var directiveTemplate = fs.readFileSync(__dirname + '/console.html', { encoding:
 module.exports = function() {
   return {
     scope: {
-      workbench : "="
+      workbench : "=",
+      commandResults : "=",
+      dbgCmdId : "="
     },
     controller: ConsoleController,
     template: directiveTemplate,

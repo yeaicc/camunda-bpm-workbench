@@ -6,6 +6,9 @@
 <div ng-show="displayEditor" class="dbg-cmd-row">
     <div class="dbg-cmd-main"></div>
     <div class="dbg-cmd-detail">
+        <button type="button" class="btn btn-default" ng-click="evaluateScript()">Evaluate Script</button>
+    </div>
+    <div class="dbg-cmd-detail">
         <button type="button" class="btn btn-default" ng-click="executeScript()">Execute Script</button>
     </div>
     <div class="dbg-cmd-detail dbg-cmd-lang">
@@ -20,4 +23,4 @@
         </div>
     </div>
 </div>
-<div ng-show="displayEditor" ui-ace="{theme: 'xcode'}" ng-model="scriptText"></div>
+<div ng-show="displayEditor" ui-ace="{theme: 'xcode', onLoad: aceLoaded}" ng-model="script"></div>

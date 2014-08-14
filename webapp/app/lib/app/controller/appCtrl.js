@@ -40,6 +40,7 @@ var Controller = ['$scope', function($scope) {
   var serverSession = new ServerSession(connection, eventBus);
   var workbench = new Workbench();
 
+
   workbench.eventBus = eventBus;
 
   // register the debugsession
@@ -61,6 +62,12 @@ var Controller = ['$scope', function($scope) {
 
   // expose the workbench
   $scope.workbench = workbench;
+
+  // expose debugCommandId
+  $scope.dbgCmdId = 0;
+
+  // expose debug command results
+  $scope.commandResults = [];
 
   // open the connection to the server
   connection.open();

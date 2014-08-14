@@ -37,16 +37,29 @@ import org.camunda.bpm.dev.debug.SuspendedExecution;
 import org.camunda.bpm.dev.debug.completion.CodeCompleter;
 import org.camunda.bpm.dev.debug.completion.CodeCompleterBuilder;
 import org.camunda.bpm.dev.debug.completion.CodeCompletionHint;
+import org.camunda.bpm.dev.debug.*;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
+import org.camunda.bpm.engine.impl.bpmn.behavior.ScriptTaskActivityBehavior;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
+import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
+import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
 import org.camunda.bpm.engine.impl.scripting.ExecutableScript;
 import org.camunda.bpm.engine.impl.scripting.engine.ScriptingEngines;
 import org.camunda.bpm.model.bpmn.Bpmn;
+
+import javax.script.Bindings;
+import javax.script.ScriptEngine;
+import javax.script.ScriptException;
+import javax.script.SimpleBindings;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author Daniel Meyer
@@ -273,14 +286,8 @@ public class DebugSessionImpl implements DebugSession {
   }
 
   public void evaluateScript(String executionId, String language, String script, String cmdId) {
-    SuspendedExecutionImpl suspendedExecution = null;
-    synchronized (suspendedExecutions) {
-      for (SuspendedExecutionImpl execution : suspendedExecutions) {
-        if(execution.getId().equals(executionId)) {
-          suspendedExecution = execution;
-        }
-      }
-    }
+    SuspendedExecutionImpl suspendedExecution = getSuspendedExecution(executionId);
+
     if(suspendedExecution != null) {
       synchronized (suspendedExecution) {
         if(!suspendedExecution.isResumed) {
@@ -291,6 +298,19 @@ public class DebugSessionImpl implements DebugSession {
     } else {
       throw new DebuggerException("No suspended execution exists for Id '" + executionId + "'.");
     }
+  }
+
+  protected SuspendedExecutionImpl getSuspendedExecution(String executionId) {
+    SuspendedExecutionImpl suspendedExecution = null;
+    synchronized (suspendedExecutions) {
+      for (SuspendedExecutionImpl execution : suspendedExecutions) {
+        if(execution.getId().equals(executionId)) {
+          suspendedExecution = execution;
+        }
+      }
+    }
+
+    return suspendedExecution;
   }
 
   public String getProcessInstanceId() {
@@ -336,6 +356,43 @@ public class DebugSessionImpl implements DebugSession {
     }
     if(suspendedExecution != null) {
       suspendedExecution.resume();
+    }
+  }
+
+  public Script getScript(String processDefinitionId, String activityId) {
+    ProcessDefinitionEntity processDefinition =
+      (ProcessDefinitionEntity) getProcessEngine().getRepositoryService().getProcessDefinition(processDefinitionId);
+
+    ActivityImpl activity = processDefinition.findActivity(activityId);
+
+    ActivityBehavior activityBehavior = activity.getActivityBehavior();
+
+    if (activityBehavior instanceof ScriptTaskActivityBehavior) {
+      Script script = new Script();
+      ExecutableScript taskScript = ((ScriptTaskActivityBehavior) activityBehavior).getScript();
+      script.setScript(taskScript.getSourceScript());
+      script.setScriptingLanguage(taskScript.getLanguage());
+
+      return script;
+    } else {
+      throw new DebuggerException("Activity " + activityId + " is no script task");
+    }
+  }
+
+  public void updateScript(String processDefinitionId, String activityId, Script script) {
+    ProcessDefinitionEntity processDefinition =
+      (ProcessDefinitionEntity) getProcessEngine().getRepositoryService().getProcessDefinition(processDefinitionId);
+
+    ActivityImpl activity = processDefinition.findActivity(activityId);
+
+    ActivityBehavior activityBehavior = activity.getActivityBehavior();
+
+    if (activityBehavior instanceof ScriptTaskActivityBehavior) {
+      ExecutableScript taskScript = ((ScriptTaskActivityBehavior) activityBehavior).getScript();
+      taskScript.setSourceScript(script.getScript());
+      // TODO set script language here
+    } else {
+      throw new DebuggerException("Activity " + activityId + " is no script task");
     }
   }
 
