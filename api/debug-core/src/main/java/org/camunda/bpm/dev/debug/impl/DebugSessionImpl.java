@@ -34,14 +34,13 @@ import org.camunda.bpm.dev.debug.DebugSession;
 import org.camunda.bpm.dev.debug.DebuggerException;
 import org.camunda.bpm.dev.debug.Script;
 import org.camunda.bpm.dev.debug.SuspendedExecution;
+import org.camunda.bpm.dev.debug.completion.CodeCompleter;
 import org.camunda.bpm.dev.debug.completion.CodeCompleterBuilder;
 import org.camunda.bpm.dev.debug.completion.CodeCompletionHint;
 import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.bpmn.behavior.ScriptTaskActivityBehavior;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
@@ -49,10 +48,7 @@ import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
 import org.camunda.bpm.engine.impl.scripting.ExecutableScript;
 import org.camunda.bpm.engine.impl.scripting.SourceExecutableScript;
-import org.camunda.bpm.engine.impl.scripting.engine.ResolverFactory;
-import org.camunda.bpm.engine.impl.scripting.engine.ScriptBindingsFactory;
 import org.camunda.bpm.engine.impl.scripting.engine.ScriptingEngines;
-import org.camunda.bpm.engine.impl.scripting.engine.VariableScopeResolverFactory;
 import org.camunda.bpm.model.bpmn.Bpmn;
 
 /**
@@ -112,6 +108,7 @@ public class DebugSessionImpl implements DebugSession {
       fireExecutionSuspended(suspendedExecution);
 
       synchronized (suspendedExecution) {
+
         while (!suspendedExecution.isResumed) {
 
           LOGG.info("[DEBUGGER] suspended " + suspendedExecution.getSuspendedThread().getName() + " on breakpoint " + suspendedExecution.getBreakPoint() + ".");
@@ -119,35 +116,10 @@ public class DebugSessionImpl implements DebugSession {
           // wait until we are notified
           suspendedExecution.wait();
 
-          if(suspendedExecution.shouldEvaluateScript) {
-            LOGG.info("[DEBUGGER] suspended " + suspendedExecution.getSuspendedThread().getName() + " on breakpoint evaluates script.");
+          while(suspendedExecution.debugOperations.peek() != null) {
+            DebugOperation nextOperation = suspendedExecution.debugOperations.poll();
 
-            DebugScriptEvaluation scriptEvaluation = suspendedExecution.debugScriptEvaluation;
-
-            try {
-              ExecutableScript executableScript = Context.getProcessEngineConfiguration()
-                .getScriptFactory()
-                .createScript(scriptEvaluation.script, scriptEvaluation.language);
-
-              Object result = Context.getProcessEngineConfiguration()
-                .getScriptingEnvironment()
-                .execute(executableScript, suspendedExecution.executionEntity);
-
-              scriptEvaluation.result = result;
-
-              fireScriptEvaluated(scriptEvaluation);
-              // fire execution update
-              fireExecutionUpdated(suspendedExecution);
-
-            } catch(ProcessEngineException e) {
-              LOGG.log(Level.WARNING, "[DEBUGGER] exception while evaluating script in Thread " +
-                       suspendedExecution.getSuspendedThread().getName() + " at breakpoint " +
-                       suspendedExecution.getBreakPoint() + ".", e);
-
-              scriptEvaluation.setScriptException((ScriptException) e.getCause());
-              fireScriptEvaluationFailed(scriptEvaluation);
-
-            }
+            nextOperation.execute(this, suspendedExecution);
           }
         }
       }
@@ -168,7 +140,7 @@ public class DebugSessionImpl implements DebugSession {
     }
   }
 
-  private void fireScriptEvaluationFailed(DebugScriptEvaluation scriptEvaluation) {
+  public void fireScriptEvaluationFailed(DebugScriptEvaluation scriptEvaluation) {
     for (DebugEventListener eventListener : debugEventListeners) {
       try {
         eventListener.onScriptEvaluationFailed(scriptEvaluation);
@@ -178,7 +150,7 @@ public class DebugSessionImpl implements DebugSession {
     }
   }
 
-  protected void fireScriptEvaluated(DebugScriptEvaluation scriptEvaluation) {
+  public void fireScriptEvaluated(DebugScriptEvaluation scriptEvaluation) {
     for (DebugEventListener eventListener : debugEventListeners) {
       try {
         eventListener.onScriptEvaluated(scriptEvaluation);
@@ -188,7 +160,7 @@ public class DebugSessionImpl implements DebugSession {
     }
   }
 
-  protected void fireExecutionSuspended(SuspendedExecutionImpl suspendedExecution) {
+  public void fireExecutionSuspended(SuspendedExecutionImpl suspendedExecution) {
     for (DebugEventListener eventListener : debugEventListeners) {
       try {
         eventListener.onExecutionSuspended(suspendedExecution);
@@ -198,7 +170,7 @@ public class DebugSessionImpl implements DebugSession {
     }
   }
 
-  protected void fireExecutionUnsuspended(SuspendedExecutionImpl suspendedExecution) {
+  public void fireExecutionUnsuspended(SuspendedExecutionImpl suspendedExecution) {
     for (DebugEventListener eventListener : debugEventListeners) {
       try {
         eventListener.onExecutionUnsuspended(suspendedExecution);
@@ -208,7 +180,7 @@ public class DebugSessionImpl implements DebugSession {
     }
   }
 
-  protected void fireExecutionUpdated(SuspendedExecutionImpl suspendedExecution) {
+  public void fireExecutionUpdated(SuspendedExecutionImpl suspendedExecution) {
     for (DebugEventListener eventListener : debugEventListeners) {
       try {
         eventListener.onExecutionUpdated(suspendedExecution);
@@ -218,10 +190,20 @@ public class DebugSessionImpl implements DebugSession {
     }
   }
 
-  protected void fireErrorOccured(Exception e, ExecutionEntity execution, AtomicOperation operation) {
+  public void fireErrorOccured(Exception e, ExecutionEntity execution, AtomicOperation operation) {
     for (DebugEventListener eventListener : debugEventListeners) {
       try {
         eventListener.onException(e, execution, operation);
+      } catch(Exception ex) {
+        LOGG.log(Level.WARNING, "Exception while invoking debug event listener", ex);
+      }
+    }
+  }
+
+  public void fireCodeCompletion(List<CodeCompletionHint> hints) {
+    for (DebugEventListener eventListener : debugEventListeners) {
+      try {
+        eventListener.onCodeCompletion(hints);
       } catch(Exception ex) {
         LOGG.log(Level.WARNING, "Exception while invoking debug event listener", ex);
       }
@@ -286,7 +268,7 @@ public class DebugSessionImpl implements DebugSession {
       synchronized (suspendedExecution) {
         if(!suspendedExecution.isResumed) {
           // evaluate script in suspended execution
-          suspendedExecution.evaluateScript(language, script, cmdId);
+          suspendedExecution.addDebugOperation(new DebugScriptEvaluation(language, script, cmdId));
         }
       }
     } else {
@@ -401,26 +383,45 @@ public class DebugSessionImpl implements DebugSession {
     fireErrorOccured(e, execution, executionOperation);
   }
 
-  public List<CodeCompletionHint> completePartialInput(String prefix, String scopeId) {
-    CodeCompleterBuilder builder = new CodeCompleterBuilder().bindings(globalScriptBindings);
+  public void completePartialInput(String prefix, String scopeId) {
 
     if (scopeId != null) {
       SuspendedExecutionImpl suspendedExecution = getSuspendedExecution(scopeId);
-      synchronized (suspendedExecution) {
-        if(!suspendedExecution.isResumed) {
-          ExecutionEntity executionEntity = getSuspendedExecution(scopeId).getExecution();
-
-          VariableScopeResolverFactory resolverFactory = new VariableScopeResolverFactory();
-          List<ResolverFactory> resolverFactories = new ArrayList<ResolverFactory>();
-          resolverFactories.add(resolverFactory);
-          ScriptBindingsFactory bindingsFactory = new ScriptBindingsFactory(resolverFactories);
-          Bindings scopeBindings = bindingsFactory.createBindings(executionEntity, new SimpleBindings());
-          builder.bindings(scopeBindings);
+      if(suspendedExecution != null) {
+        synchronized (suspendedExecution) {
+          if(!suspendedExecution.isResumed) {
+            suspendedExecution.addDebugOperation(new CodeCompletionOperation(scopeId, prefix));
+          }
         }
+      } else {
+        throw new DebuggerException("No suspended execution exists for Id '" + scopeId + "'.");
       }
+
+    } else {
+      CodeCompleter codeCompleter = new CodeCompleterBuilder().bindings(globalScriptBindings).buildCompleter();
+      List<CodeCompletionHint> hints = codeCompleter.complete(prefix);
+      fireCodeCompletion(hints);
     }
 
-    return builder.buildCompleter().complete(prefix);
+//    CodeCompleterBuilder builder = new CodeCompleterBuilder().bindings(globalScriptBindings);
+//
+//    if (scopeId != null) {
+//      SuspendedExecutionImpl suspendedExecution = getSuspendedExecution(scopeId);
+//      synchronized (suspendedExecution) {
+//        if(!suspendedExecution.isResumed) {
+//          ExecutionEntity executionEntity = getSuspendedExecution(scopeId).getExecution();
+//
+//          VariableScopeResolverFactory resolverFactory = new VariableScopeResolverFactory();
+//          List<ResolverFactory> resolverFactories = new ArrayList<ResolverFactory>();
+//          resolverFactories.add(resolverFactory);
+//          ScriptBindingsFactory bindingsFactory = new ScriptBindingsFactory(resolverFactories);
+//          Bindings scopeBindings = bindingsFactory.createBindings(executionEntity, new SimpleBindings());
+//          builder.bindings(scopeBindings);
+//        }
+//      }
+//    }
+//
+//    return builder.buildCompleter().complete(prefix);
   }
 
 }

@@ -35,6 +35,11 @@ public class DefaultPrefixSplitter implements PrefixSplitter {
         throw new DebuggerException("malformed method invocation: " + methodInvocation);
       }
 
+      String args = methodInvocation.substring(openParenthesis, closingParenthesis - 1);
+      if (args.trim().isEmpty()) {
+        return new String[]{};
+      }
+
       return methodInvocation.substring(openParenthesis, closingParenthesis - 1).split(",");
     }
   }

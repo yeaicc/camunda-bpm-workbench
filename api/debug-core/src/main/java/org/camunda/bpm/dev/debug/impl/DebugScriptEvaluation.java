@@ -12,13 +12,22 @@
  */
 package org.camunda.bpm.dev.debug.impl;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import javax.script.ScriptException;
+
+import org.camunda.bpm.engine.ProcessEngineException;
+import org.camunda.bpm.engine.impl.context.Context;
+import org.camunda.bpm.engine.impl.scripting.ExecutableScript;
 
 /**
  * @author Daniel Meyer
  *
  */
-public class DebugScriptEvaluation {
+public class DebugScriptEvaluation implements DebugOperation {
+
+  protected Logger LOGG = Logger.getLogger(DebugScriptEvaluation.class.getName());
 
   protected String language;
 
@@ -70,6 +79,36 @@ public class DebugScriptEvaluation {
 
   public String getCmdId() {
     return cmdId;
+  }
+
+  public void execute(DebugSessionImpl debugSession, SuspendedExecutionImpl suspendedExecution) {
+    LOGG.info("[DEBUGGER] suspended " + suspendedExecution.getSuspendedThread().getName() + " on breakpoint evaluates script.");
+
+    try {
+      ExecutableScript executableScript = Context.getProcessEngineConfiguration()
+        .getScriptFactory()
+        .createScript(script, language);
+
+      Object result = Context.getProcessEngineConfiguration()
+        .getScriptingEnvironment()
+        .execute(executableScript, suspendedExecution.executionEntity);
+
+      this.result = result;
+
+      debugSession.fireScriptEvaluated(this);
+      // fire execution update
+      debugSession.fireExecutionUpdated(suspendedExecution);
+
+    } catch(ProcessEngineException e) {
+      LOGG.log(Level.WARNING, "[DEBUGGER] exception while evaluating script in Thread " +
+               suspendedExecution.getSuspendedThread().getName() + " at breakpoint " +
+               suspendedExecution.getBreakPoint() + ".", e);
+
+      this.setScriptException((ScriptException) e.getCause());
+      debugSession.fireScriptEvaluationFailed(this);
+
+    }
+
   }
 
 }

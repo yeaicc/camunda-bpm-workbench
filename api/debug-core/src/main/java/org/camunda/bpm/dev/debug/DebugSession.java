@@ -54,6 +54,6 @@ public interface DebugSession {
 
   public void updateScript(String processDefinitionId, String activityId, Script script);
 
-  public List<CodeCompletionHint> completePartialInput(String prefix, String scopeId);
+  public void completePartialInput(String prefix, String scopeId);
 
 }

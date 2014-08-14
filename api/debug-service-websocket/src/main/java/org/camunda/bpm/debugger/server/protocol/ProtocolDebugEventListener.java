@@ -12,11 +12,15 @@
  */
 package org.camunda.bpm.debugger.server.protocol;
 
+import java.util.List;
+
 import io.netty.channel.Channel;
 
+import org.camunda.bpm.debugger.server.protocol.dto.CodeCompletionDto;
 import org.camunda.bpm.debugger.server.protocol.dto.ErrorData;
 import org.camunda.bpm.debugger.server.protocol.dto.ScriptEvaluationData;
 import org.camunda.bpm.debugger.server.protocol.dto.SuspendedExecutionData;
+import org.camunda.bpm.debugger.server.protocol.evt.CodeCompletionEvt;
 import org.camunda.bpm.debugger.server.protocol.evt.ErrorEvt;
 import org.camunda.bpm.debugger.server.protocol.evt.ExecutionSuspendedEvt;
 import org.camunda.bpm.debugger.server.protocol.evt.ExecutionUnsuspendedEvt;
@@ -26,6 +30,7 @@ import org.camunda.bpm.debugger.server.protocol.evt.ScriptEvaluationFailedEvt;
 import org.camunda.bpm.dev.debug.DebugEventListener;
 import org.camunda.bpm.dev.debug.DebugSession;
 import org.camunda.bpm.dev.debug.SuspendedExecution;
+import org.camunda.bpm.dev.debug.completion.CodeCompletionHint;
 import org.camunda.bpm.dev.debug.impl.DebugScriptEvaluation;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
@@ -72,6 +77,11 @@ public class ProtocolDebugEventListener implements DebugEventListener {
 
   public void onException(Exception e, ExecutionEntity execution, AtomicOperation operation) {
     protocol.fireEvent(channel, new ErrorEvt(new ErrorData(e)));
+  }
+
+  public void onCodeCompletion(List<CodeCompletionHint> completionHints) {
+    protocol.fireEvent(channel, new CodeCompletionEvt(CodeCompletionDto.fromList(completionHints)));
+
   }
 
 

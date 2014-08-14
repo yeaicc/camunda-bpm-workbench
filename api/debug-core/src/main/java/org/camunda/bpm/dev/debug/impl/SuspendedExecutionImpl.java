@@ -14,7 +14,9 @@ package org.camunda.bpm.dev.debug.impl;
 
 import java.util.Collection;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Set;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import org.camunda.bpm.dev.debug.BreakPoint;
 import org.camunda.bpm.dev.debug.SuspendedExecution;
@@ -41,14 +43,17 @@ public class SuspendedExecutionImpl implements SuspendedExecution {
 
   protected boolean isResumed;
 
-  protected boolean shouldEvaluateScript;
+//  protected boolean shouldEvaluateScript;
+//
+//  protected DebugScriptEvaluation debugScriptEvaluation;
 
-  protected DebugScriptEvaluation debugScriptEvaluation;
+  protected Queue<DebugOperation> debugOperations;
 
   public SuspendedExecutionImpl(ExecutionEntity executionEntity, AtomicOperation operation) {
     this.executionEntity = executionEntity;
     this.operation = operation;
     this.suspendedThread = Thread.currentThread();
+    this.debugOperations = new LinkedBlockingQueue<DebugOperation>();
   }
 
   public SuspendedExecutionImpl(ExecutionEntity executionEntity, AtomicOperation operation, BreakPoint breakPoint) {
@@ -222,9 +227,8 @@ public class SuspendedExecutionImpl implements SuspendedExecution {
     return executionEntity.getCurrentTransitionId();
   }
 
-  public void evaluateScript(String language, String script, String cmdId) {
-    shouldEvaluateScript = true;
-    debugScriptEvaluation = new DebugScriptEvaluation(language, script, cmdId);
+  public void addDebugOperation(DebugOperation debugOperation) {
+    this.debugOperations.add(debugOperation);
     notifyAll();
   }
 

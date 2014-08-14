@@ -22,9 +22,6 @@ import java.util.Set;
 import javax.script.Bindings;
 
 import org.camunda.bpm.dev.debug.DebuggerException;
-import org.camunda.bpm.dev.debug.impl.DebugSessionImpl;
-import org.camunda.bpm.engine.impl.context.Context;
-import org.camunda.bpm.engine.impl.scripting.ExecutableScript;
 
 public class CodeCompleter {
 
