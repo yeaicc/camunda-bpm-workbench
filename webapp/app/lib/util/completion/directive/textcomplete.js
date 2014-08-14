@@ -16,7 +16,19 @@ var directive = [ '$compile', function($compile) {
 
         var lastStatementRegex = new RegExp('([^\\s]*(\\([^\)]*\\))?)*$');
 
-        $compile(autocompleteTemplate)(scope).appendTo(element.parent());
+        var hintsElement = $compile(autocompleteTemplate)(scope).appendTo(element.parent());
+
+        scope.$watch('selectedIndex', function() {
+          if (scope.selectedIndex && scope.selectedIndex >= 0) {
+            var liChildren = $(hintsElement.find('li'));
+
+            var height = 0;
+            for (i = 0; i < scope.selectedIndex; i++) {
+              height += $(liChildren[i]).outerHeight();
+            }
+            hintsElement.children('ul').scrollTop(height);
+          }
+        });
 
         var extrapolatePartialInput = function(element) {
           var caretPos = element.get(0).selectionStart;
@@ -75,7 +87,6 @@ var directive = [ '$compile', function($compile) {
               event.preventDefault();
               event.stopImmediatePropagation();
 
-              console.log(scope.selectedIndex);
               scope.selectedIndex = (scope.selectedIndex + 1) || 0;
               if (scope.selectedIndex == scope.hints.length) {
                 scope.selectedIndex = 0;
