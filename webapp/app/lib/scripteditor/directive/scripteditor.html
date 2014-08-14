@@ -5,11 +5,11 @@
 </div>
 <div ng-show="displayEditor" class="dbg-cmd-row">
     <div class="dbg-cmd-main"></div>
-    <div class="dbg-cmd-detail">
+    <div class="dbg-cmd-detail dbg-cmd-lang">
         <button type="button" class="btn btn-default" ng-click="evaluateScript()">Evaluate Script</button>
     </div>
-    <div class="dbg-cmd-detail">
-        <button type="button" class="btn btn-default" ng-click="executeScript()">Execute Script</button>
+    <div class="dbg-cmd-detail dbg-cmd-lang">
+        <button type="button" class="btn btn-default" ng-click="executeScript()">Evaluate and Continue Script</button>
     </div>
     <div class="dbg-cmd-detail dbg-cmd-lang">
         <div class="dropdown">
@@ -23,4 +23,4 @@
         </div>
     </div>
 </div>
-<div ng-show="displayEditor" ui-ace="{theme: 'xcode', onLoad: aceLoaded}" ng-model="script"></div>
+<div ng-show="displayEditor" ui-ace="{showIndentGuides: true, theme: 'xcode', onLoad: aceLoaded}" ng-model="script"></div>
