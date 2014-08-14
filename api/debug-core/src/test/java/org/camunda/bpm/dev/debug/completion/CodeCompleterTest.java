@@ -12,15 +12,14 @@
  */
 package org.camunda.bpm.dev.debug.completion;
 
-import java.util.List;
-
-import javax.script.Bindings;
-import javax.script.SimpleBindings;
-
 import org.camunda.bpm.engine.impl.RuntimeServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import javax.script.Bindings;
+import javax.script.SimpleBindings;
+import java.util.List;
 
 public class CodeCompleterTest {
 
@@ -54,7 +53,7 @@ public class CodeCompleterTest {
 
   @Test
   public void testNestedMethodCompletion() {
-    List<CodeCompletionHint> hints = completer.complete("runtimeService.getVariables().pu");
-    Assert.assertEquals(3, hints.size());
+    List<CodeCompletionHint> hints = completer.complete("runtimeService.createMessageCorrelation('aMessage').setV");
+    Assert.assertEquals(2, hints.size());
   }
 }

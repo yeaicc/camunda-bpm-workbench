@@ -13,7 +13,6 @@
 package org.camunda.bpm.dev.debug.impl;
 
 import org.camunda.bpm.dev.debug.DebugSessionFactory;
-import org.camunda.bpm.engine.impl.interceptor.Command;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 import org.camunda.bpm.engine.impl.interceptor.CommandContextFactory;
 
@@ -23,8 +22,8 @@ import org.camunda.bpm.engine.impl.interceptor.CommandContextFactory;
  */
 public class DebugCommandContextFactory extends CommandContextFactory {
 
-  public CommandContext createCommandContext(Command<?> cmd) {
-    return new DebugCommandContext(cmd, processEngineConfiguration, (DebugSessionFactoryImpl) DebugSessionFactory.getInstance());
+  public CommandContext createCommandContext() {
+    return new DebugCommandContext(processEngineConfiguration, (DebugSessionFactoryImpl) DebugSessionFactory.getInstance());
   }
 
 }
