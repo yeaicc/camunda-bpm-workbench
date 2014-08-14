@@ -12,17 +12,16 @@
  */
 package org.camunda.bpm.dev.debug.impl;
 
-import java.util.List;
-
 import org.camunda.bpm.dev.debug.BreakPoint;
 import org.camunda.bpm.dev.debug.DebugSession;
 import org.camunda.bpm.dev.debug.DebugSessionFactory;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
-import org.camunda.bpm.engine.impl.interceptor.Command;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
 import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
+
+import java.util.List;
 
 /**
  * @author Daniel Meyer
@@ -32,8 +31,8 @@ public class DebugCommandContext extends CommandContext {
 
   protected DebugSessionFactoryImpl debugSessionFactory;
 
-  public DebugCommandContext(Command<?> command, ProcessEngineConfigurationImpl processEngineConfiguration, DebugSessionFactoryImpl debugSessionFactory) {
-    super(command, processEngineConfiguration);
+  public DebugCommandContext(ProcessEngineConfigurationImpl processEngineConfiguration, DebugSessionFactoryImpl debugSessionFactory) {
+    super(processEngineConfiguration);
     this.debugSessionFactory = debugSessionFactory;
   }
 

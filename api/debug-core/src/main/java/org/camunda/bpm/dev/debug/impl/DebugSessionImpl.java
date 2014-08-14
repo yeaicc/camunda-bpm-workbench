@@ -12,32 +12,10 @@
  */
 package org.camunda.bpm.dev.debug.impl;
 
-import java.util.ArrayDeque;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Deque;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
-import javax.script.Bindings;
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
-import javax.script.SimpleBindings;
-
-import org.camunda.bpm.dev.debug.BreakPoint;
-import org.camunda.bpm.dev.debug.DebugEventListener;
-import org.camunda.bpm.dev.debug.DebugSession;
-import org.camunda.bpm.dev.debug.DebuggerException;
-import org.camunda.bpm.dev.debug.SuspendedExecution;
+import org.camunda.bpm.dev.debug.*;
 import org.camunda.bpm.dev.debug.completion.CodeCompleter;
 import org.camunda.bpm.dev.debug.completion.CodeCompleterBuilder;
 import org.camunda.bpm.dev.debug.completion.CodeCompletionHint;
-import org.camunda.bpm.dev.debug.*;
 import org.camunda.bpm.engine.ProcessEngine;
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
@@ -50,6 +28,7 @@ import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
 import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
 import org.camunda.bpm.engine.impl.scripting.ExecutableScript;
+import org.camunda.bpm.engine.impl.scripting.SourceExecutableScript;
 import org.camunda.bpm.engine.impl.scripting.engine.ScriptingEngines;
 import org.camunda.bpm.model.bpmn.Bpmn;
 
@@ -370,8 +349,15 @@ public class DebugSessionImpl implements DebugSession {
     if (activityBehavior instanceof ScriptTaskActivityBehavior) {
       Script script = new Script();
       ExecutableScript taskScript = ((ScriptTaskActivityBehavior) activityBehavior).getScript();
-      script.setScript(taskScript.getSourceScript());
-      script.setScriptingLanguage(taskScript.getLanguage());
+
+      if (!(taskScript instanceof SourceExecutableScript)) {
+        throw new DebuggerException("Encountered non-source script");
+      }
+
+      SourceExecutableScript sourceScript = (SourceExecutableScript) taskScript;
+
+      script.setScript(sourceScript.getScriptSrc());
+      script.setScriptingLanguage(sourceScript.getLanguage());
 
       return script;
     } else {
@@ -388,8 +374,8 @@ public class DebugSessionImpl implements DebugSession {
     ActivityBehavior activityBehavior = activity.getActivityBehavior();
 
     if (activityBehavior instanceof ScriptTaskActivityBehavior) {
-      ExecutableScript taskScript = ((ScriptTaskActivityBehavior) activityBehavior).getScript();
-      taskScript.setSourceScript(script.getScript());
+      SourceExecutableScript taskScript = (SourceExecutableScript) ((ScriptTaskActivityBehavior) activityBehavior).getScript();
+      taskScript.setScriptSrc(script.getScript());
       // TODO set script language here
     } else {
       throw new DebuggerException("Activity " + activityId + " is no script task");

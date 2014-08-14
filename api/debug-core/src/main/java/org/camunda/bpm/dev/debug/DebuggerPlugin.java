@@ -28,6 +28,7 @@ public class DebuggerPlugin extends AbstractProcessEnginePlugin {
     DebugCommandContextFactory commandContextFactory = new DebugCommandContextFactory();
     commandContextFactory.setProcessEngineConfiguration(processEngineConfiguration);
     processEngineConfiguration.setCommandContextFactory(commandContextFactory);
+    processEngineConfiguration.setEnableScriptCompilation(false);
   }
 
   public void postProcessEngineBuild(ProcessEngine processEngine) {
