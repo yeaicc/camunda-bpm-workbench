@@ -1,0 +1,23 @@
+<div class="app-pn-header">
+    <h2>
+        <span class="glyphicon glyphicon-edit"></span> SCRIPT EDITOR
+    </h2>
+</div>
+<div ng-show="displayEditor" class="dbg-cmd-row">
+    <div class="dbg-cmd-main"></div>
+    <div class="dbg-cmd-detail">
+        <button type="button" class="btn btn-default" ng-click="executeScript()">Execute Script</button>
+    </div>
+    <div class="dbg-cmd-detail dbg-cmd-lang">
+        <div class="dropdown">
+            <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown">
+                {{scriptLanguage}}
+                <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-left" data-parent="dbg">
+                <li ng-repeat="lang in scriptLanguages"><a href ng-click="selectLanguage(lang)">{{lang}}</a></li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div ng-show="displayEditor" ui-ace="{theme: 'xcode'}" ng-model="scriptText"></div>
