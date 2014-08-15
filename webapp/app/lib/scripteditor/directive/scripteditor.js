@@ -54,7 +54,6 @@ var ScriptEditorController = [ '$scope', function($scope) {
     _editor.setShowPrintMargin(false);
     _editor.setDisplayIndentGuides();
     _editor.setShowInvisibles(true);
-
   };
 
   var executeCommand = function(commandType, cmd) {

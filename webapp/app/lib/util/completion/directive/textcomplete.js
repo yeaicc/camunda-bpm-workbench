@@ -67,7 +67,10 @@ var directive = [ '$compile', function($compile) {
         }
 
         element.bind("keyup", function(event) {
-          tryUpdateHints(extrapolatePartialInput(element));
+          if (scope.hints) {
+            tryUpdateHints(extrapolatePartialInput(element));
+          }
+
         });
 
         element.bind("keydown keypress", function(event) {

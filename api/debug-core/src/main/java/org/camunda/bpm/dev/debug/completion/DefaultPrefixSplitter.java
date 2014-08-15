@@ -61,7 +61,7 @@ public class DefaultPrefixSplitter implements PrefixSplitter {
       sb.append(parameterNames[i]);
 
       if (i < parameterNames.length - 1) {
-        sb.append(", ");
+        sb.append(",");
       }
     }
     sb.append(")");

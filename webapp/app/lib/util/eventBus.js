@@ -47,7 +47,18 @@ var EventBus = (function() {
   };
 
   EventBus.prototype.off = function(eventName, callback) {
-    console.warn('not implemented EventBus#off', eventName, callback);
+    var listeners = this.eventListeners[eventName];
+
+    if (listeners === undefined) {
+      return;
+    }
+
+    for (var i = 0; i < listeners.length; i++) {
+      if (listeners[i] == callback) {
+        listeners.splice(i, 1);
+        return;
+      }
+    }
   };
 
   EventBus.prototype.fireEvent = function(eventName, eventPayload) {
