@@ -21,6 +21,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.camunda.bpm.dev.debug.BreakPoint;
 import org.camunda.bpm.dev.debug.SuspendedExecution;
 import org.camunda.bpm.engine.ProcessEngineServices;
+import org.camunda.bpm.engine.delegate.PersistentVariableInstance;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
@@ -129,6 +130,30 @@ public class SuspendedExecutionImpl implements SuspendedExecution {
 
   public void setVariableLocal(String variableName, Object value) {
     executionEntity.setVariableLocal(variableName, value);
+  }
+
+  public void setVariableFromSerialized(String variableName, Object value, String variableTypeName, Map<String, Object> configuration) {
+    executionEntity.setVariableFromSerialized(variableName, value, variableTypeName, configuration);
+  }
+
+  public void setVariableLocalFromSerialized(String variableName, Object value, String variableTypeName, Map<String, Object> configuration) {
+    executionEntity.setVariableFromSerialized(variableName, value, variableTypeName, configuration);
+  }
+
+  public Map<String, PersistentVariableInstance> getVariableInstances() {
+    return executionEntity.getVariableInstances();
+  }
+
+  public PersistentVariableInstance getVariableInstance(String name) {
+    return executionEntity.getVariableInstance(name);
+  }
+
+  public Map<String, PersistentVariableInstance> getVariableInstancesLocal() {
+    return executionEntity.getVariableInstancesLocal();
+  }
+
+  public PersistentVariableInstance getVariableInstanceLocal(String name) {
+    return executionEntity.getVariableInstanceLocal(name);
   }
 
   public BpmnModelInstance getBpmnModelInstance() {

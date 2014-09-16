@@ -105,8 +105,7 @@ public class DebugProtocol {
       String marshalledEvent = debugServerConfiguration.getMarshaller()
         .marshal(event);
 
-      channel.writeAndFlush(new TextWebSocketFrame(marshalledEvent))
-        .sync();
+      channel.writeAndFlush(new TextWebSocketFrame(marshalledEvent));
 
     } catch (Exception e) {
       LOGG.log(Level.WARNING, "Error while marshaling event payload ", e);
