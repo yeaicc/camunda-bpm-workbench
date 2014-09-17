@@ -14,7 +14,7 @@ var directive = [ '$compile', function($compile) {
       },
       link: function(scope, element, attrs) {
 
-        var lastStatementRegex = new RegExp('([^\\s]*(\\([^\)]*\\))?)*$');
+        var lastStatementRegex = new RegExp('([^\\s\\(\\)]*(\\([^\)]*\\))?)*$');
 
         var hintsElement = $compile(autocompleteTemplate)(scope).appendTo(element.parent());
 
