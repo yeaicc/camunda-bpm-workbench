@@ -1,11 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <artifactId>camunda-debug-websocket</artifactId>
-  <name>camunda BPM - Developer API - Debug Service Websocket</name>
+  <artifactId>camunda-workbench-api-debug-websocket</artifactId>
+  <name>camunda BPM - Workbench - API - Debug Websocket</name>
 
   <parent>
-    <groupId>org.camunda.bpm.dev</groupId>
-    <artifactId>camunda-dev-api-root</artifactId>
+    <groupId>org.camunda.bpm.workbench</groupId>
+    <artifactId>camunda-workbench-api-root</artifactId>
     <version>1.0.0-SNAPSHOT</version>
   </parent>
 
