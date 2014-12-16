@@ -108,7 +108,7 @@
         <groupId>org.codehaus.mojo</groupId>
         <artifactId>exec-maven-plugin</artifactId>
         <configuration>
-          <mainClass>org.camunda.bpm.debugger.server.StandaloneDebugServerBootstrap</mainClass>
+          <mainClass>org.camunda.bpm.debugger.server.StandaloneDebugWebsocketBootstrap</mainClass>
         </configuration>
       </plugin>
     </plugins>
