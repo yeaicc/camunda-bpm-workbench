@@ -17,7 +17,7 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 
-import org.camunda.bpm.debugger.server.DebugServerConfiguration;
+import org.camunda.bpm.debugger.server.DebugWebsocketConfiguration;
 
 /**
  * This handler is responsible for executing incoming commands over the protocol
@@ -27,18 +27,18 @@ import org.camunda.bpm.debugger.server.DebugServerConfiguration;
  */
 public class DebugProtocolHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
 
-  protected DebugServerConfiguration debugServerConfiguration;
+  protected DebugWebsocketConfiguration debugWebsocketConfiguration;
 
   /**
-   * @param debugServerConfiguration
+   * @param debugWebsocketConfiguration
    */
-  public DebugProtocolHandler(DebugServerConfiguration debugServerConfiguration) {
-    this.debugServerConfiguration = debugServerConfiguration;
+  public DebugProtocolHandler(DebugWebsocketConfiguration debugWebsocketConfiguration) {
+    this.debugWebsocketConfiguration = debugWebsocketConfiguration;
   }
 
   protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame msg) throws Exception {
 
-    debugServerConfiguration
+    debugWebsocketConfiguration
       .getProtocol()
       .executeCommand(ctx.channel(), msg.text());
 
@@ -48,7 +48,7 @@ public class DebugProtocolHandler extends SimpleChannelInboundHandler<TextWebSoc
   public void channelInactive(ChannelHandlerContext ctx) throws Exception {
 
     // open the session
-    debugServerConfiguration
+    debugWebsocketConfiguration
       .getProtocol()
       .closeSession(ctx);
 
@@ -59,7 +59,7 @@ public class DebugProtocolHandler extends SimpleChannelInboundHandler<TextWebSoc
   public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
     if(evt == WebSocketServerProtocolHandler.ServerHandshakeStateEvent.HANDSHAKE_COMPLETE) {
       // open the session
-      debugServerConfiguration
+      debugWebsocketConfiguration
         .getProtocol()
         .openSession(ctx);
     }

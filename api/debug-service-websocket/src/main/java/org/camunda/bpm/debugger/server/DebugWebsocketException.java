@@ -16,23 +16,23 @@ package org.camunda.bpm.debugger.server;
  * @author Daniel Meyer
  *
  */
-public class DebugServerException extends RuntimeException {
+public class DebugWebsocketException extends RuntimeException {
 
   private static final long serialVersionUID = 1L;
 
-  public DebugServerException() {
+  public DebugWebsocketException() {
     super();
   }
 
-  public DebugServerException(String message, Throwable cause) {
+  public DebugWebsocketException(String message, Throwable cause) {
     super(message, cause);
   }
 
-  public DebugServerException(String message) {
+  public DebugWebsocketException(String message) {
     super(message);
   }
 
-  public DebugServerException(Throwable cause) {
+  public DebugWebsocketException(Throwable cause) {
     super(cause);
   }
 

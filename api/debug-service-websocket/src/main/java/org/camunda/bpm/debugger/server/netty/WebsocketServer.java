@@ -26,7 +26,7 @@ import java.net.InetSocketAddress;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import org.camunda.bpm.debugger.server.DebugServerConfiguration;
+import org.camunda.bpm.debugger.server.DebugWebsocketConfiguration;
 
 /**
  * The debug http server
@@ -34,15 +34,15 @@ import org.camunda.bpm.debugger.server.DebugServerConfiguration;
  * @author Daniel Meyer
  *
  */
-public class DefaultNettyServer extends AbstractNettyServer {
+public class WebsocketServer extends AbstractNettyServer {
 
-  final static Logger LOGG = Logger.getLogger(DefaultNettyServer.class.getName());
+  final static Logger LOGG = Logger.getLogger(WebsocketServer.class.getName());
 
-  protected DebugServerConfiguration debugServerConfiguration;
+  protected DebugWebsocketConfiguration debugWebsocketConfiguration;
 
-  public DefaultNettyServer(int httpPort, DebugServerConfiguration debugServerConfiguration) {
+  public WebsocketServer(int httpPort, DebugWebsocketConfiguration debugWebsocketConfiguration) {
     this.port = httpPort;
-    this.debugServerConfiguration = debugServerConfiguration;
+    this.debugWebsocketConfiguration = debugWebsocketConfiguration;
   }
 
   public ChannelFuture run() {
@@ -59,7 +59,7 @@ public class DefaultNettyServer extends AbstractNettyServer {
             new HttpRequestDecoder(),
             new HttpObjectAggregator(65536),
             new WebSocketServerProtocolHandler("/debug-session"),
-            new DebugProtocolHandler(debugServerConfiguration));
+            new DebugProtocolHandler(debugWebsocketConfiguration));
         }
 
     });

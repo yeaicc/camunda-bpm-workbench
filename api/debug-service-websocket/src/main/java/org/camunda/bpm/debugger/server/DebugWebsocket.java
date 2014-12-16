@@ -12,37 +12,48 @@
  */
 package org.camunda.bpm.debugger.server;
 
+import io.netty.channel.ChannelFuture;
+
 /**
  *
  * @author Daniel Meyer
  *
  */
-public class DebugServer {
+public class DebugWebsocket {
 
-  protected DebugServerConfiguration debugServerConfiguration;
+  protected DebugWebsocketConfiguration debugWebsocketConfiguration;
+
+  protected ChannelFuture closeFuture;
 
   /**
-   * @param debugServerConfiguration
+   * @param debugWebsocketConfiguration
    */
-  public DebugServer(DebugServerConfiguration debugServerConfiguration) {
-    this.debugServerConfiguration = debugServerConfiguration;
+  public DebugWebsocket(DebugWebsocketConfiguration debugWebsocketConfiguration) {
+    this.debugWebsocketConfiguration = debugWebsocketConfiguration;
 
     try {
-      debugServerConfiguration.getNettyServer().run()
+      closeFuture = debugWebsocketConfiguration.getNettyServer().run()
         .sync()
         .channel()
-        .closeFuture()
-        .sync();
+        .closeFuture();
 
     } catch(Exception e) {
-      throw new DebugServerException("Exception while staring server", e);
+      throw new DebugWebsocketException("Exception while staring server", e);
 
     }
 
   }
 
+  public void waitForShutdown() {
+    try {
+      closeFuture.sync();
+    } catch (InterruptedException e) {
+      // ignore
+    }
+  }
+
   public void shutdown() {
-    debugServerConfiguration.getNettyServer().shutdown();
+    debugWebsocketConfiguration.getNettyServer().shutdown();
   }
 
 }

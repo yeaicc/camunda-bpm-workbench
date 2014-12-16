@@ -13,7 +13,7 @@
 package org.camunda.bpm.debugger.server;
 
 import org.camunda.bpm.debugger.server.netty.AbstractNettyServer;
-import org.camunda.bpm.debugger.server.netty.DefaultNettyServer;
+import org.camunda.bpm.debugger.server.netty.WebsocketServer;
 import org.camunda.bpm.debugger.server.protocol.DebugProtocol;
 import org.camunda.bpm.debugger.server.protocol.Marshaller;
 import org.camunda.bpm.debugger.server.protocol.cmd.*;
@@ -28,12 +28,12 @@ import org.camunda.bpm.debugger.server.protocol.cmd.StartProcessCmd;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
- * Configuration and factory for a {@link DebugServer}.
+ * Configuration and factory for a {@link DebugWebsocket}.
  *
  * @author Daniel Meyer
  *
  */
-public class DebugServerConfiguration {
+public class DebugWebsocketConfiguration {
 
   /**
    * The netty server to use.
@@ -62,9 +62,9 @@ public class DebugServerConfiguration {
 
   // factory /////////////////////////////////////
 
-  public DebugServer startServer() {
+  public DebugWebsocket startServer() {
     init();
-    return new DebugServer(this);
+    return new DebugWebsocket(this);
   }
 
   protected void init() {
@@ -108,33 +108,33 @@ public class DebugServerConfiguration {
 
   protected void initNettyServer() {
     if(nettyServer == null) {
-      nettyServer = new DefaultNettyServer(port, this);
+      nettyServer = new WebsocketServer(port, this);
     }
   }
 
   // fluent builder //////////////////////////////
 
-  public DebugServerConfiguration protocol(DebugProtocol protocol) {
+  public DebugWebsocketConfiguration protocol(DebugProtocol protocol) {
     this.protocol = protocol;
     return this;
   }
 
-  public DebugServerConfiguration nettyServer(AbstractNettyServer nettyServer) {
+  public DebugWebsocketConfiguration nettyServer(AbstractNettyServer nettyServer) {
     this.nettyServer = nettyServer;
     return this;
   }
 
-  public DebugServerConfiguration port(int port) {
+  public DebugWebsocketConfiguration port(int port) {
     this.port = port;
     return this;
   }
 
-  public DebugServerConfiguration port(ObjectMapper objectMapper) {
+  public DebugWebsocketConfiguration port(ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
     return this;
   }
 
-  public DebugServerConfiguration marshaller(Marshaller marshaller) {
+  public DebugWebsocketConfiguration marshaller(Marshaller marshaller) {
     this.marshaller = marshaller;
     return this;
   }

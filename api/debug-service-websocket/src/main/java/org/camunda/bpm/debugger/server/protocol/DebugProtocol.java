@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.camunda.bpm.debugger.server.DebugServerConfiguration;
+import org.camunda.bpm.debugger.server.DebugWebsocketConfiguration;
 import org.camunda.bpm.debugger.server.netty.ChannelAttributes;
 import org.camunda.bpm.debugger.server.protocol.cmd.DebugCommand;
 import org.camunda.bpm.debugger.server.protocol.cmd.DebugCommandContext;
@@ -41,9 +41,9 @@ public class DebugProtocol {
 
   protected static Pattern commandNameMatcher = Pattern.compile(".*\"command\"\\s*:\\s*\"([\\w|-]*)\".*");
 
-  protected static Logger LOGG = Logger.getLogger(DebugServerConfiguration.class.getName());
+  protected static Logger LOGG = Logger.getLogger(DebugWebsocketConfiguration.class.getName());
 
-  protected DebugServerConfiguration debugServerConfiguration;
+  protected DebugWebsocketConfiguration debugWebsocketConfiguration;
 
   /**
    * The set of registered command handlers to be used for executing commands.
@@ -51,10 +51,10 @@ public class DebugProtocol {
   protected Map<String, Class<? extends DebugCommand<?>>> commandHandlers = new HashMap<String, Class<? extends DebugCommand<?>>>();
 
   /**
-   * @param debugServerConfiguration
+   * @param debugWebsocketConfiguration
    */
-  public DebugProtocol(DebugServerConfiguration debugServerConfiguration) {
-    this.debugServerConfiguration = debugServerConfiguration;
+  public DebugProtocol(DebugWebsocketConfiguration debugWebsocketConfiguration) {
+    this.debugWebsocketConfiguration = debugWebsocketConfiguration;
   }
 
   /**
@@ -82,7 +82,7 @@ public class DebugProtocol {
       Class<? extends DebugCommand<?>> commandHandler = commandHandlers.get(commandName);
       if(commandHandler != null) {
         // unmarshall protocol POJO:
-        DebugCommand<?> commandDto = debugServerConfiguration
+        DebugCommand<?> commandDto = debugWebsocketConfiguration
           .getMarshaller()
           .unmarshal(commandPayload, commandHandler);
 
@@ -102,7 +102,7 @@ public class DebugProtocol {
   public void fireEvent(Channel channel, EventDto<?> event) {
 
     try {
-      String marshalledEvent = debugServerConfiguration.getMarshaller()
+      String marshalledEvent = debugWebsocketConfiguration.getMarshaller()
         .marshal(event);
 
       channel.writeAndFlush(new TextWebSocketFrame(marshalledEvent));

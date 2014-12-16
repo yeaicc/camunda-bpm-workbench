@@ -13,8 +13,8 @@
 package org.camunda.bpm.debugger.server.protocol;
 
 import java.io.StringWriter;
-import org.camunda.bpm.debugger.server.DebugServerConfiguration;
-import org.camunda.bpm.debugger.server.DebugServerException;
+import org.camunda.bpm.debugger.server.DebugWebsocketConfiguration;
+import org.camunda.bpm.debugger.server.DebugWebsocketException;
 import org.codehaus.jackson.map.ObjectMapper;
 
 /**
@@ -23,7 +23,7 @@ import org.codehaus.jackson.map.ObjectMapper;
  */
 public class Marshaller {
 
-  protected DebugServerConfiguration configuration;
+  protected DebugWebsocketConfiguration configuration;
 
   public String marshal(Object object) {
 
@@ -36,7 +36,7 @@ public class Marshaller {
       return valueWriter.toString();
 
     } catch (Exception e) {
-      throw new DebugServerException("Error while marshalling to JSON ", e);
+      throw new DebugWebsocketException("Error while marshalling to JSON ", e);
     }
 
   }
@@ -49,14 +49,14 @@ public class Marshaller {
       return objectMapper.readValue(source, type);
 
     } catch (Exception e) {
-      throw new DebugServerException("Error while unmarshalling from JSON ", e);
+      throw new DebugWebsocketException("Error while unmarshalling from JSON ", e);
     }
 
   }
 
 
 
-  public void setConfiguration(DebugServerConfiguration configuration) {
+  public void setConfiguration(DebugWebsocketConfiguration configuration) {
     this.configuration = configuration;
   }
 
