@@ -13,7 +13,7 @@
 
 'use strict';
 
-var BpmnJS = require('bpmn-js');
+var BpmnJS = require('bpmn-js/lib/Modeler');
 
 
 var DiagramManager = (function() {
@@ -98,21 +98,17 @@ var DiagramManager = (function() {
    */
   DiagramManager.prototype.initDiagram = function(element) {
 
-    var bpmnJSModules = BpmnJS.prototype._modules.concat([
-      require('bpmn-js/lib/features/zoomscroll'),
-      require('bpmn-js/lib/features/movecanvas'),
+    var extensionModules = [
       require('./debug-overlay'),
       {
         workbench: [ 'value', this.workbench ]
       }
-    ]);
+    ];
 
     // construct new renderer
     this.renderer = new BpmnJS({
       container: element,
-      width: '100%',
-      height: '100%',
-      modules: bpmnJSModules
+      additionalModules: extensionModules
     });
 
     // register listeners on the renderer
