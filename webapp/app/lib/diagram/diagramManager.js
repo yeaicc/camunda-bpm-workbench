@@ -99,6 +99,7 @@ var DiagramManager = (function() {
   DiagramManager.prototype.initDiagram = function(element) {
 
     var extensionModules = [
+      require('diagram-js-origin'),
       require('./debug-overlay'),
       {
         workbench: [ 'value', this.workbench ]
