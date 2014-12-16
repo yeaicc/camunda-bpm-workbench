@@ -1,7 +1,12 @@
 # camunda BPM workbench
 
-camunda BPM workbench is a web-application allowing you to implement BPMN processes using an app directly inside a web browser.
+camunda BPM workbench is a web-application allowing you to implement your BPMN processes with [camunda BPM](camundabpm] directly inside a web browser.
+
+
+## Components
+
 The app provides the following features:
+
 
 ### BPMN Diagram Renderer
 
@@ -17,23 +22,37 @@ The script editor allows editing the scripts associated with BPMN Script Tasks. 
 The debugger connects to a camunda BPM runtime using a Websocket.
 Put breakpoints directly inside the process diagram, inspect the current state of the process variables and interact with a process instance through an interactive scripting console.
 
-## Install and run
 
-- clone the git repository
-  `git clone git@github.com:camunda/camunda-bpm-workbench.git`
-- link the camunda-simple-grid for npm
-  `cd camunda-bpm-workbench/frontend/util/simple-grid && npm link`
-- link simple-grid for the app
-  `cd ../../app && npm link camunda-simple-grid`
-- install with npm
-  `npm install`
-- go to the backend folder and build using mvn
-  `cd ../../backend && mvn clean install && cd debugger-server mvn exec:java`
-  (this will start a server on port 9090 - which has to be, obviously, free)
-- run grunt from the app directory
-  `cd ../../frontend/app && grunt auto-build`
+## Setup and Run
 
+Clone the git repository:
+
+```
+git clone git@github.com:camunda/camunda-bpm-workbench.git
+```
+
+Install client dependencies:
+
+```
+(cd webapp/app && npm install && bower install)
+```
+
+Build and start backend on `localhost:9090`:
+
+```
+(cd api && mvn clean install)
+(cd api/debug-service-websocket && mvn exec:java)
+```
+
+Build client and start it on `localhost:9000`
+
+```
+(cd webapp/app && grunt auto-build)
+```
+
+Open [http://localhost:9000](http://localhost:9000) in your browser.
 
 
 [ace]: http://ace.c9.io
 [bpmnio]: http://bpmn.io
+[camundabpm]: http://camunda.org
