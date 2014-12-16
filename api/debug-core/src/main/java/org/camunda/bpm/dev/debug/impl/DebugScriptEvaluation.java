@@ -87,7 +87,7 @@ public class DebugScriptEvaluation implements DebugOperation {
     try {
       ExecutableScript executableScript = Context.getProcessEngineConfiguration()
         .getScriptFactory()
-        .createScript(script, language);
+        .createScriptFromSource(language, script);
 
       Object result = Context.getProcessEngineConfiguration()
         .getScriptingEnvironment()

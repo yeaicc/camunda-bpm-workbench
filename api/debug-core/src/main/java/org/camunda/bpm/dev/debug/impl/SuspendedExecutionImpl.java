@@ -21,9 +21,10 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.camunda.bpm.dev.debug.BreakPoint;
 import org.camunda.bpm.dev.debug.SuspendedExecution;
 import org.camunda.bpm.engine.ProcessEngineServices;
-import org.camunda.bpm.engine.delegate.PersistentVariableInstance;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
+import org.camunda.bpm.engine.variable.VariableMap;
+import org.camunda.bpm.engine.variable.value.TypedValue;
 import org.camunda.bpm.model.bpmn.BpmnModelInstance;
 import org.camunda.bpm.model.bpmn.instance.FlowElement;
 
@@ -34,7 +35,6 @@ import org.camunda.bpm.model.bpmn.instance.FlowElement;
 public class SuspendedExecutionImpl implements SuspendedExecution {
 
   protected ExecutionEntity executionEntity;
-
 
   protected AtomicOperation operation;
 
@@ -132,30 +132,6 @@ public class SuspendedExecutionImpl implements SuspendedExecution {
     executionEntity.setVariableLocal(variableName, value);
   }
 
-  public void setVariableFromSerialized(String variableName, Object value, String variableTypeName, Map<String, Object> configuration) {
-    executionEntity.setVariableFromSerialized(variableName, value, variableTypeName, configuration);
-  }
-
-  public void setVariableLocalFromSerialized(String variableName, Object value, String variableTypeName, Map<String, Object> configuration) {
-    executionEntity.setVariableFromSerialized(variableName, value, variableTypeName, configuration);
-  }
-
-  public Map<String, PersistentVariableInstance> getVariableInstances() {
-    return executionEntity.getVariableInstances();
-  }
-
-  public PersistentVariableInstance getVariableInstance(String name) {
-    return executionEntity.getVariableInstance(name);
-  }
-
-  public Map<String, PersistentVariableInstance> getVariableInstancesLocal() {
-    return executionEntity.getVariableInstancesLocal();
-  }
-
-  public PersistentVariableInstance getVariableInstanceLocal(String name) {
-    return executionEntity.getVariableInstanceLocal(name);
-  }
-
   public BpmnModelInstance getBpmnModelInstance() {
     return executionEntity.getBpmnModelInstance();
   }
@@ -203,6 +179,8 @@ public class SuspendedExecutionImpl implements SuspendedExecution {
   public void removeVariableLocal(String variableName) {
     executionEntity.removeVariableLocal(variableName);
   }
+
+
 
   public String getProcessBusinessKey() {
     return executionEntity.getProcessBusinessKey();
@@ -255,6 +233,42 @@ public class SuspendedExecutionImpl implements SuspendedExecution {
   public void addDebugOperation(DebugOperation debugOperation) {
     this.debugOperations.add(debugOperation);
     notifyAll();
+  }
+
+  public String getVariableScopeKey() {
+    return executionEntity.getVariableScopeKey();
+  }
+
+  public VariableMap getVariablesTyped() {
+    return executionEntity.getVariablesTyped();
+  }
+
+  public VariableMap getVariablesTyped(boolean deserializeValues) {
+    return executionEntity.getVariablesTyped(deserializeValues);
+  }
+
+  public VariableMap getVariablesLocalTyped() {
+    return executionEntity.getVariablesLocalTyped();
+  }
+
+  public VariableMap getVariablesLocalTyped(boolean deserializeValues) {
+    return getVariablesLocalTyped(deserializeValues);
+  }
+
+  public <T extends TypedValue> T getVariableTyped(String variableName) {
+    return executionEntity.getVariableTyped(variableName);
+  }
+
+  public <T extends TypedValue> T getVariableTyped(String variableName, boolean deserializeValue) {
+    return executionEntity.getVariableTyped(variableName, deserializeValue);
+  }
+
+  public <T extends TypedValue> T getVariableLocalTyped(String variableName) {
+    return executionEntity.getVariableLocalTyped(variableName);
+  }
+
+  public <T extends TypedValue> T getVariableLocalTyped(String variableName, boolean deserializeValue) {
+    return executionEntity.getVariableLocalTyped(variableName, deserializeValue);
   }
 
 }

@@ -353,7 +353,7 @@ public class DebugSessionImpl implements DebugSession {
 
       SourceExecutableScript sourceScript = (SourceExecutableScript) taskScript;
 
-      script.setScript(sourceScript.getScriptSrc());
+      script.setScript(sourceScript.getScriptSource());
       script.setScriptingLanguage(sourceScript.getLanguage());
 
       return script;
@@ -372,7 +372,7 @@ public class DebugSessionImpl implements DebugSession {
 
     if (activityBehavior instanceof ScriptTaskActivityBehavior) {
       SourceExecutableScript taskScript = (SourceExecutableScript) ((ScriptTaskActivityBehavior) activityBehavior).getScript();
-      taskScript.setScriptSrc(script.getScript());
+      taskScript.setScriptSource(script.getScript());
       // TODO set script language here
     } else {
       throw new DebuggerException("Activity " + activityId + " is no script task");
