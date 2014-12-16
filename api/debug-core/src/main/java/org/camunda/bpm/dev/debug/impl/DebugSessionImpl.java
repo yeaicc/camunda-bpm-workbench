@@ -24,8 +24,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javax.script.Bindings;
-import javax.script.ScriptEngine;
-import javax.script.ScriptException;
 import javax.script.SimpleBindings;
 
 import org.camunda.bpm.dev.debug.BreakPoint;
@@ -38,9 +36,12 @@ import org.camunda.bpm.dev.debug.completion.CodeCompleter;
 import org.camunda.bpm.dev.debug.completion.CodeCompleterBuilder;
 import org.camunda.bpm.dev.debug.completion.CodeCompletionHint;
 import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.ScriptEvaluationException;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.bpmn.behavior.ScriptTaskActivityBehavior;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
+import org.camunda.bpm.engine.impl.context.Context;
+import org.camunda.bpm.engine.impl.el.StartProcessVariableScope;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.impl.persistence.entity.ProcessDefinitionEntity;
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityBehavior;
@@ -48,7 +49,6 @@ import org.camunda.bpm.engine.impl.pvm.process.ActivityImpl;
 import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
 import org.camunda.bpm.engine.impl.scripting.ExecutableScript;
 import org.camunda.bpm.engine.impl.scripting.SourceExecutableScript;
-import org.camunda.bpm.engine.impl.scripting.engine.ScriptingEngines;
 import org.camunda.bpm.model.bpmn.Bpmn;
 
 /**
@@ -304,20 +304,29 @@ public class DebugSessionImpl implements DebugSession {
     ProcessEngine processEngine = debugSessionFactory.getProcessEngine();
     ProcessEngineConfigurationImpl processEngineConfiguration = ((ProcessEngineImpl)processEngine).getProcessEngineConfiguration();
 
-    ScriptingEngines scriptingEngines = processEngineConfiguration.getScriptingEngines();
-    ScriptEngine scriptEngine = scriptingEngines.getScriptEngineForLanguage(language);
-    if(scriptEngine == null) {
-      scriptEvaluation.setResult("Could not find engine for language '"+language+"'");
+    try {
+      ExecutableScript executableScript = processEngineConfiguration
+        .getScriptFactory()
+        .createScriptFromSource(language, script);
+
+      Context.setProcessEngineConfiguration(processEngineConfiguration);
+      Object result = processEngineConfiguration
+        .getScriptingEnvironment()
+        .execute(executableScript, StartProcessVariableScope.getSharedInstance(), globalScriptBindings);
+
+      scriptEvaluation.setResult(result);
+      fireScriptEvaluated(scriptEvaluation);
+    }
+    catch (ScriptEvaluationException e) {
+      scriptEvaluation.setException((Exception) e.getCause());
       fireScriptEvaluationFailed(scriptEvaluation);
-    } else {
-      try {
-        Object result = scriptEngine.eval(script, globalScriptBindings);
-        scriptEvaluation.setResult(result);
-        fireScriptEvaluated(scriptEvaluation);
-      } catch (ScriptException e) {
-        scriptEvaluation.setScriptException(e);
-        fireScriptEvaluationFailed(scriptEvaluation);
-      }
+    }
+    catch (Exception e) {
+      scriptEvaluation.setException(e);
+      fireScriptEvaluationFailed(scriptEvaluation);
+    }
+    finally {
+      Context.removeProcessEngineConfiguration();
     }
   }
 

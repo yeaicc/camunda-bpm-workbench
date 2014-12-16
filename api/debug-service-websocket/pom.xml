@@ -31,8 +31,8 @@
     </dependency>
 
     <dependency>
-      <groupId>org.camunda.bpm.dev</groupId>
-      <artifactId>camunda-debug-core</artifactId>
+      <groupId>org.camunda.bpm.workbench</groupId>
+      <artifactId>camunda-workbench-api-debug-core</artifactId>
       <version>${project.version}</version>
     </dependency>
 

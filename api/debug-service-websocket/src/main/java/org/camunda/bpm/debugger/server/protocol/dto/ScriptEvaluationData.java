@@ -26,8 +26,8 @@ public class ScriptEvaluationData {
   public ScriptEvaluationData(DebugScriptEvaluation evaluation) {
     this.cmdId = evaluation.getCmdId();
     if(evaluation.getResult() == null) {
-      if(evaluation.getScriptException() != null) {
-        this.result = evaluation.getScriptException().getMessage();
+      if(evaluation.getException() != null) {
+        this.result = evaluation.getException().getMessage();
       } else {
         this.result = "undefined";
       }

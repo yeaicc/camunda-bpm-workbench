@@ -15,8 +15,6 @@ package org.camunda.bpm.dev.debug.impl;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.script.ScriptException;
-
 import org.camunda.bpm.engine.ProcessEngineException;
 import org.camunda.bpm.engine.impl.context.Context;
 import org.camunda.bpm.engine.impl.scripting.ExecutableScript;
@@ -35,7 +33,7 @@ public class DebugScriptEvaluation implements DebugOperation {
 
   protected Object result;
 
-  protected ScriptException scriptException;
+  protected Exception exception;
 
   protected String cmdId;
 
@@ -69,12 +67,12 @@ public class DebugScriptEvaluation implements DebugOperation {
     this.result = result;
   }
 
-  public void setScriptException(ScriptException scriptException) {
-    this.scriptException = scriptException;
+  public void setException(Exception scriptException) {
+    this.exception = scriptException;
   }
 
-  public ScriptException getScriptException() {
-    return scriptException;
+  public Exception getException() {
+    return exception;
   }
 
   public String getCmdId() {
@@ -104,7 +102,7 @@ public class DebugScriptEvaluation implements DebugOperation {
                suspendedExecution.getSuspendedThread().getName() + " at breakpoint " +
                suspendedExecution.getBreakPoint() + ".", e);
 
-      this.setScriptException((ScriptException) e.getCause());
+      this.setException((Exception) e.getCause());
       debugSession.fireScriptEvaluationFailed(this);
 
     }
