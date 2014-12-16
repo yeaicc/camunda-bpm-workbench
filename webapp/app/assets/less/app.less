@@ -1,180 +1,123 @@
-/** variables */
+html, body {
+  height: 100%;
+}
 
-@app-background: #444;
-@app-content-background: #eee;
-@app-content-border-color: #333;
-
-@app-header-color: #ccc;
-@app-header-bg-color: @app-content-border-color;
-@app-header-border-color: #333;
-
-/** the height of a panel header */
-@app-pn-header-height: 28px;
-
-@navbar-inverse-bg: #b5152b;
-@navbar-link-color: white;
-@navbar-inverse-brand-color: white;
-
-@nav-link-padding: 2px;
-@border-radius-base: 0px;
-@border-radius-small: 0px;
-@border-radius-large: 0px;
-
-@nav-tabs-active-link-hover-bg: #fff;
-@nav-tabs-active-link-hover-color: #333;
-
-@dbg-pn-border: 1px solid #bbb;
-
-/** the main container of the application. Takes up all the space
- * below the navbar */
-#app-main {
-
-  position: absolute;
-  top: 51px;
-  bottom: 0px;
-  width: 100%;
-
+body {
   background-color: @app-background;
-
 }
 
-/** ace code editor */
-.ace {
-  &_editor {
-    height: 237px;
-    width: 100%;
-  }
 
-  &_editor,
-  &_scroller,
-  &_gutter {
-    top: 5px;
-  }
+/* panel layout */
+
+.wb-panel,
+.wb-panel-row,
+.wb-panel-part {
+  .flex-container(column);
 }
 
-.app {
+.wb-panel-toolbar,
+.wb-panel-header {
+  .flex-fill(initial);
+}
 
-  /** panels */
-  &-pn {
+.wb-panel-part,
+.wb-panel-rows,
+.wb-panel-row,
+.wb-panel-content {
+  .flex-fill(1);
 
-    /** panel header */
-    &-header {
-      border-bottom: solid 1px @app-header-border-color;
-      background-color: @app-header-bg-color;
-      padding: 5px;
-      padding-left: 10px;
-      padding-right: 10px;
-      height: @app-pn-header-height;
+  position: relative;
+}
 
-      h2 {
-        color: @app-header-color;
-        font-size: 14px;
-        font-weight: 400;
-        font-family: monospace;
-        margin: 0px;
-      }
-    }
+.wb-panel-rows {
+  .flex-container(row);
+}
 
-    /** panel content */
-    &-content {
-      position: relative;
-      height: calc(~'100% - @{app-pn-header-height}');
-      overflow: auto;
-      font-size: 9pt;
-      background: @component-active-color;
 
-    }
+/* panel styles */
 
-  }
+.wb-panel {
 
-  &-ctn {
+  background: @app-content-background;
+
+  .wb-panel-header {
+    border-bottom: @app-header-border;
+    background-color: @app-header-bg-color;
     padding: 5px;
+    padding-left: 10px;
+    padding-right: 10px;
+
+    height: @app-panel-header-height;
+
+    h2 {
+      color: @app-header-color;
+      font-size: 14px;
+      font-weight: 400;
+      font-family: monospace;
+      margin: 0px;
+    }
   }
 
-  &-diagram-wrapper {
-    overflow:hidden;
+  .wb-panel-content {
+    overflow: auto;
+    font-size: 9pt;
+    background: @app-panel-background;
   }
-}
-/** the ctrl panels (control panels) are panels
- * providing the controls */
-.ctrl {
 
-  /** a control panel */
-  &-pn {
-    height: 100%;
+  .wb-panel-tabbar,
+  .wb-panel-toolbar {
+    height: @app-panel-bar-height;
+    background-color: @app-panel-bar-background;
 
-    &-col {
-      float: left;
-      height: 100%;
-      width: 50%;
-      min-width: 150px;
-      border-right: @dbg-pn-border;
-    }
+    border-bottom: @app-panel-border;
+    padding: 0;
+  }
 
-    &-head {
-      height: 26px;
-    }
-
-    &-ctn {
-      height: calc(~'100% - 26px');
-      overflow: auto;
-
-      .nav-tab-ctn {
-        padding: 5px;
-      } 
-    }
-
-    /** customize bootstrap controls inside a control panel */
-    .nav-tabs {
-      background-color: @app-content-background;
-    }
+  .wb-panel-toolbar {
 
     .navbar {
-      padding: 0px;
-      border-bottom: 1px solid #bbb;
-      min-height: 26px;
-      margin-bottom: inherit;
-      background-color: @app-content-background;
-
-      .btn {
-        background-color: transparent;
-      }
-
-      .divider {
-        height: 100%;
-        border-left: 1px solid #bbb;
-        border-right: 1px solid #fff;
-      }
-
-      .badge {
-        margin: 2px;
-      }
+      padding: 2px;
     }
 
-    &-row {
+    .btn {
+      background-color: transparent;
+    }
 
-      &-head {
+    .divider {
+      height: 100%;
+      border-left: 1px solid #bbb;
+      border-right: 1px solid #fff;
+    }
 
-        padding: 1px;
-        padding-left: 3px;
-        border-bottom: 1px solid #ddd;
-        background-color: @app-content-background;
-
-
-        h3 {
-          font-size: inherit;
-          margin: 0px;
-          padding: 0px;
-        }
-
-      }
-
-      &-ctn {
-        border-bottom: 1px solid #ddd;
-      }
-
+    .badge {
+      margin: 2px;
     }
   }
+
+  .wb-panel-row:not(:last-child) {
+    border-right: @app-panel-border;
+  }
+}
+
+.wb-panel-tabbar .nav-tabs {
+  border: none;
+}
+
+[resizer] {
+  .flex-fill(initial);
+
+  background: @resizer-bg;
+  border: 1px @resizer-border-color;
+}
+
+[layout-horizontal] > [resizer] {
+  width: @resizer-size;
+  border-style: none solid;
+}
+
+[layout-vertical] > [resizer] {
+  height: @resizer-size;
+  border-style: solid none;
 }
 
 /** customizations for camunda simple grid */
@@ -182,7 +125,7 @@
 
   &-col {
     background-color: @app-content-background;
-    border: solid 1px @app-content-border-color;
+    border: @app-panel-border;
   }
 
   &-toggle-fullscreen {
@@ -210,7 +153,7 @@
   /** customizations for tabs */
   &-tabs {
 
-    border-bottom: @dbg-pn-border;;
+    border-bottom: @app-default-border;
 
     /** give tabs a small top margin */
     & > li {
@@ -231,17 +174,11 @@
     & > li.active > a,
     & > li.active > a:hover,
     & > li.active > a:focus {
-      border: @dbg-pn-border;
+      border: @app-panel-border;
       border-bottom-color: transparent;
       margin-bottom: 0px;
     }
   }
-}
-
-.tab-content {
-  background-color: #fff;
-  height: 100%;
-  border-top: 1px solid #bbb;
 }
 
 .table > tbody > tr > th,

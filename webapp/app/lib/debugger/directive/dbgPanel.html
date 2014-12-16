@@ -1,42 +1,34 @@
 <!-- #BEGIN debugger/directive/dbgPanel.html -->
+<div class="wb-panel-rows">
 
-<div class="ctrl-pn">
+  <div class="wb-panel-row">
 
-  <div class="ctrl-pn-col">
-
-    <div class="ctrl-pn-head">
+    <div class="wb-panel-toolbar">
       <div dbg-controls></div>
     </div>
 
-    <div class="ctrl-pn-ctn" ng-show="processDebugger.isSessionOpen()">
-
+    <div class="wb-panel-content" ng-show="processDebugger.isSessionOpen()">
       <div dbg-executions></div>
-
       <div dbg-breakpoints></div>
-
     </div>
 
-    <div class="ctrl-pn-ctn dbg-disabled" ng-show="!processDebugger.isSessionOpen()">
+    <div class="wb-panel-content dbg-disabled" ng-show="!processDebugger.isSessionOpen()">
       No connection to process engine.
-      Please <a href ng-click="processDebugger.openSession()">connect</a> in oder to use the debugger.
+      Please <a href ng-click="processDebugger.openSession()">connect</a> in order to use the debugger.
     </div>
-
   </div>
 
-  <div class="ctrl-pn-col">
+  <div class="wb-panel-row">
 
-    <div class="ctrl-pn-head">
+    <div class="wb-panel-tabbar">
       <ul class="nav nav-tabs" ng-show="processDebugger.isSessionOpen()">
         <li class="active"><a href>Variables</a></li>
       </ul>
     </div>
 
-    <div class="ctrl-pn-ctn" ng-show="processDebugger.isSessionOpen()"> 
-      <div class="nav-tab-ctn">
-        <div dbg-variables></div>
-      </div>
+    <div class="wb-panel-content" ng-show="processDebugger.isSessionOpen()">
+      <div dbg-variables></div>
     </div>
-
   </div>
 
 </div>

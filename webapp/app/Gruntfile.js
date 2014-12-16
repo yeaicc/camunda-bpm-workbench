@@ -20,7 +20,7 @@ module.exports = function (grunt) {
           ]
         },
         files: {
-          'dist/css/developer.css': 'assets/less/developer.less'
+          'dist/css/workbench.css': 'assets/less/workbench.less'
         }
       }
     },
@@ -59,7 +59,7 @@ module.exports = function (grunt) {
       },
       app: {
         files: {
-          'dist/developer.js': [ 'lib/developer.js' ]
+          'dist/workbench.js': [ 'lib/workbench.js' ]
         }
       },
       watch: {
@@ -73,7 +73,7 @@ module.exports = function (grunt) {
           }
         },
         files: {
-          'dist/developer.js': [ 'lib/developer.js' ],
+          'dist/workbench.js': [ 'lib/workbench.js' ],
         }
       }
     },
@@ -81,7 +81,7 @@ module.exports = function (grunt) {
     uglify: {
       dist: {
         files: {
-          'dist/developer.min.js': [ 'dist/developer.js' ]
+          'dist/workbench.min.js': [ 'dist/workbench.js' ]
         }
       }
     },
@@ -109,8 +109,15 @@ module.exports = function (grunt) {
           { expand: true, cwd: 'assets/', src: [ 'img/*' ], dest: 'dist/' },
 
           // fonts
-          { expand: true, cwd: 'assets/', src: [ 'font/developer.*' ], dest: 'dist/' },
+          { expand: true, cwd: 'assets/', src: [ 'font/**/*' ], dest: 'dist/' },
         ]
+      },
+
+      diagram_js: {
+        files: [{
+          src: require.resolve('diagram-js/assets/diagram-js.css'),
+          dest: 'dist/vendor/diagram-js/diagram-js.css'
+        }]
       }
     },
     watch: {
@@ -122,7 +129,7 @@ module.exports = function (grunt) {
         files: [
           'lib/index.html',
           'assets/img/**.*',
-          'assets/font/developer.*'
+          'assets/font/workbench.*'
         ],
         tasks: [ 'copy:resources' ]
       }

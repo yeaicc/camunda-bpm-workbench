@@ -1,7 +1,7 @@
 {
-  "name": "camunda-debugger",
-  "version": "7.2.0-SNAPSHOT",
-  "description": "Debuggger webapp for camunda BPM process engine",
+  "name": "camunda-workbench",
+  "version": "7.3.0-SNAPSHOT",
+  "description": "A application for creating, manipulating, running and inspecting BPMN processes with camunda BPM",
   "author": "Daniel Meyer <daniel.meyer@camunda.com>",
   "license": "Apache License 2.0",
   "scripts": {},
@@ -9,13 +9,14 @@
     "camunda",
     "bpm",
     "developer",
+    "workbench",
     "debugger",
     "bpmn",
     "business process management"
   ],
   "repository": {
     "type": "git",
-    "url": "git@github.com:camunda/camunda-bpm-developer.git"
+    "url": "git@github.com:camunda/camunda-bpm-workbench.git"
   },
   "bugs": {
     "url": "https://app.camunda.com/jira/browse/CAM"

@@ -1,0 +1,37 @@
+.flex-container(@direction) {
+  display: flex;
+  flex-direction: @direction;
+}
+
+.flex-fill(@flex: 1) {
+  flex: @flex;
+}
+
+/**
+ * user styles
+ */
+
+[layout-vertical] {
+  .flex-container(column);
+}
+
+[layout-horizontal] {
+  .flex-container(row);
+}
+
+[layout-sizing="initial"] {
+  .flex-fill(initial);
+}
+
+[layout-sizing="fill"],
+[layout-sizing="1"] {
+  .flex-fill(1);
+}
+
+[layout-sizing="2"] {
+  .flex-fill(2);
+}
+
+[layout-sizing="3"] {
+  .flex-fill(3);
+}

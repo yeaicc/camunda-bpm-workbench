@@ -1,14 +1,14 @@
 <!-- #BEGIN diagram/directive/dgrControls.html -->
 <div class="navbar">
 
-  <button type="button" class="btn btn-xs" 
+  <button type="button" class="btn btn-xs"
     ng-click="openFsProcess()"
     title="Open process from your filesystem">
     <span class="glyphicon glyphicon-folder-open"></span>
      &nbsp; File System
   </button>
 
-  <button type="button" class="btn btn-xs" 
+  <button type="button" class="btn btn-xs"
     ng-click="openDeployedProcess()"
     title="Open a deployed process">
     <span class="glyphicon glyphicon-open"></span>
@@ -23,6 +23,5 @@
     <span class="badge alert-info" ng-show="isDeployed()">Deployed</span>
     <span class="badge alert-warning" ng-show="!isDeployed()">Not Deployed</span>
   </div>
-
 </div>
 <!-- #END diagram/directive/dgrControls.html -->

@@ -1,40 +1,40 @@
 <!-- #BEGIN console/directive/console.html -->
-<div id="dbg-cmd-console">
-    <div class="dbg-cmd-row">
-        <div class="dbg-cmd-detail">
-            <span class="glyphicon glyphicon-chevron-right"></span>
-        </div>
-        <div class="dbg-cmd-main">
-            <textarea class="dbg-cmd-line" ng-model="script"
-                      ng-enter="evaluate()"
-                      ng-up="historyPrevious()"
-                      ng-down="historyNext()"
-                      ng-expandable
-                      textcomplete="fetchHints(partialInput)"
-                      contenteditable='true'
-                      spellcheck="false"></textarea>
-        </div>
-        <div script-language-selector class="dbg-cmd-detail dbg-cmd-lang" language="scriptLanguage"/>
+<div class="wb-panel-content">
+  <div class="dbg-cmd-row">
+    <div class="dbg-cmd-detail">
+      <span class="glyphicon glyphicon-chevron-right"></span>
     </div>
+    <div class="dbg-cmd-main">
+      <textarea class="dbg-cmd-line" ng-model="script"
+                ng-enter="evaluate()"
+                ng-up="historyPrevious()"
+                ng-down="historyNext()"
+                ng-expandable
+                textcomplete="fetchHints(partialInput)"
+                contenteditable='true'
+                spellcheck="false"></textarea>
+    </div>
+    <div script-language-selector class="dbg-cmd-detail dbg-cmd-lang" language="scriptLanguage"/>
+  </div>
 
-    <div class="dbg-cmd-row dbg-cmd-row-hist" ng-repeat="result in commandResults">
-        <div class="dbg-cmd-detail">
-            <span class="glyphicon glyphicon-chevron-right"></span>
-        </div>
-        <div class="dbg-cmd-main">
-            <p class="text-muted">
-                {{result.script}}
-            </p>
-            <p ng-if="result.evaluationFailed" class="text-danger">
-                {{result.result}}
-            </p>
-            <p ng-if="!result.evaluationFailed">
-                {{result.result}}
-            </p>
-        </div>
-        <div class="dbg-cmd-detail dbg-cmd-lang">
-            {{result.language}}
-        </div>
+  <div class="dbg-cmd-row dbg-cmd-row-hist" ng-repeat="result in commandResults">
+    <div class="dbg-cmd-detail">
+      <span class="glyphicon glyphicon-chevron-right"></span>
     </div>
+    <div class="dbg-cmd-main">
+      <p class="text-muted">
+        {{result.script}}
+      </p>
+      <p ng-if="result.evaluationFailed" class="text-danger">
+        {{result.result}}
+      </p>
+      <p ng-if="!result.evaluationFailed">
+        {{result.result}}
+      </p>
+    </div>
+    <div class="dbg-cmd-detail dbg-cmd-lang">
+      {{result.language}}
+    </div>
+  </div>
 </div>
 <!-- #END console/directive/console.html -->
