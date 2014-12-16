@@ -13,9 +13,11 @@
 package org.camunda.bpm.debugger.server.protocol;
 
 import java.io.StringWriter;
+
 import org.camunda.bpm.debugger.server.DebugWebsocketConfiguration;
 import org.camunda.bpm.debugger.server.DebugWebsocketException;
-import org.codehaus.jackson.map.ObjectMapper;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * @author Daniel Meyer

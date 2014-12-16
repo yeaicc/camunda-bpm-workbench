@@ -16,16 +16,18 @@ import org.camunda.bpm.debugger.server.netty.AbstractNettyServer;
 import org.camunda.bpm.debugger.server.netty.WebsocketServer;
 import org.camunda.bpm.debugger.server.protocol.DebugProtocol;
 import org.camunda.bpm.debugger.server.protocol.Marshaller;
-import org.camunda.bpm.debugger.server.protocol.cmd.*;
 import org.camunda.bpm.debugger.server.protocol.cmd.CodeCompletionCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.DeployProcessCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.EvaluateScriptCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.GetProcessDefinitionXmlCmd;
+import org.camunda.bpm.debugger.server.protocol.cmd.GetScriptCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.ListProcessesDefinitionsCommand;
 import org.camunda.bpm.debugger.server.protocol.cmd.ResumeExecutionCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.SetBreakPointsCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.StartProcessCmd;
-import org.codehaus.jackson.map.ObjectMapper;
+import org.camunda.bpm.debugger.server.protocol.cmd.UpdateScriptCmd;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 /**
  * Configuration and factory for a {@link DebugWebsocket}.
