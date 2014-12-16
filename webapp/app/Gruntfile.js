@@ -113,6 +113,13 @@ module.exports = function (grunt) {
         ]
       },
 
+      debug_overlay: {
+        files: [{
+          src: require.resolve('bpmn-js-debug-overlay/assets/debug-overlay.css'),
+          dest: 'dist/vendor/bpmn-js-debug-overlay/debug-overlay.css'
+        }]
+      },
+
       diagram_js: {
         files: [{
           src: require.resolve('diagram-js/assets/diagram-js.css'),
@@ -122,7 +129,7 @@ module.exports = function (grunt) {
     },
     watch: {
       less: {
-        files: [ 'assets/less/*.less' ],
+        files: [ 'assets/less/**/*.less' ],
         tasks: [ 'less' ]
       },
       resources: {

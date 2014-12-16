@@ -46,7 +46,7 @@ var DiagramManager = (function() {
        * returns the semantic information about an element by id
        */
       getBpmnElement : function(id) {
-        return diagramManager.renderer.get('elementRegistry').getById(id);
+        return diagramManager.renderer.get('elementRegistry').get(id);
       },
 
       getBpmnXml : function(done) {
@@ -100,7 +100,8 @@ var DiagramManager = (function() {
 
     var extensionModules = [
       require('diagram-js-origin'),
-      require('./debug-overlay'),
+      require('bpmn-js-debug-overlay'),
+      require('./debug-bridge'),
       {
         workbench: [ 'value', this.workbench ]
       }
@@ -109,6 +110,12 @@ var DiagramManager = (function() {
     // construct new renderer
     this.renderer = new BpmnJS({
       container: element,
+      debugOverlay: {
+        buttons: {
+          'break': { className: 'glyphicon glyphicon-record' },
+          'resume': { className: 'glyphicon glyphicon-play' }
+        }
+      },
       additionalModules: extensionModules
     });
 

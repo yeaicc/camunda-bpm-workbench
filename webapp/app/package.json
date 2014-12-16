@@ -53,6 +53,7 @@
   "dependencies": {
     "angular": "^1.2.16",
     "bpmn-js": "~0.6.0",
+    "bpmn-js-debug-overlay": "^0.1.0",
     "camunda-simple-grid": "../util/simple-grid",
     "diagram-js-origin": "^0.1.2",
     "didi": "0.0.4",
