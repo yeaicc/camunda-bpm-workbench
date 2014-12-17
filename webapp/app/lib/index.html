@@ -38,7 +38,7 @@
         diagram
       -->
       <div layout-sizing="2" layout-vertical>
-        <div class="wb-panel" layout-sizing="fill">
+        <div class="wb-panel" layout-sizing="2">
           <div class="wb-panel-header">
             <h2>
               <!--
@@ -53,12 +53,16 @@
 
         <div resizer></div>
 
-        <div layout-sizing="initial"
-             scripteditor
-             dbg-cmd-id="dbgCmdId"
-             command-results="commandResults"
-             workbench="workbench">
+        <div class="wb-panel" layout-sizing="1">
+          <div class="wb-panel-header">
+            <h2>
+              <span class="glyphicon glyphicon-wrench"></span>
+              PROPERTIES
+            </h2>
+          </div>
+          <div class="wb-panel-part" prop-panel workbench="workbench"></div>
         </div>
+
       </div>
 
       <div resizer></div>
