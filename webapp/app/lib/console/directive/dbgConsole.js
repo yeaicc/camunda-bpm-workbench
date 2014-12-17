@@ -22,6 +22,8 @@ var ConsoleController = [ '$scope', function($scope) {
 
   var nextId = 0;
 
+  $scope.processDebugger = $scope.workbench.processDebugger;
+
   /**
    * the console input is bound to this field
    */
