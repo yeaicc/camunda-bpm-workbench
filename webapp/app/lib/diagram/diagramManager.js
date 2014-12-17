@@ -38,6 +38,11 @@ var DiagramManager = (function() {
     renderer.on('canvas.viewbox.changed', function(e) {
       diagramManager.cachedViewbox = e.viewbox;
     });
+
+    renderer.on('commandStack.changed', function(e) {
+      // reset cached XML (became invalid)
+      diagramManager.cachedXML = null;
+    });
   }
 
   function getDiagramProvider(diagramManager) {
@@ -54,9 +59,25 @@ var DiagramManager = (function() {
       },
 
       getBpmnXml : function(done) {
+
+        var cachedXML = diagramManager.cachedXML;
+
+        // use cached XML if nothing has changed
+        if (cachedXML) {
+          console.debug('using cached BPMN 2.0 XML');
+          done(null, cachedXML);
+        }
+
+        // perform an export otherwise
         diagramManager.renderer.saveXML({ format: true }, function(err, xml) {
           if (!err) {
-            diagramManager.currentXmlSource = xml;
+            diagramManager.cachedXML = xml;
+
+            console.debug('exported BPMN 2.0 XML');
+            console.debug(xml);
+          } else {
+            console.error('error exporting BPMN 2.0 XML');
+            console.error(err);
           }
 
           done(err, xml);
@@ -148,25 +169,29 @@ var DiagramManager = (function() {
     // register listeners on the renderer
     registerListeners(this.renderer, this);
 
-    if (this.currentXmlSource) {
+    if (this.diagramLoaded) {
       this.openProcess();
     }
   };
 
   DiagramManager.prototype.openProcess = function(data) {
 
+    // open new process, cache xml
+    // and reset saved viewbox
     if (data) {
-      this.currentXmlSource = data.xml;
-      this.processDefinition = data.processDefinition;
+      this.cachedXML = data.xml;
       this.cachedViewbox = null;
+      this.processDefinition = data.processDefinition;
     }
 
     var self = this;
-    this.renderer.importXML(this.currentXmlSource, function(err) {
+    this.renderer.importXML(this.cachedXML, function(err) {
 
       if (err) {
         console.error(err);
       } else {
+
+        self.diagramLoaded = true;
 
         // apply cached viewbox
         if (self.cachedViewbox) {

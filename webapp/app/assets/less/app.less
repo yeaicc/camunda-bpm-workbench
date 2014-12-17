@@ -162,21 +162,29 @@ body {
     margin-left: 5px;
 
     border-radius: 5px;
-    border: solid 1px darken(@navbar-inverse-bg, 5%);
+    border: none;
+    background: transparent;
+
+    border: solid 1px @navbar-inverse-bg;
 
     overflow: none;
-
-    background: rgba(255, 255, 255, .07);
 
     padding: 5px 10px;
     font-size: 16px;
     color: white;
     outline: none;
 
+    &:hover {
+      background: rgba(255, 255, 255, .07);
+      border-color: darken(@navbar-inverse-bg, 5%);
+    }
+
     &.active {
-      background: white;
+      background: lighten(@navbar-inverse-bg, 60%);
       color: darken(@navbar-inverse-bg, 15%);
       border: solid 1px darken(@navbar-inverse-bg, 15%);
+
+      cursor: default;
     }
   }
 }
