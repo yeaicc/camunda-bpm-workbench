@@ -35,7 +35,8 @@ var EventBus = (function() {
    * @param {string} eventName the name of the event or '*' for global event listeners
    * @param {function} callback the callback function invoked if an event is received.
    */
-  EventBus.prototype.onEvent = function(eventName, callback, once) {
+  EventBus.prototype.onEvent =
+  EventBus.prototype.on = function(eventName, callback, once) {
     if(once) {
       callback.once = true;
     }

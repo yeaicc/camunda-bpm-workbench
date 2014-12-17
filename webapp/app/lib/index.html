@@ -23,13 +23,15 @@
       <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
   </head>
-  <body ng-controller="AppCtrl" layout-vertical>
+  <body ng-controller="AppCtrl" layout-vertical ng-cloak>
 
     <!-- navbar -->
     <div class="navbar navbar-inverse" role="navigation" layout-sizing="initial">
       <div class="navbar-header">
         <a class="navbar-brand" href="#">{ camunda : workbench }</a>
       </div>
+
+      <div class="wb-perspective-switcher pull-right" nav-perspective-switcher workbench="workbench"></div>
     </div>
 
     <div layout-sizing="fill" layout-horizontal>
@@ -38,7 +40,7 @@
         diagram
       -->
       <div layout-sizing="2" layout-vertical>
-        <div class="wb-panel" layout-sizing="2">
+      <div class="wb-diagram-panel" layout-sizing="2" layout-vertical>
           <div class="wb-panel-header">
             <h2>
               <!--
@@ -72,7 +74,9 @@
         <!--
           debugger
         -->
-        <div layout-sizing="1" class="wb-panel">
+        <div class="wb-debugger-panel wb-panel"
+             layout-sizing="1"
+             ng-show="workbench.perspective === 'debug'">
           <div class="wb-panel-header">
             <h2>
               <span class="glyphicon glyphicon-list-alt"></span>
@@ -82,12 +86,12 @@
           <div class="wb-panel-part" dbg-panel workbench="workbench"></div>
         </div>
 
-        <div resizer></div>
+        <div resizer ng-show="workbench.perspective === 'debug'"></div>
 
         <!--
           console
         -->
-        <div layout-sizing="2" class="wb-panel">
+        <div class="wb-console-panel wb-panel" layout-sizing="2">
           <div class="wb-panel-header">
             <h2>
               <span class="glyphicon glyphicon-cog"></span>

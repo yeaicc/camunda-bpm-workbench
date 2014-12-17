@@ -1,18 +1,22 @@
 <!-- #BEGIN diagram/directive/dgrControls.html -->
 <div class="navbar">
 
-  <button type="button" class="btn btn-xs"
+  <button
+    class="btn btn-xs"
     ng-click="openFsProcess()"
+    ng-show="workbench.perspective === 'model'"
     title="Open process from your filesystem">
-    <span class="glyphicon glyphicon-folder-open"></span>
-     &nbsp; File System
+      <span class="glyphicon glyphicon-folder-open"></span>
+      &nbsp; File System
   </button>
 
-  <button type="button" class="btn btn-xs"
+  <button
+    class="btn btn-xs"
     ng-click="openDeployedProcess()"
+    ng-show="workbench.perspective === 'model'"
     title="Open a deployed process">
-    <span class="glyphicon glyphicon-open"></span>
-     Deployed Process
+      <span class="glyphicon glyphicon-open"></span>
+      Deployed Process
   </button>
 
   <div class="hidden">

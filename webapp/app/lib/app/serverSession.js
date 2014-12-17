@@ -25,7 +25,7 @@ var ServerSession = (function() {
   function ServerSession(wsConnection, eventBus) {
 
     /**
-     * @member {WsConnection} the connection to the backend server 
+     * @member {WsConnection} the connection to the backend server
      */
     this.wsConnection = wsConnection;
 
@@ -54,7 +54,7 @@ var ServerSession = (function() {
       }
     };
 
-    this.eventBus.onEvent(evtName, listener, true);
+    this.eventBus.on(evtName, listener, true);
 
     return {
       success : function(callb) {
@@ -77,7 +77,7 @@ var ServerSession = (function() {
   /**
    * Sets the breakpoints on the session.
    *
-   * A breakpoint object is expected to have the form 
+   * A breakpoint object is expected to have the form
    * { "elementId": "ServiceTask_1", "type": "BEFORE_ACTIVITY" }
    *
    * @param {Array} an array of breakpoints
@@ -97,7 +97,7 @@ var ServerSession = (function() {
   /**
    * Evaluate script
    *
-   * Allows evaluating a script. ScriptInfo is expected to have the following form 
+   * Allows evaluating a script. ScriptInfo is expected to have the following form
    * { "language": "Javascript", "script": "script source ...", "executionId": "some-suspended execution id"}
    *
    * @param {Object} input for the script evaluation
@@ -134,7 +134,7 @@ var ServerSession = (function() {
 
   /**
    * Deploys a process
-   * @param {String} resourceData the resource data of the form 
+   * @param {String} resourceData the resource data of the form
    * { "resourceName": "process.bpmn", "resourceData": "..." }
    */
   ServerSession.prototype.deployProcess = function(resourceData) {
@@ -151,7 +151,7 @@ var ServerSession = (function() {
 
   /**
    * Start a Process Instance
-   * @param {String} startProcessData command data of the form 
+   * @param {String} startProcessData command data of the form
    * { "processDefinitionId": "someProcessDefinitionId" }
    */
   ServerSession.prototype.startProcess = function(startProcessData) {
@@ -223,10 +223,10 @@ var ServerSession = (function() {
 
   /**
    * Executes a command in the debug session
-   * 
+   *
    * @param {Object} cmd the command object to execute
    * @param {WsConnection} connection the connection to send the command on
-   * 
+   *
    */
   function execute(cmd, connection) {
     var payload = marshall(cmd);

@@ -30,19 +30,19 @@ var ProcessDebugger = (function() {
 
   function registerListeners(eventBus, processDebugger) {
 
-    eventBus.onEvent('process-deployed', function(evt) {
+    eventBus.on('process-deployed', function(evt) {
       eventBus.fireEvent('diagram-changed', evt);
     });
 
-    eventBus.onEvent('diagram-changed', function(evt) {
+    eventBus.on('diagram-changed', function(evt) {
       diagramChanged(processDebugger, evt);
     });
 
-    eventBus.onEvent('OPEN', function() {
+    eventBus.on('OPEN', function() {
       processDebugger.breakpointManager.updateBreakpoints();
     });
 
-    eventBus.onEvent('CLOSE', function() {
+    eventBus.on('CLOSE', function() {
       processDebugger.executionManager.clear();
     });
   }

@@ -18,7 +18,7 @@ var ExecutionManager = (function() {
   // static helper functions /////////////
 
   function registerListeners(eventBus, executionManager) {
-    eventBus.onEvent('execution-suspended', function(data) {
+    eventBus.on('execution-suspended', function(data) {
       executionManager.executions.push(data);
 
       // auto-select if it is the first execution
@@ -27,7 +27,7 @@ var ExecutionManager = (function() {
       }
     });
 
-    eventBus.onEvent('execution-updated', function(data) {
+    eventBus.on('execution-updated', function(data) {
       var executions = executionManager.executions;
       var idx = -1;
       for(var i = 0; i < executions.length; i++) {

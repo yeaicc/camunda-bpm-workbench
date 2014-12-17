@@ -1,11 +1,11 @@
-/* Licensed under the Apache License, Version 2.0 (the "License");
+/* Licensed under the Apache License, Version 2.0 (the 'License');
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
+ * distributed under the License is distributed on an 'AS IS' BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
@@ -13,7 +13,8 @@
 
 'use strict';
 
-var BpmnJS = require('bpmn-js/lib/Modeler');
+var BpmnModeler = require('bpmn-js/lib/Modeler'),
+    BpmnViewer = require('bpmn-js/lib/Viewer');
 
 
 var DiagramManager = (function() {
@@ -34,6 +35,9 @@ var DiagramManager = (function() {
       diagramManager.workbench.update();
     });
 
+    renderer.on('canvas.viewbox.changed', function(e) {
+      diagramManager.cachedViewbox = e.viewbox;
+    });
   }
 
   function getDiagramProvider(diagramManager) {
@@ -50,12 +54,13 @@ var DiagramManager = (function() {
       },
 
       getBpmnXml : function(done) {
-        done(null, diagramManager.currentXmlSource);
-        // TODO: use this once bpmn.io supports diagram export.
-  /**      diagramManager.renderer.saveXML({ format: true }, function(err, xml) {
+        diagramManager.renderer.saveXML({ format: true }, function(err, xml) {
+          if (!err) {
+            diagramManager.currentXmlSource = xml;
+          }
+
           done(err, xml);
         });
-  */
       },
 
       getSelectedElements : function() {
@@ -96,16 +101,37 @@ var DiagramManager = (function() {
    *
    * @param {Element} element the Dom Element on which the diagram renderer should be created.
    */
-  DiagramManager.prototype.initDiagram = function(element) {
+  DiagramManager.prototype.initDiagram = function(element, perspective) {
 
-    var extensionModules = [
-      require('diagram-js-origin'),
-      require('bpmn-js-debug-overlay'),
-      require('./debug-bridge'),
-      {
-        workbench: [ 'value', this.workbench ]
-      }
-    ];
+    var BpmnJS,
+        additionalModules;
+
+    if (perspective === 'model') {
+      BpmnJS = BpmnModeler;
+
+      additionalModules = [
+        require('diagram-js-origin'),
+        require('./palette-extension')
+      ];
+    } else {
+      BpmnJS = BpmnViewer;
+
+      additionalModules = [
+        require('diagram-js/lib/navigation/zoomscroll'),
+        require('diagram-js/lib/navigation/movecanvas'),
+        require('bpmn-js-debug-overlay'),
+        require('./debug-bridge'),
+        {
+          workbench: [ 'value', this.workbench ]
+        }
+      ];
+    }
+
+    if (this.renderer) {
+      // TODO(nre): replace with renderer.destroy() once bpmn-js 0.7.0 is out
+      this.renderer.clear();
+      this.renderer.container.parentNode.removeChild(this.renderer.container);
+    }
 
     // construct new renderer
     this.renderer = new BpmnJS({
@@ -116,30 +142,43 @@ var DiagramManager = (function() {
           'resume': { className: 'glyphicon glyphicon-play' }
         }
       },
-      additionalModules: extensionModules
+      additionalModules: additionalModules
     });
 
     // register listeners on the renderer
     registerListeners(this.renderer, this);
+
+    if (this.currentXmlSource) {
+      this.openProcess();
+    }
   };
 
   DiagramManager.prototype.openProcess = function(data) {
 
-    var diagramExists = this.currentXmlSource !== null;
-    this.currentXmlSource =data.xml;
-    this.processDefinition = data.processDefinition;
+    if (data) {
+      this.currentXmlSource = data.xml;
+      this.processDefinition = data.processDefinition;
+      this.cachedViewbox = null;
+    }
 
     var self = this;
     this.renderer.importXML(this.currentXmlSource, function(err) {
 
       if (err) {
         console.error(err);
-
-      }
-      if(self.processDefinition) {
-        self.workbench.eventBus.fireEvent("diagram-changed", self.processDefinition.id);
       } else {
-        self.workbench.eventBus.fireEvent("diagram-changed");
+
+        // apply cached viewbox
+        if (self.cachedViewbox) {
+          self.renderer.get('canvas').viewbox(self.cachedViewbox);
+        }
+      }
+
+
+      if (self.processDefinition) {
+        self.workbench.eventBus.fireEvent('diagram-changed', self.processDefinition.id);
+      } else {
+        self.workbench.eventBus.fireEvent('diagram-changed');
       }
 
     });

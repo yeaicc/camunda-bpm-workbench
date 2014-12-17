@@ -126,24 +126,24 @@ var ConsoleController = [ '$scope', function($scope) {
 
   // register event listeners on the debug session
 
-  serverSession.eventBus.onEvent("script-evaluated", function(data) {
+  serverSession.eventBus.on("script-evaluated", function(data) {
     addcommandResults(data, false);
   });
 
-  serverSession.eventBus.onEvent("script-evaluation-failed", function(data) {
+  serverSession.eventBus.on("script-evaluation-failed", function(data) {
     addcommandResults(data, true);
   });
 
-  serverSession.eventBus.onEvent("server-error", function(data) {
+  serverSession.eventBus.on("server-error", function(data) {
     logError(data);
   });
 
 
-  eventBus.onEvent("execution-selected", function(data) {
+  eventBus.on("execution-selected", function(data) {
     $scope.executionId = data.id;
   });
 
-  eventBus.onEvent("execution-deselected", function() {
+  eventBus.on("execution-deselected", function() {
     $scope.executionId = null;
   });
 

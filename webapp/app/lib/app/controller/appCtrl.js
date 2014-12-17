@@ -53,7 +53,7 @@ var Controller = ['$scope', function($scope) {
 
   // trigger scope whenever an event is fired. This listener is the first to register
   // and will always be invoked last.
-  eventBus.onEvent('*', function() {
+  eventBus.on('*', function() {
     workbench.update();
   });
 
@@ -71,7 +71,6 @@ var Controller = ['$scope', function($scope) {
 
   // open the connection to the server
   connection.open();
-
 }];
 
 module.exports = Controller;

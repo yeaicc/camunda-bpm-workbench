@@ -33,6 +33,9 @@ var Workbench = (function() {
     this.eventBus = null;
 
     this.update = null;
+
+    // the current view on the workbench
+    this.perspective = 'model';
   }
 
   return Workbench;

@@ -92,7 +92,7 @@ var ScriptEditorController = [ '$scope', function($scope) {
     executeCommand('check', cmd);
   };
 
-  eventBus.onEvent('execution-suspended', function(data) {
+  eventBus.on('execution-suspended', function(data) {
     activityId = data.currentActivityId;
     processDefinitionId = processDebugger.processDefinitionId;
     var elementType = workbench.diagramProvider.getBpmnElement(data.currentActivityId).type;
@@ -106,11 +106,11 @@ var ScriptEditorController = [ '$scope', function($scope) {
     executeCommand('get', cmd);
   });
 
-  serverSession.eventBus.onEvent('get-script', function(data) {
+  serverSession.eventBus.on('get-script', function(data) {
     $scope.script = data.script.replace(/\\n/g, "\n");
   });
 
-  serverSession.eventBus.onEvent('script-update', function(data) {
+  serverSession.eventBus.on('script-update', function(data) {
     if(processDebugger.canRun(data.activityId)) {
       processDebugger.run(data.activityId);
     }

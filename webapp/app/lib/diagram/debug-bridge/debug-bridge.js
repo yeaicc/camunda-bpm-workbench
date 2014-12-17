@@ -30,10 +30,10 @@ function DebugBridge(eventBus, elementRegistry, workbench) {
 
   var workbenchEvents = workbench.eventBus;
 
-  workbenchEvents.onEvent('execution-suspended', suspended);
-  workbenchEvents.onEvent('execution-unsuspended', unsuspended);
-  workbenchEvents.onEvent('breakpoint-added', breakpointAdded);
-  workbenchEvents.onEvent('breakpoint-removed', breakpointRemoved);
+  workbenchEvents.on('execution-suspended', suspended);
+  workbenchEvents.on('execution-unsuspended', unsuspended);
+  workbenchEvents.on('breakpoint-added', breakpointAdded);
+  workbenchEvents.on('breakpoint-removed', breakpointRemoved);
 
   eventBus.on('diagram.destroy', function() {
     workbenchEvents.off('execution-suspended', suspended);

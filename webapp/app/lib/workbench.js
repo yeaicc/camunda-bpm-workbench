@@ -11,6 +11,7 @@ var uiAce = require('../bower_components/angular-ui-ace/ui-ace');
 
 var ngModule = angular.module('developer', [
   require('./app').name,
+  require('./navigation').name,
   require('./diagram').name,
   require('./debugger').name,
   require('./console').name,

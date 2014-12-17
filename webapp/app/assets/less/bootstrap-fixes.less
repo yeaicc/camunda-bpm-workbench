@@ -1,3 +1,39 @@
 .navbar {
   margin-bottom: 0;
 }
+
+/** bootstrap customizations */
+
+/** nav styles */
+.nav {
+
+  /** customizations for tabs */
+  &-tabs {
+
+    border-bottom: @app-default-border;
+
+    /** give tabs a small top margin */
+    & > li {
+      margin-top: 3px;
+    }
+
+    /** slightly move in the first tab */
+    & > li:first-of-type {
+      margin-left: 10px;
+    }
+
+    /** same color for active and inactive tabs */
+    & > li > a {
+      color: #333;
+    }
+
+    /** active tab border color */
+    & > li.active > a,
+    & > li.active > a:hover,
+    & > li.active > a:focus {
+      border: @app-panel-border;
+      border-bottom-color: transparent;
+      margin-bottom: 0px;
+    }
+  }
+}

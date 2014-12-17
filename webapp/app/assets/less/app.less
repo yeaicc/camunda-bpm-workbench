@@ -132,6 +132,8 @@ body {
 }
 
 
+/* resize integration */
+
 [resizer] {
   .flex-fill(initial);
 
@@ -149,6 +151,36 @@ body {
   border-style: solid none;
 }
 
+/* perspective switcher */
+
+.wb-perspective-switcher {
+
+  margin: 7px 10px;
+
+  button {
+
+    margin-left: 5px;
+
+    border-radius: 5px;
+    border: solid 1px darken(@navbar-inverse-bg, 5%);
+
+    overflow: none;
+
+    background: rgba(255, 255, 255, .07);
+
+    padding: 5px 10px;
+    font-size: 16px;
+    color: white;
+    outline: none;
+
+    &.active {
+      background: white;
+      color: darken(@navbar-inverse-bg, 15%);
+      border: solid 1px darken(@navbar-inverse-bg, 15%);
+    }
+  }
+}
+
 /** customizations for camunda simple grid */
 .sg {
 
@@ -161,53 +193,6 @@ body {
     float: right;
   }
 
-}
-
-/** bpmn-js styles */
-
-#bpmn-js {
-
-  &-canvas {
-    background-color: white;
-    height: 100%;
-  }
-
-}
-
-/** bootstrap customizations */
-
-/** nav styles */
-.nav {
-
-  /** customizations for tabs */
-  &-tabs {
-
-    border-bottom: @app-default-border;
-
-    /** give tabs a small top margin */
-    & > li {
-      margin-top: 3px;
-    }
-
-    /** slightly move in the first tab */
-    & > li:first-of-type {
-      margin-left: 10px;
-    }
-
-    /** same color for active and inactive tabs */
-    & > li > a {
-      color: #333;
-    }
-
-    /** active tab border color */
-    & > li.active > a,
-    & > li.active > a:hover,
-    & > li.active > a:focus {
-      border: @app-panel-border;
-      border-bottom-color: transparent;
-      margin-bottom: 0px;
-    }
-  }
 }
 
 .table > tbody > tr > th,
