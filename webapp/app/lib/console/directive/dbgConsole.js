@@ -57,16 +57,16 @@ var ConsoleController = [ '$scope', function($scope) {
 
   $scope.evaluate = function() {
 
-    if("clear" === $scope.script) {
+    if ('clear' === $scope.script) {
       $scope.commandResults = [];
 
     } else {
 
       var cmd = {
-        "cmdId" : $scope.dbgCmdId++,
-        "language": $scope.scriptLanguage,
-        "executionId": $scope.executionId,
-        "script": $scope.script
+        cmdId : $scope.dbgCmdId++,
+        language: $scope.scriptLanguage,
+        executionId: $scope.executionId,
+        script: $scope.script
       };
 
       $scope.commandResults.unshift(cmd);
@@ -75,7 +75,7 @@ var ConsoleController = [ '$scope', function($scope) {
     }
 
     $scope.historyCurrent = 0;
-    $scope.script = "";
+    $scope.script = '';
   };
 
   $scope.historyPrevious = function() {
@@ -88,17 +88,18 @@ var ConsoleController = [ '$scope', function($scope) {
 
   $scope.historyNext = function() {
     var entry = $scope.historyCurrent - 1;
-    if(entry >= 0) {
+    if (entry >= 0) {
       $scope.historyCurrent--;
-      if(entry === 0) {
-        $scope.script = "";
+
+      if (entry === 0) {
+        $scope.script = '';
       } else {
         $scope.script = $scope.scripts[$scope.commandResults.length - entry];
       }
     }
   };
 
-  function addcommandResults(data, failed) {
+  function addCommandResults(data, failed) {
     var cmdId = data.cmdId;
     for(var i = 0; i < $scope.commandResults.length; i++) {
       var result = $scope.commandResults[i];
@@ -111,8 +112,8 @@ var ConsoleController = [ '$scope', function($scope) {
 
   $scope.fetchHints = function(partialInput) {
     return serverSession.completeCodePrefix({
-      "prefix": partialInput,
-      "executionId": $scope.executionId
+      prefix: partialInput,
+      executionId: $scope.executionId
     });
   }
 
@@ -126,24 +127,24 @@ var ConsoleController = [ '$scope', function($scope) {
 
   // register event listeners on the debug session
 
-  serverSession.eventBus.on("script-evaluated", function(data) {
-    addcommandResults(data, false);
+  serverSession.eventBus.on('script-evaluated', function(data) {
+    addCommandResults(data, false);
   });
 
-  serverSession.eventBus.on("script-evaluation-failed", function(data) {
-    addcommandResults(data, true);
+  serverSession.eventBus.on('script-evaluation-failed', function(data) {
+    addCommandResults(data, true);
   });
 
-  serverSession.eventBus.on("server-error", function(data) {
+  serverSession.eventBus.on('server-error', function(data) {
     logError(data);
   });
 
 
-  eventBus.on("execution-selected", function(data) {
+  eventBus.on('execution-selected', function(data) {
     $scope.executionId = data.id;
   });
 
-  eventBus.on("execution-deselected", function() {
+  eventBus.on('execution-deselected', function() {
     $scope.executionId = null;
   });
 
@@ -157,9 +158,9 @@ var directiveTemplate = fs.readFileSync(__dirname + '/console.html', { encoding:
 module.exports = function() {
   return {
     scope: {
-      workbench : "=",
-      commandResults : "=",
-      dbgCmdId : "="
+      workbench : '=',
+      commandResults : '=',
+      dbgCmdId : '='
     },
     controller: ConsoleController,
     template: directiveTemplate,

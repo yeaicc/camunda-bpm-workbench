@@ -225,12 +225,13 @@ body {
 }
 
 .dbg-cmd-row {
-  display:table-row;
+  .flex-container(row);
+
+  position: relative;
   width: 100%;
 }
 
 .dbg-cmd-detail, .dbg-cmd-main {
-  display: table-cell;
   border-bottom: #ccc solid 1px;
   padding-top: 5px;
   padding-bottom: 5px;
@@ -240,9 +241,15 @@ body {
 }
 
 .dbg-cmd-detail {
+  .flex-fill(initial);
+
   padding-left: 5px;
   padding-right: 5px;
   color: #999;
+}
+
+.dbg-cmd-main {
+  .flex-fill(1);
 }
 
 .dbg-cmd-detail .dropdown {
@@ -275,7 +282,6 @@ body {
 .dbg-cmd-main {
   width: 100%;
   word-break: break-all;
-  position: relative;
 }
 
 .dbg-cmd-line {
@@ -405,17 +411,24 @@ body {
 .autocomplete {
   position: absolute;
   bottom: 0;
+  z-index: 500;
   width: 100%;
-  z-index: 10;
 }
 
 .autocomplete > * {
   position: absolute;
-  width: 100%;
+
+  white-space: nowrap;
+
+  min-width: 100%;
 
   border: solid 1px #CCC;
 
   background: white;
+
+  z-index: 500;
+
+  top: -1px;
 
   list-style: none;
   padding: 0;
@@ -423,7 +436,7 @@ body {
 
 .autocomplete li {
   border-bottom: solid 1px #EEE;
-  line-height: 11px;
+  line-height: 20px;
 
   &.selected {
     background: aliceblue;
@@ -431,9 +444,8 @@ body {
 }
 
 .autocomplete ul {
-  max-height: 105px;
-  overflow-y: auto;
-  overflow-x: hidden;
+  max-height: 150px;
+  overflow: auto;
 }
 
 .autocomplete li:last-child {
