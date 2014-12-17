@@ -11,6 +11,14 @@
          diagram-manager="diagramManager"
          perspective="workbench.perspective">
     </div>
+
+    <div class="dgr-canvas-opener" ng-show="!diagramManager.diagramLoaded">
+      <h3>Open a deployed Process</h3>
+
+      <p>
+        <button ng-click="debugDeployedProcess()">Open Process</button>
+      </p>
+    </div>
   </div>
 </div>
 <!-- #END diagram/directive/diagram.html -->

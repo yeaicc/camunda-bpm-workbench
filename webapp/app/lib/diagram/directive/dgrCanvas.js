@@ -76,7 +76,7 @@ module.exports = function() {
         // initialize the diagram
         diagramManager.initDiagram(element, newValue);
 
-        if (!diagramManager.diagramLoaded) {
+        if (!diagramManager.diagramLoaded && newValue !== 'debug') {
           // open the example diagram
           scope.diagramManager.openProcess({ xml : demoProcess });
         }

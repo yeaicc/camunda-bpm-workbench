@@ -16,61 +16,7 @@
 var fs = require('fs'),
     jquery = require('jquery');
 
-var openDeployedProcessTemplate = fs.readFileSync(__dirname + '/dialog/openDeployedProcess.html',
-    { encoding: 'utf-8' });
-
-
-var OpenDeployedProcessCtrl = ['$scope', '$modalInstance', 'ServerSession', 
-    function($scope, $modalInstance, ServerSession) {
-
-  $scope.processList = [];
-
-  ServerSession.listProcessDefinitions().success(function(definitions) {
-    $scope.processList = definitions;
-    $scope.$digest();
-  });
-
-  $scope.cancel = function() {
-    $modalInstance.dismiss('cancel');
-  };
-
-  $scope.selectProcess = function(process) {
-    $modalInstance.close(process);
-  };
-
-}];
-
-var Controller = ['$scope', '$modal', function($scope, $modal) {
-
-  $scope.openDeployedProcess = function() {
-
-    // open dialog
-    var modalInstance = $modal.open({
-      template: openDeployedProcessTemplate,
-      controller: OpenDeployedProcessCtrl,
-      resolve: {
-        "ServerSession": function() {
-          return $scope.workbench.serverSession;
-        }
-      }
-    });
-
-    modalInstance.result.then(function(processDef) {
-      // dialog closed
-
-      $scope.workbench.serverSession
-        .getProcessDefinitionXml(processDef.id)
-        .success(function(data) {
-
-          // open the diagram
-          $scope.diagramManager.openProcess({
-            xml: data,
-            processDefinition: processDef
-          });
-      });
-
-    });
-  };
+var Controller = ['$scope', function($scope) {
 
   $scope.openFsProcess = function() {
 
@@ -79,14 +25,13 @@ var Controller = ['$scope', '$modal', function($scope, $modal) {
     var obj = jquery('#dgr-uploader');
     obj[0].update = function() {
       var file = this.files[0];
-      if(file !== null) {
+      if (file !== null) {
         var reader = new FileReader();
         reader.onload = function(e) {
           $scope.diagramManager.openProcess({
-          xml: e.target.result,
-          processDefinition: null
-        });
-
+            xml: e.target.result,
+            processDefinition: null
+          });
         };
         reader.readAsText(file);
       }

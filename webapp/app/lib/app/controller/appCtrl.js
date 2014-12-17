@@ -20,12 +20,12 @@ var ServerSession = require('./../serverSession'),
     Workbench = require('./../workbench');
 
 
-var Controller = ['$scope', function($scope) {
+var Controller = ['$scope', '$location', function($scope, $location) {
 
   $scope.safeDigest = function(fn) {
   var phase = this.$root.$$phase;
     // only apply if not already in digest / apply
-    if(phase !== '$apply' && phase !== '$digest') {
+    if (phase !== '$apply' && phase !== '$digest') {
       this.$apply(fn);
     }
   };
@@ -40,6 +40,13 @@ var Controller = ['$scope', function($scope) {
   var serverSession = new ServerSession(connection, eventBus);
   var workbench = new Workbench();
 
+  if ($location.path() === '/debug') {
+    workbench.perspective = 'debug';
+  }
+
+  $scope.$watch('workbench.perspective', function(newPerspective) {
+    $location.path('/' + newPerspective);
+  });
 
   workbench.eventBus = eventBus;
 

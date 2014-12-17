@@ -19,6 +19,15 @@
       Deployed Process
   </button>
 
+  <button
+    class="btn btn-xs"
+    ng-click="debugDeployedProcess()"
+    ng-show="workbench.perspective === 'debug'"
+    title="Debug a deployed process">
+      <span class="glyphicon glyphicon-open"></span>
+      Deployed Process
+  </button>
+
   <div class="hidden">
     <input type="file" id="dgr-uploader" onchange="this.update()"></input>
   </div>

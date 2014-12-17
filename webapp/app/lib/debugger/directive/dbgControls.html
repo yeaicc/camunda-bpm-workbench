@@ -1,15 +1,6 @@
 <!-- #BEGIN debugger/directive/dbgPanel.html -->
 <div class="navbar">
 
-  <button type="button" class="btn btn-xs" 
-    ng-click="processDebugger.deployProcess()"
-    ng-disabled="!processDebugger.canDeployProcess()"
-    title="Deploy">
-    <span class="glyphicon glyphicon-download-alt"></span>
-  </button>
-
-  <span class="divider"></span>
-
   <button type="button" class="btn btn-xs"
     ng-click="processDebugger.run()"
     ng-disabled="!processDebugger.canRun()"

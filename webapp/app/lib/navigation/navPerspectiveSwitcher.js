@@ -6,7 +6,7 @@ var ngModule = angular.module('developer.navigation.perspectiveSwitcher', []);
 
 var directiveTemplate = fs.readFileSync(__dirname + '/navPerspectiveSwitcher.html', { encoding: 'utf-8' });
 
-ngModule.directive('navPerspectiveSwitcher', function() {
+ngModule.directive('navPerspectiveSwitcher', [ '$location', function($location) {
 
   return {
     restrict: 'A',
@@ -26,8 +26,6 @@ ngModule.directive('navPerspectiveSwitcher', function() {
 
         // deploy before switching perspective
 
-        console.log(newPerspective);
-
         if (newPerspective === 'debug') {
           var processDebugger = workbench.processDebugger;
 
@@ -36,7 +34,7 @@ ngModule.directive('navPerspectiveSwitcher', function() {
           }
 
           processDebugger.deployProcess(function(data) {
-            console.log(data);
+            console.debug('deployed process', data);
             workbench.perspective = 'debug';
           });
         } else {
@@ -49,6 +47,6 @@ ngModule.directive('navPerspectiveSwitcher', function() {
       };
     }
   };
-});
+}]);
 
 module.exports = ngModule;
