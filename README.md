@@ -5,12 +5,18 @@
 ![workbench close-up](https://raw.githubusercontent.com/camunda/camunda-bpm-workbench/master/resources/screenshot.png)
 
 
+## Resources
+
+* [Releases](https://github.com/camunda/camunda-bpm-workbench/releases)
+* [Issues](https://github.com/camunda/camunda-bpm-workbench/issues)
+
+
 ## Components
 
-The app provides the following features:
+The app provides a BPMN modeler, a script editing component and a debugger. These allow you to design BPMN 2.0 processes and interactively explore their execution.
 
 
-### BPMN Diagram Renderer
+### BPMN Modeler
 
 The BPMN renderer embeds [bpmn.io][bpmnio] rendering BPMN 2.0 XML files directly inside the browser.
 You can simply drop a BPMN file from your desktop and have it rendered inside the Browser.
