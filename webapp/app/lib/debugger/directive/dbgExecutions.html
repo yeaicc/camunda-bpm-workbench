@@ -1,15 +1,15 @@
 <!-- #BEGIN debugger/directive/dbgBreakpoints.html -->
-<div class="ctrl-pn-row">
-  <div class="ctrl-pn-row-head">
+<div class="wb-subpane">
+  <div class="wb-subpane-header">
     <h3>
       <span class="glyphicon glyphicon-collapse-down"></span>
       Executions
     </h3>
   </div>
-  <div class="ctrl-pn-row-ctn">
+  <div class="wb-subpane-content">
 
     <div class="dbg-execution"
-      ng-repeat="ex in processDebugger.executionManager.executions" 
+      ng-repeat="ex in processDebugger.executionManager.executions"
       ng-class="{'dbg-execution-selected': processDebugger.executionManager.isSelected(ex)}"
       ng-click="processDebugger.executionManager.select(ex)">
 

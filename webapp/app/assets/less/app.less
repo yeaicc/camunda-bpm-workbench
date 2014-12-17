@@ -60,7 +60,7 @@ body {
 
   .wb-panel-content {
     overflow: auto;
-    font-size: 9pt;
+    font-size: 12px;
     background: @app-panel-background;
   }
 
@@ -71,6 +71,12 @@ body {
 
     border-bottom: @app-panel-border;
     padding: 0;
+  }
+
+  .wb-panel-tabbar {
+    .nav-tabs {
+      padding: 2px;
+    }
   }
 
   .wb-panel-toolbar {
@@ -100,8 +106,31 @@ body {
 }
 
 .wb-panel-tabbar .nav-tabs {
+  font-size: 12px;
   border: none;
 }
+
+.wb-subpane {
+  font-size: 12px;
+
+  &-header {
+    padding: 2px;
+    padding-left: 3px;
+    border-bottom: 1px solid #ddd;
+    background-color: @app-content-background;
+
+    h3 {
+      font-size: inherit;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  &-content {
+    border-bottom: 1px solid #ddd;
+  }
+}
+
 
 [resizer] {
   .flex-fill(initial);
