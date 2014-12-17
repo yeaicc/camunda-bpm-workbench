@@ -1,6 +1,7 @@
 'use strict';
 
-var fs = require('fs');
+var fs = require('fs'),
+    _ = require('lodash');
 
 
 var Controller = [
@@ -10,9 +11,28 @@ function(
 ) {
 
   var el = $scope.modelElement.businessObject;
+  var diagramProvider = $scope.workbench.diagramProvider;
 
   $scope.scriptFormat = el.scriptFormat;
   $scope.script = el.script;
+
+  $scope.updateScriptFormat = function() {
+    diagramProvider.executeCommand('element.propertyUpdate', {
+      element: $scope.modelElement,
+      newProperties: {
+        scriptFormat: $scope.scriptFormat
+      }
+    });
+  };
+
+  $scope.updateScript = _.debounce(function() {
+    diagramProvider.executeCommand('element.propertyUpdate', {
+      element: $scope.modelElement,
+      newProperties: {
+        script: $scope.script
+      }
+    });
+  }, 500);
 
 }];
 

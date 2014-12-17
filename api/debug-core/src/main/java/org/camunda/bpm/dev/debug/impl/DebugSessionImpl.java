@@ -18,13 +18,14 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Deque;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import javax.script.Bindings;
-import javax.script.SimpleBindings;
+import javax.script.*;
 
 import org.camunda.bpm.dev.debug.BreakPoint;
 import org.camunda.bpm.dev.debug.DebugEventListener;
@@ -36,6 +37,7 @@ import org.camunda.bpm.dev.debug.completion.CodeCompleter;
 import org.camunda.bpm.dev.debug.completion.CodeCompleterBuilder;
 import org.camunda.bpm.dev.debug.completion.CodeCompletionHint;
 import org.camunda.bpm.engine.ProcessEngine;
+import org.camunda.bpm.engine.ScriptEngineException;
 import org.camunda.bpm.engine.ScriptEvaluationException;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.bpmn.behavior.ScriptTaskActivityBehavior;
@@ -69,6 +71,8 @@ public class DebugSessionImpl implements DebugSession {
   protected Deque<SuspendedExecutionImpl> suspendedExecutions = new ArrayDeque<SuspendedExecutionImpl>();
 
   protected List<DebugEventListener> debugEventListeners = new LinkedList<DebugEventListener>();
+
+  protected Map<String, ScriptEngine> globalScriptEngines = new HashMap<String, ScriptEngine>();
 
   protected Bindings globalScriptBindings;
 
@@ -310,9 +314,21 @@ public class DebugSessionImpl implements DebugSession {
         .createScriptFromSource(language, script);
 
       Context.setProcessEngineConfiguration(processEngineConfiguration);
+
+      ScriptEngine scriptEngine = globalScriptEngines.get(language);
+      if(scriptEngine == null) {
+        scriptEngine = processEngineConfiguration.getScriptingEngines().getScriptEngineForLanguage(language);
+        if(scriptEngine == null) {
+          throw new RuntimeException("No script engine found for language :"+scriptEngine);
+        }
+        else {
+          globalScriptEngines.put(language, scriptEngine);
+        }
+      }
+
       Object result = processEngineConfiguration
         .getScriptingEnvironment()
-        .execute(executableScript, StartProcessVariableScope.getSharedInstance(), globalScriptBindings);
+        .execute(executableScript, StartProcessVariableScope.getSharedInstance(), globalScriptBindings, scriptEngine);
 
       scriptEvaluation.setResult(result);
       fireScriptEvaluated(scriptEvaluation);

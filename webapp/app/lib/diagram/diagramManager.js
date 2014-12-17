@@ -90,6 +90,10 @@ var DiagramManager = (function() {
 
       getProcessDefinition : function() {
         return diagramManager.processDefinition;
+      },
+
+      executeCommand : function(name, cmd) {
+        diagramManager.renderer.get('commandStack').execute(name, cmd);
       }
 
    };
@@ -132,7 +136,8 @@ var DiagramManager = (function() {
 
       additionalModules = [
         require('diagram-js-origin'),
-        require('./palette-extension')
+        require('./palette-extension'),
+        require('./property-update')
       ];
     } else {
       BpmnJS = BpmnViewer;

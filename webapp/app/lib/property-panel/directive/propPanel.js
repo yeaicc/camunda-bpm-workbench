@@ -50,6 +50,12 @@ function(
 
   var workbench = $scope.workbench;
 
+  $scope.$watch(function() {
+      return workbench.perspective;
+    }, function(perspective) {
+      $scope.readonly = perspective !== 'model';
+  });
+
   // initialize a new property editor 
   var propertyPanel = new PropertyPanel(workbench, renderer);
 
