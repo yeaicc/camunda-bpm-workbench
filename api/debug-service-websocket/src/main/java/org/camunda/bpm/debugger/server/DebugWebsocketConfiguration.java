@@ -13,7 +13,7 @@
 package org.camunda.bpm.debugger.server;
 
 import org.camunda.bpm.debugger.server.netty.AbstractNettyServer;
-import org.camunda.bpm.debugger.server.netty.WebsocketServer;
+import org.camunda.bpm.debugger.server.netty.websocket.WebsocketServer;
 import org.camunda.bpm.debugger.server.protocol.DebugProtocol;
 import org.camunda.bpm.debugger.server.protocol.Marshaller;
 import org.camunda.bpm.debugger.server.protocol.cmd.CodeCompletionCmd;

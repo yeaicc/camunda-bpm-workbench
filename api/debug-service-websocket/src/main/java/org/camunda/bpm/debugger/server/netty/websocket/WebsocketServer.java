@@ -10,7 +10,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package org.camunda.bpm.debugger.server.netty;
+package org.camunda.bpm.debugger.server.netty.websocket;
 
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.ChannelFuture;
@@ -27,6 +27,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.camunda.bpm.debugger.server.DebugWebsocketConfiguration;
+import org.camunda.bpm.debugger.server.netty.AbstractNettyServer;
 
 /**
  * The debug http server

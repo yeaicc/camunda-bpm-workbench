@@ -16,7 +16,7 @@ import java.util.concurrent.Callable;
 import java.util.concurrent.Future;
 import java.util.concurrent.FutureTask;
 
-import org.camunda.bpm.debugger.server.netty.ChannelAttributes;
+import org.camunda.bpm.debugger.server.netty.websocket.ChannelAttributes;
 import org.camunda.bpm.debugger.server.protocol.DebugProtocol;
 import org.camunda.bpm.debugger.server.protocol.evt.EventDto;
 import org.camunda.bpm.dev.debug.DebugSession;

@@ -24,7 +24,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.camunda.bpm.debugger.server.DebugWebsocketConfiguration;
-import org.camunda.bpm.debugger.server.netty.ChannelAttributes;
+import org.camunda.bpm.debugger.server.netty.websocket.ChannelAttributes;
 import org.camunda.bpm.debugger.server.protocol.cmd.DebugCommand;
 import org.camunda.bpm.debugger.server.protocol.cmd.DebugCommandContext;
 import org.camunda.bpm.debugger.server.protocol.dto.ErrorData;
