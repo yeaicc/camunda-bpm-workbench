@@ -35,27 +35,39 @@ public class EmbeddableDebugWebsocketBootstrap extends DebuggerPlugin {
 
     configureDebugSession();
 
-    DebugWebsocket debugWebsocket = null;
-    ClasspathResourceServer classpathResourceServer = null;
-    try {
-      debugWebsocket = startWebsocket();
+    new Thread() {
 
-      LOG.info("Starting Camunda Workbench on port " + httpPort);
-
-      classpathResourceServer = new ClasspathResourceServer(httpPort);
-      classpathResourceServer.run().sync().channel().closeFuture();
-
-    } catch (Exception e) {
-      throw new RuntimeException(e);
-
-    } finally {
-      if (classpathResourceServer != null) {
-        closeResourceServer(classpathResourceServer);
+      public synchronized void start() {
+        setDaemon(true);
+        super.start();
       }
-      if (debugWebsocket != null) {
-        closeDebugWebsocket(debugWebsocket);
+
+      public void run() {
+
+
+        DebugWebsocket debugWebsocket = null;
+        ClasspathResourceServer classpathResourceServer = null;
+        try {
+          debugWebsocket = startWebsocket();
+
+          LOG.info("Starting Camunda Workbench on port " + httpPort);
+
+          classpathResourceServer = new ClasspathResourceServer(httpPort);
+          classpathResourceServer.run().sync().channel().closeFuture().sync();
+
+        } catch (Exception e) {
+          throw new RuntimeException(e);
+
+        } finally {
+          if (classpathResourceServer != null) {
+            closeResourceServer(classpathResourceServer);
+          }
+          if (debugWebsocket != null) {
+            closeDebugWebsocket(debugWebsocket);
+          }
+        }
       }
-    }
+    }.start();
 
   }
 
