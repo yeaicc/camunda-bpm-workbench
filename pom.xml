@@ -16,7 +16,7 @@
 
   <modules>
     <module>api</module>
-    <module>dist</module>
+    <module>distro</module>
     <module>webapp/app</module>
   </modules>
 
