@@ -1,6 +1,6 @@
 # camunda BPM workbench
 
-[camunda BPM][camundabpm] workbench is a web-application allowing you to implement your BPMN processes directly in your browser.
+[Camunda BPM][camundabpm] Workbench is a web-application allowing you to implement your BPMN processes directly in your browser.
 
 ![workbench close-up](https://raw.githubusercontent.com/camunda/camunda-bpm-workbench/master/resources/screenshot.png)
 
@@ -8,6 +8,7 @@
 ## Resources
 
 * [Releases](https://github.com/camunda/camunda-bpm-workbench/releases)
+* [Documentation](https://github.com/camunda/camunda-bpm-workbench/wiki)
 * [Issues](https://github.com/camunda/camunda-bpm-workbench/issues)
 
 
