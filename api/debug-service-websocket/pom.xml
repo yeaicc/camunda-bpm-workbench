@@ -100,28 +100,84 @@
   </dependencies>
 
   <build>
-
     <testResources>
       <testResource>
         <directory>src/test/resources</directory>
         <filtering>true</filtering>
       </testResource>
     </testResources>
-
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-surefire-plugin</artifactId>
       </plugin>
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <configuration>
-          <mainClass>org.camunda.bpm.debugger.server.StandaloneDebugWebsocketBootstrap</mainClass>
-        </configuration>
-      </plugin>
     </plugins>
-
   </build>
+
+  <profiles>
+    <profile>
+      <id>develop</id>
+      <dependencies>
+        <dependency>
+          <groupId>org.camunda.bpm</groupId>
+          <artifactId>camunda-engine</artifactId>
+          <exclusions>
+            <exclusion>
+              <artifactId>commons-email</artifactId>
+              <groupId>org.apache.commons</groupId>
+            </exclusion>
+            <exclusion>
+              <artifactId>spring-beans</artifactId>
+              <groupId>org.springframework</groupId>
+            </exclusion>
+          </exclusions>
+        </dependency>
+        <dependency>
+          <groupId>com.h2database</groupId>
+          <artifactId>h2</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.camunda.bpm</groupId>
+          <artifactId>camunda-engine-plugin-spin</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.camunda.spin</groupId>
+          <artifactId>camunda-spin-dataformat-json-jackson</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.camunda.spin</groupId>
+          <artifactId>camunda-spin-dataformat-xml-dom</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.camunda.bpm</groupId>
+          <artifactId>camunda-engine-plugin-connect</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.camunda.connect</groupId>
+          <artifactId>camunda-connect-http-client</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.camunda.connect</groupId>
+          <artifactId>camunda-connect-soap-http-client</artifactId>
+        </dependency>
+        <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-jdk14</artifactId>
+          <version>1.7.7</version>
+        </dependency>
+      </dependencies>
+      <build>
+        <plugins>
+          <plugin>
+            <groupId>org.codehaus.mojo</groupId>
+            <artifactId>exec-maven-plugin</artifactId>
+            <configuration>
+              <mainClass>org.camunda.bpm.debugger.server.StandaloneDebugWebsocketBootstrap</mainClass>
+            </configuration>
+          </plugin>
+        </plugins>
+      </build>
+    </profile>
+  </profiles>
 
 </project>

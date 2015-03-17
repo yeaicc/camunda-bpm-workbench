@@ -43,20 +43,20 @@ git clone git@github.com:camunda/camunda-bpm-workbench.git
 Install client dependencies:
 
 ```
-(cd webapp/app && npm install && bower install)
+(cd webapp/ && npm install && bower install)
 ```
 
 Build and start backend on `localhost:9090`:
 
 ```
 (cd api && mvn clean install)
-(cd api/debug-service-websocket && mvn exec:java)
+(cd api/debug-service-websocket && mvn exec:java -P develop)
 ```
 
 Build client and start it on `localhost:9000`
 
 ```
-(cd webapp/app && grunt auto-build)
+(cd webapp/ && grunt auto-build)
 ```
 
 Open [http://localhost:9000](http://localhost:9000) in your browser.
