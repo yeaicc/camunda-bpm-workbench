@@ -22,7 +22,6 @@
     "url": "https://app.camunda.com/jira/browse/CAM"
   },
   "browser": {
-    "fs": false,
     "angular": "./vendor/angular.js",
     "angular-route": "./vendor/angular-route.js",
     "angular-ui-bootstrap": "./vendor/angular-ui-bootstrap.js"
@@ -30,9 +29,9 @@
   "homepage": "http://camunda.org/developer",
   "devDependencies": {
     "bower": "^1.3.3",
-    "brfs": "~1.0.0",
+    "brfs": "^1.4.0",
     "grunt": "^0.4.4",
-    "grunt-browserify": "^2.1.0",
+    "grunt-browserify": "^3.5.0",
     "grunt-cli": "^0.1.13",
     "grunt-contrib-connect": "^0.7.1",
     "grunt-contrib-copy": "^0.5.0",
@@ -43,21 +42,21 @@
     "grunt-jasmine-node": "^0.2.1",
     "grunt-karma": "^0.8.3",
     "karma": "^0.12.15",
-    "karma-browserify": "^1.0.0",
+    "karma-browserify": "^4.0.0",
     "karma-jasmine": "^0.1.5",
     "karma-phantomjs-launcher": "^0.1.3",
     "load-grunt-tasks": "^0.4.0",
-    "time-grunt": "^0.3.1",
-    "watchify": "^0.8.3"
+    "time-grunt": "^0.3.1"
   },
   "dependencies": {
     "angular": "1.3.14",
-    "bpmn-js": "~0.6.0",
-    "bpmn-js-debug-overlay": "^0.1.0",
-    "diagram-js-origin": "^0.1.2",
+    "bpmn-js": "^0.9.0",
+    "bpmn-js-debug-overlay": "^0.2.0",
+    "diagram-js": "^0.9.0",
+    "diagram-js-origin": "^0.4.0",
     "didi": "0.0.4",
     "jquery": "^2.1.1",
-    "jquery-mousewheel": "^3.1.11",
-    "lodash": "^2.4.1"
+    "lodash": "^3.0.0",
+    "min-dom": "^0.2.0"
   }
 }

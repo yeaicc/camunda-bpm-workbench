@@ -1,7 +1,8 @@
 'use strict';
 
-var fs = require('fs'),
-    _ = require('lodash');
+var fs = require('fs');
+
+var _ = require('lodash');
 
 
 var Controller = [

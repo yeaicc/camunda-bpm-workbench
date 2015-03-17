@@ -1,5 +1,3 @@
-require("camunda-simple-grid");
-
 var jquery = require('jquery');
 var angular = require('angular');
 

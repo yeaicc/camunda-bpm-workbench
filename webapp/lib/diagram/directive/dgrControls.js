@@ -13,8 +13,9 @@
 
 'use strict';
 
-var fs = require('fs'),
-    jquery = require('jquery');
+var fs = require('fs');
+
+var jquery = require('jquery');
 
 var Controller = ['$scope', function($scope) {
 

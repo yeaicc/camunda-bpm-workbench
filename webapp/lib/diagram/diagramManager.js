@@ -162,6 +162,7 @@ var DiagramManager = (function() {
     // construct new renderer
     this.renderer = new BpmnJS({
       container: element,
+      position: 'absolute',
       debugOverlay: {
         buttons: {
           'break': { className: 'glyphicon glyphicon-record' },

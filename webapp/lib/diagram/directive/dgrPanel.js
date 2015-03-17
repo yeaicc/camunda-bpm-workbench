@@ -13,8 +13,9 @@
 
 'use strict';
 
-var fs = require('fs'),
-    DiagramManager = require('./../diagramManager');
+var fs = require('fs');
+
+var DiagramManager = require('./../diagramManager');
 
 var OpenDeployedProcessModal = require('./dialog/openDeployedProcess');
 

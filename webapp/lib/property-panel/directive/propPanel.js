@@ -1,7 +1,8 @@
 'use strict';
 
-var fs = require('fs'),
-    angular = require('angular'),
+var fs = require('fs');
+
+var angular = require('angular'),
     PropertyPanel = require('./../propertyPanel');
 
 var directiveTemplate = fs.readFileSync(__dirname + '/propPanel.html', { encoding: 'utf-8' });
@@ -56,7 +57,7 @@ function(
       $scope.readonly = perspective !== 'model';
   });
 
-  // initialize a new property editor 
+  // initialize a new property editor
   var propertyPanel = new PropertyPanel(workbench, renderer);
 
   $scope.$watch(function() {

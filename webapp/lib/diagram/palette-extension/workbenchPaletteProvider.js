@@ -26,7 +26,7 @@ PaletteProvider.prototype.getPaletteEntries = function(element) {
   _.extend(actions, {
     'create.script-task': {
       group: 'activity',
-      className: 'glyphicon glyphicon-tree-deciduous',
+      className: 'icon-script-task',
       title: 'Create a new ScriptTask',
       action: {
         dragstart: function(event) {

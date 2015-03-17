@@ -15,8 +15,7 @@ module.exports = function (grunt) {
         options: {
           paths: [
             'assets/less',
-            'bower_components/bootstrap/less',
-            'node_modules/camunda-simple-grid/lib/less'
+            'bower_components/bootstrap/less'
           ]
         },
         files: {
@@ -47,15 +46,18 @@ module.exports = function (grunt) {
 
     browserify: {
       options: {
-        transform: [ 'brfs' ],
         browserifyOptions: {
-          builtins: [ 'fs' ],
-          commondir: false
+          builtins: false,
+          insertGlobalVars: {
+            process: function () {
+                return 'undefined';
+            },
+            Buffer: function () {
+                return 'undefined';
+            }
+          }
         },
-        bundleOptions: {
-          detectGlobals: false,
-          insertGlobalVars: []
-        }
+        transform: [ 'brfs' ]
       },
       app: {
         files: {
@@ -64,13 +66,20 @@ module.exports = function (grunt) {
       },
       watch: {
         options: {
-          watch: true,
           keepalive: true,
-          bundleOptions: {
-            detectGlobals: false,
-            insertGlobalVars: [],
-            debug: true
-          }
+          browserifyOptions: {
+            builtins: false,
+            debug: true,
+            insertGlobalVars: {
+              process: function () {
+                  return 'undefined';
+              },
+              Buffer: function () {
+                  return 'undefined';
+              }
+            }
+          },
+          watch: true
         },
         files: {
           'dist/workbench.js': [ 'lib/workbench.js' ],
@@ -100,16 +109,16 @@ module.exports = function (grunt) {
         files: [
 
           // bootstrap fonts
-          { expand: true, cwd: 'bower_components/bootstrap/dist/fonts/', src: [ '*'], dest: 'dist/fonts/' },
+          { expand: true, cwd: 'bower_components/bootstrap/dist/fonts', src: [ '*' ], dest: 'dist/fonts' },
+
+          // bpmn font
+          { expand: true, cwd: 'assets/font/bpmn-font/font', src: [ '*' ], dest: 'dist/fonts' },
 
           // index.html
-          { expand: true, cwd: 'lib/', src: [ 'index.html' ], dest: 'dist/' },
+          { expand: true, cwd: 'lib', src: [ 'index.html' ], dest: 'dist' },
 
           // images
-          { expand: true, cwd: 'assets/', src: [ 'img/*' ], dest: 'dist/' },
-
-          // fonts
-          { expand: true, cwd: 'assets/', src: [ 'font/**/*' ], dest: 'dist/' },
+          { expand: true, cwd: 'assets', src: [ 'img/*' ], dest: 'dist' }
         ]
       },
 
