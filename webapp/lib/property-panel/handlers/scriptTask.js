@@ -16,6 +16,10 @@ function(
   $scope.scriptFormat = el.scriptFormat;
   $scope.script = el.script;
 
+  $scope.aceOptions = {
+    mode: 'javascript'
+  };
+
   $scope.updateScriptFormat = function() {
     diagramProvider.executeCommand('element.propertyUpdate', {
       element: $scope.modelElement,

@@ -3,11 +3,11 @@ require("camunda-simple-grid");
 var jquery = require('jquery');
 var angular = require('angular');
 
-/** ACE Code Editor
+/** ACE Code Edito*/
 var ace = require('../bower_components/ace-builds/src-min/ace');
+var acei_javascript = require('../bower_components/ace-builds/src-min/mode-javascript');
 var aceTheme = require('../bower_components/ace-builds/src-min/theme-xcode');
 var uiAce = require('../bower_components/angular-ui-ace/ui-ace');
-*/
 
 var ngModule = angular.module('developer', [
   require('./app').name,
@@ -15,8 +15,8 @@ var ngModule = angular.module('developer', [
   require('./diagram').name,
   require('./debugger').name,
   require('./console').name,
-  require('./property-panel').name
-//  'ui.ace'
+  require('./property-panel').name,
+  'ui.ace'
 ]);
 
 /*ngModule.config([ '$locationProvider', function($locationProvider) {
