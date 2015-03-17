@@ -45,7 +45,7 @@ var Breakpoint = (function() {
   };
 
   /**
-   * @returns {string} a human presentable string representation 
+   * @returns {string} a human presentable string representation
    * of this breakpoint
    */
   Breakpoint.prototype.toString = function() {
@@ -155,7 +155,7 @@ var BreakpointManager = (function() {
    * @param {string} elementId The id of the element
    * @param {string} type The type of the breakpoint
    */
-  BreakpointManager.prototype.toggleBreakpoint = function(elementId,processDefinitionId, type) {
+  BreakpointManager.prototype.toggleBreakpoint = function(elementId, processDefinitionId, type) {
     var removeIdx = -1;
     for(var i=0; i < this.breakpoints.length; i++) {
       var bp = this.breakpoints[i];
@@ -190,13 +190,13 @@ var BreakpointManager = (function() {
   /**
    * toggles a breakpoint before an element
    *
-   * @param {string} the id of the element before which we want 
+   * @param {string} the id of the element before which we want
    * to toggle the breakpoint.
    * @param {string} the id of the process definition
    */
   BreakpointManager.prototype.toggleBreakpointBefore = function(elementId, processDefinitionId) {
     this.toggleBreakpoint(elementId, processDefinitionId, BEFORE_ACTIVITY);
-  }; 
+  };
 
   /**
    * @returns {Array} a list of Breakpoints

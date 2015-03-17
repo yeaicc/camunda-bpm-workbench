@@ -174,24 +174,24 @@ var ProcessDebugger = (function() {
     return false;
   };
 
-  ProcessDebugger.prototype.doToggleBreakpoint = function(id) {
+  ProcessDebugger.prototype.doToggleBreakpoint = function(id, type) {
     var selectedIds = (id && [id]) || this.workbench.diagramProvider.getSelectedElements();
 
     for(var i = 0; i<selectedIds.length; i++) {
       var elId = selectedIds[i];
-      this.breakpointManager.toggleBreakpointBefore(elId, this.processDefinitionId);
+      this.breakpointManager.toggleBreakpoint(elId, this.processDefinitionId, type);
     }
   };
 
-  ProcessDebugger.prototype.toggleBreakpoint = function(id) {
+  ProcessDebugger.prototype.toggleBreakpoint = function(id, type) {
     var self = this;
     if(!this.processDefinitionId) {
       this.deployProcess(function(data) {
         self.processDefinitionId = data;
-        self.doToggleBreakpoint(id);
+        self.doToggleBreakpoint(id, type);
       });
     } else {
-      self.doToggleBreakpoint(id);
+      self.doToggleBreakpoint(id, type);
     }
   };
 

@@ -5,27 +5,42 @@ function DebugBridge(eventBus, elementRegistry, workbench) {
     return elementRegistry.get(id);
   }
 
-  function fire(event, element) {
-    eventBus.fire(event, { element: getElement(element) });
+  function fire(event, payload) {
+    eventBus.fire(event, payload);
   }
 
+  var WORKBENCH_DBG_CONTROLS_TYPE_MAPPING = {
+    BEFORE_ACTIVITY: 'before',
+    AFTER_ACTIVITY: 'after'
+  };
+
+  var DBG_CONTROLS_WORKBENCH_TYPE_MAPPING = {
+    before: 'BEFORE_ACTIVITY',
+    after: 'AFTER_ACTIVITY'
+  };
 
   // workbench -> debug overlay integration
 
   function suspended(e) {
-    fire('debug.step', e.currentActivityId);
+    fire('debug.step', { element: getElement(e.currentActivityId) });
   }
 
   function unsuspended(e) {
-    fire('debug.resumed', e.currentActivityId);
+    fire('debug.resumed', { element: getElement(e.currentActivityId) });
   }
 
   function breakpointAdded(e) {
-    fire('debug.breakpoint.added', e.elementId);
+    fire('debug.breakpoint.added', {
+      element: getElement(e.elementId),
+      location: WORKBENCH_DBG_CONTROLS_TYPE_MAPPING[e.type]
+    });
   }
 
   function breakpointRemoved(e) {
-    fire('debug.breakpoint.removed', e.elementId);
+    fire('debug.breakpoint.removed', {
+      element: getElement(e.elementId),
+      location: WORKBENCH_DBG_CONTROLS_TYPE_MAPPING[e.type]
+    });
   }
 
   var workbenchEvents = workbench.eventBus;
@@ -57,7 +72,7 @@ function DebugBridge(eventBus, elementRegistry, workbench) {
   eventBus.on([ 'debug.breakpoint.add', 'debug.breakpoint.remove' ], function(e) {
     var element = e.element;
 
-    workbench.processDebugger.toggleBreakpoint(element.id);
+    workbench.processDebugger.toggleBreakpoint(element.id, DBG_CONTROLS_WORKBENCH_TYPE_MAPPING[e.location]);
     workbench.update();
   });
 }
