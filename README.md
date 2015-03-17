@@ -61,6 +61,21 @@ Build client and start it on `localhost:9000`
 
 Open [http://localhost:9000](http://localhost:9000) in your browser.
 
+## Docker
+
+Start the workbench embedded in the latest camunda-bpm-platform JBoss distro with:
+
+```
+docker run --name workbench -p 8080:8080 -p 8090:8090 -p 9090:9090 \
+           camunda/camunda-bpm-workbench
+```
+
+Or use the [`docker-compose.yml`](docker/docker-compose.yml) in the [`docker/`](docker/) directory:
+
+```
+docker-compose up workbench
+```
+
 
 [ace]: http://ace.c9.io
 [bpmnio]: http://bpmn.io
