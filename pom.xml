@@ -17,7 +17,7 @@
   <modules>
     <module>api</module>
     <module>distro</module>
-    <module>webapp/app</module>
+    <module>webapp</module>
   </modules>
 
   <dependencyManagement>
