@@ -3,7 +3,7 @@
 var fs = require('fs');
 
 
-var FlowNodePopertiesController = [
+var BaseElementPropertiesController = [
   '$scope',
 function(
   $scope
@@ -20,11 +20,11 @@ module.exports = {
 
     var businessObject = propertyHandlerCtx.selectedElement.businessObject;
 
-    if(businessObject.$instanceOf('bpmn:FlowNode')) {
+    if(businessObject.$instanceOf('bpmn:BaseElement')) {
       propertyHandlerCtx.provide({
-        name: 'Flow Node Properties',
-        template: fs.readFileSync(__dirname + '/flowNode.html', { encoding: 'utf-8' }),
-        controller: FlowNodePopertiesController
+        name: 'Base Element Properties',
+        template: fs.readFileSync(__dirname + '/baseElement.html', { encoding: 'utf-8' }),
+        controller: BaseElementPropertiesController
       });
     }
 

@@ -1,8 +1,9 @@
 'use strict';
 
 var handlers = [];
-handlers.push(require('./handlers/flowNode'));
+handlers.push(require('./handlers/baseElement'));
 handlers.push(require('./handlers/scriptTask'));
+handlers.push(require('./handlers/process'));
 
 
 var PropertyPanel = (function() {
@@ -15,6 +16,10 @@ var PropertyPanel = (function() {
 
   PropertyPanel.prototype.selectElement = function(element) {
     this.clear();
+
+    if(!element) {
+      element = this.workbench.diagramProvider.getProcessElement();
+    }
 
     if(!!element) {
       this.selectedElement = element;

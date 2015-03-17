@@ -58,6 +58,12 @@ var DiagramManager = (function() {
         return diagramManager.renderer.get('elementRegistry').get(id);
       },
 
+      getProcessElement : function() {
+        if(!!diagramManager.renderer.diagram) {
+          return diagramManager.renderer.get('canvas').getRootElement();
+        }
+      },
+
       getBpmnXml : function(done) {
 
         var cachedXML = diagramManager.cachedXML;
@@ -154,9 +160,7 @@ var DiagramManager = (function() {
     }
 
     if (this.renderer) {
-      // TODO(nre): replace with renderer.destroy() once bpmn-js 0.7.0 is out
-      this.renderer.clear();
-      this.renderer.container.parentNode.removeChild(this.renderer.container);
+      this.renderer.destroy();
     }
 
     // construct new renderer
@@ -178,6 +182,13 @@ var DiagramManager = (function() {
     if (this.diagramLoaded) {
       this.openProcess();
     }
+  };
+
+  DiagramManager.prototype.createProcess = function() {
+    var self = this;
+    this.renderer.createDiagram(function() {
+      self.workbench.eventBus.fireEvent('diagram-changed');
+    });
   };
 
   DiagramManager.prototype.openProcess = function(data) {

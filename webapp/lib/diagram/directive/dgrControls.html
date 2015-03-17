@@ -3,6 +3,14 @@
 
   <button
     class="btn btn-xs"
+    ng-click="newProcess()"
+    ng-show="workbench.perspective === 'model'"
+    title="Create a new Process">
+      <span class="glyphicon glyphicon-file"></span>
+      &nbsp; New
+  </button>
+  <button
+    class="btn btn-xs"
     ng-click="openFsProcess()"
     ng-show="workbench.perspective === 'model'"
     title="Open process from your filesystem">

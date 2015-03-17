@@ -42,6 +42,10 @@ var Controller = ['$scope', function($scope) {
 
   };
 
+  $scope.newProcess = function() {
+    $scope.diagramManager.createProcess();
+  };
+
   $scope.isDeployed = function() {
     return !!$scope.workbench.processDebugger.processDefinitionId;
   };
