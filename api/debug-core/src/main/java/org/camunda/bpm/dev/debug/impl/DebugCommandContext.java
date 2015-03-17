@@ -15,11 +15,14 @@ package org.camunda.bpm.dev.debug.impl;
 import org.camunda.bpm.dev.debug.BreakPoint;
 import org.camunda.bpm.dev.debug.DebugSession;
 import org.camunda.bpm.dev.debug.DebugSessionFactory;
+import org.camunda.bpm.dev.debug.StepBreakPoint;
 import org.camunda.bpm.engine.impl.cfg.ProcessEngineConfigurationImpl;
 import org.camunda.bpm.engine.impl.interceptor.CommandContext;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.impl.pvm.delegate.ActivityExecution;
 import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
+
+import static org.camunda.bpm.dev.debug.BreakPointSpecs.*;
 
 import java.util.List;
 
@@ -28,6 +31,8 @@ import java.util.List;
  *
  */
 public class DebugCommandContext extends CommandContext {
+
+  private static ThreadLocal<StepBreakPoint> NEXT_STEP_BREAK_POINT = new ThreadLocal<StepBreakPoint>();
 
   protected DebugSessionFactoryImpl debugSessionFactory;
 
@@ -52,34 +57,44 @@ public class DebugCommandContext extends CommandContext {
     DebugSessionImpl currentSession = null;
     BreakPoint breakPoint = null;
 
-    synchronized (DebugSessionFactory.getInstance()) {
+    if(NEXT_STEP_BREAK_POINT.get() != null) {
+      StepBreakPoint stepBreakPoint = NEXT_STEP_BREAK_POINT.get();
+      if(stepBreakPoint.breakOnOperation(executionOperation, executionEntity)) {
+        NEXT_STEP_BREAK_POINT.remove();
+        breakPoint = stepBreakPoint;
+        currentSession = stepBreakPoint.getSession();
+      }
+    }
+    else {
+      synchronized (DebugSessionFactory.getInstance()) {
 
-      openSessions = debugSessionFactory.getSessions();
-      for (DebugSession debugSession : openSessions) {
-        if(execution.getProcessInstanceId().equals(debugSession.getProcessInstanceId())) {
-          currentSession = (DebugSessionImpl) debugSession;
+        openSessions = debugSessionFactory.getSessions();
+        for (DebugSession debugSession : openSessions) {
+          if(execution.getProcessInstanceId().equals(debugSession.getProcessInstanceId())) {
+            currentSession = (DebugSessionImpl) debugSession;
 
-          try {
-            breakPoint = findBreakPoint(debugSession, executionOperation, executionEntity);
-          } catch (RuntimeException e) {
-            currentSession.execption(e, execution, executionOperation);
-            throw e;
-          }
-
-          break;
-
-        } else if(debugSession.getProcessInstanceId() == null) {
-          if(currentSession == null) {
             try {
-              breakPoint = findBreakPoint(debugSession, executionOperation, execution);
-
+              breakPoint = findBreakPoint(debugSession, executionOperation, executionEntity);
             } catch (RuntimeException e) {
-              ((DebugSessionImpl) debugSession).execption(e, execution, executionOperation);
+              currentSession.execption(e, execution, executionOperation);
               throw e;
             }
 
-            if(breakPoint != null) {
-              currentSession = (DebugSessionImpl) debugSession;
+            break;
+
+          } else if(debugSession.getProcessInstanceId() == null) {
+            if(currentSession == null) {
+              try {
+                breakPoint = findBreakPoint(debugSession, executionOperation, execution);
+
+              } catch (RuntimeException e) {
+                ((DebugSessionImpl) debugSession).execption(e, execution, executionOperation);
+                throw e;
+              }
+
+              if(breakPoint != null) {
+                currentSession = (DebugSessionImpl) debugSession;
+              }
             }
           }
         }
@@ -92,7 +107,14 @@ public class DebugCommandContext extends CommandContext {
         currentSession.setProcessInstanceId(execution.getProcessInstanceId());
       }
       isSuspended = true;
-      currentSession.suspend(new SuspendedExecutionImpl((ExecutionEntity) execution, executionOperation, breakPoint));
+      SuspendedExecutionImpl suspendedExecution = new SuspendedExecutionImpl((ExecutionEntity) execution, executionOperation, breakPoint);
+      currentSession.suspend(suspendedExecution);
+      if(suspendedExecution.isStep) {
+        NEXT_STEP_BREAK_POINT.set(new StepBreakPoint(
+            // TODO: currently sequence flows are not supported for stepping
+            BEFORE_ACTIVITY.equals(breakPoint.getBreakPointSpec()) ? AFTER_ACTIVITY : BEFORE_ACTIVITY,
+            currentSession));
+      }
     }
 
     try {

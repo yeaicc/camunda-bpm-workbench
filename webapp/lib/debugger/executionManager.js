@@ -13,6 +13,12 @@
 
 'use strict';
 
+var BEFORE_ACTIVITY = 'BEFORE_ACTIVITY';
+var AFTER_ACTIVITY = 'AFTER_ACTIVITY';
+var BREAKPOINT_NAMES = {};
+BREAKPOINT_NAMES[BEFORE_ACTIVITY] = 'Before';
+BREAKPOINT_NAMES[AFTER_ACTIVITY] = 'After';
+
 var ExecutionManager = (function() {
 
   // static helper functions /////////////
@@ -92,6 +98,16 @@ var ExecutionManager = (function() {
     }
   };
 
+  ExecutionManager.prototype.stepExecution = function(execution) {
+    var idx = this.executions.indexOf(execution);
+    if(idx >= 0) {
+      this.serverSession.stepExecution(execution.id);
+      this.executions.splice(idx, 1);
+      this.selectedExecution = null;
+      this.workbench.eventBus.fireEvent("execution-deselected", execution);
+    }
+  };
+
   ExecutionManager.prototype.resumeAllExecutions = function() {
     for (var i = 0; i < this.executions.length; i++) {
       this.resumeExecution(this.executions[i]);
@@ -102,6 +118,10 @@ var ExecutionManager = (function() {
     if(this.selectedExecution !== null) {
       return this.selectedExecution.variables;
     }
+  };
+
+  ExecutionManager.prototype.breakPointTypeName = function(ex) {
+    return BREAKPOINT_NAMES[ex.breakPointType];
   };
 
   return ExecutionManager;

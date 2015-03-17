@@ -43,12 +43,14 @@ public class SuspendedExecutionImpl implements SuspendedExecution {
   protected BreakPoint breakPoint;
 
   protected boolean isResumed;
+  protected volatile boolean isStep;
 
 //  protected boolean shouldEvaluateScript;
 //
 //  protected DebugScriptEvaluation debugScriptEvaluation;
 
   protected Queue<DebugOperation> debugOperations;
+
 
   public SuspendedExecutionImpl(ExecutionEntity executionEntity, AtomicOperation operation) {
     this.executionEntity = executionEntity;
@@ -84,6 +86,12 @@ public class SuspendedExecutionImpl implements SuspendedExecution {
 
   public synchronized void resume() {
     isResumed = true;
+    notifyAll();
+  }
+
+  public synchronized void step() {
+    isResumed = true;
+    isStep = true;
     notifyAll();
   }
 

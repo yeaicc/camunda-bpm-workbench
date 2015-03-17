@@ -12,6 +12,11 @@
  */
 package org.camunda.bpm.debugger.server.protocol.dto;
 
+import java.util.Map;
+
+import org.camunda.bpm.engine.variable.value.SerializableValue;
+import org.camunda.bpm.engine.variable.value.TypedValue;
+
 /**
  * @author Daniel Meyer
  *
@@ -19,12 +24,20 @@ package org.camunda.bpm.debugger.server.protocol.dto;
 public class VariableInstanceDto {
 
   protected String variableName;
-  protected String variableValue;
+  protected Object variableValue;
+  protected String type;
+  protected Map<String, Object> valueInfo;
 
-  public VariableInstanceDto(String name, Object value) {
-    this.variableName = name;
-    if(value != null) {
-      variableValue = value.toString();
+  public VariableInstanceDto(String name, TypedValue typedValue) {
+    variableName = name;
+    type = typedValue.getType().getName();
+    valueInfo = typedValue.getType().getValueInfo(typedValue);
+    if (typedValue instanceof SerializableValue) {
+      SerializableValue serializableValue = (SerializableValue) typedValue;
+      this.variableValue = serializableValue.getValueSerialized();
+    }
+    else {
+      this.variableValue = typedValue.getValue();
     }
   }
 
@@ -32,8 +45,16 @@ public class VariableInstanceDto {
     return variableName;
   }
 
-  public String getVariableValue() {
+  public Object getVariableValue() {
     return variableValue;
+  }
+
+  public Map<String, Object> getValueInfo() {
+    return valueInfo;
+  }
+
+  public String getType() {
+    return type;
   }
 
 }

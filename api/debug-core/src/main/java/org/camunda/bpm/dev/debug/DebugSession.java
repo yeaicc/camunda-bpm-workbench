@@ -17,9 +17,6 @@ import org.camunda.bpm.engine.ProcessEngine;
 import java.util.Collection;
 import java.util.List;
 
-import org.camunda.bpm.dev.debug.completion.CodeCompletionHint;
-import org.camunda.bpm.engine.ProcessEngine;
-
 /**
  * @author Daniel Meyer
  *
@@ -55,5 +52,7 @@ public interface DebugSession {
   public void updateScript(String processDefinitionId, String activityId, Script script);
 
   public void completePartialInput(String prefix, String scopeId);
+
+  public void stepExecution(String data);
 
 }

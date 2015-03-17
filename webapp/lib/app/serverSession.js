@@ -179,6 +179,20 @@ var ServerSession = (function() {
   };
 
   /**
+   * Step execution
+   * @param {String} executionId a string providing the id of the execution
+   */
+  ServerSession.prototype.stepExecution = function(id) {
+
+    var cmd = {
+      "command" : "step-execution",
+      "data" : id
+    };
+
+    execute(cmd, this.wsConnection);
+  };
+
+  /**
    * Command requesting the server to list process definitions
    * @return promise which can be used for getting notified about the result.
    */
@@ -217,7 +231,7 @@ var ServerSession = (function() {
     execute(cmd, this.wsConnection);
 
     return this.promise("code-completion-hints");
-  }
+  };
 
   // private static helpers /////////////////////
 

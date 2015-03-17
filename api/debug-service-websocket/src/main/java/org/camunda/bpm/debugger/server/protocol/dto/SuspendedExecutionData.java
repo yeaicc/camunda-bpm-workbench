@@ -14,10 +14,8 @@ package org.camunda.bpm.debugger.server.protocol.dto;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-
 import org.camunda.bpm.dev.debug.SuspendedExecution;
+import org.camunda.bpm.engine.variable.VariableMap;
 
 /**
  * @author Daniel Meyer
@@ -31,6 +29,8 @@ public class SuspendedExecutionData {
 
   protected String currentActivityId;
 
+  protected String breakPointType;
+
   protected String operationType;
 
   protected String currentTransitionId;
@@ -43,10 +43,11 @@ public class SuspendedExecutionData {
     currentActivityId = suspendedExecution.getCurrentActivityId();
     operationType = suspendedExecution.getOperationType();
     currentTransitionId = suspendedExecution.getCurrentTransitionId();
+    breakPointType = suspendedExecution.getBreakPoint().getBreakPointSpec().toString();
     variables = new ArrayList<VariableInstanceDto>();
-    Map<String, Object> variables = suspendedExecution.getVariables();
-    for (Entry<String, Object> variable : variables.entrySet()) {
-      this.variables.add(new VariableInstanceDto(variable.getKey(), variable.getValue()));
+    VariableMap variables = suspendedExecution.getVariablesTyped();
+    for (String name : variables.keySet()) {
+      this.variables.add(new VariableInstanceDto(name, variables.getValueTyped(name)));
     }
   }
 
@@ -72,6 +73,10 @@ public class SuspendedExecutionData {
 
   public List<VariableInstanceDto> getVariables() {
     return variables;
+  }
+
+  public String getBreakPointType() {
+    return breakPointType;
   }
 
 }

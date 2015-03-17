@@ -37,7 +37,6 @@ import org.camunda.bpm.dev.debug.completion.CodeCompleter;
 import org.camunda.bpm.dev.debug.completion.CodeCompleterBuilder;
 import org.camunda.bpm.dev.debug.completion.CodeCompletionHint;
 import org.camunda.bpm.engine.ProcessEngine;
-import org.camunda.bpm.engine.ScriptEngineException;
 import org.camunda.bpm.engine.ScriptEvaluationException;
 import org.camunda.bpm.engine.impl.ProcessEngineImpl;
 import org.camunda.bpm.engine.impl.bpmn.behavior.ScriptTaskActivityBehavior;
@@ -281,14 +280,7 @@ public class DebugSessionImpl implements DebugSession {
   }
 
   protected SuspendedExecutionImpl getSuspendedExecution(String executionId) {
-    SuspendedExecutionImpl suspendedExecution = null;
-    synchronized (suspendedExecutions) {
-      for (SuspendedExecutionImpl execution : suspendedExecutions) {
-        if(execution.getId().equals(executionId)) {
-          suspendedExecution = execution;
-        }
-      }
-    }
+    SuspendedExecutionImpl suspendedExecution = findSuspendedExecution(executionId);
 
     return suspendedExecution;
   }
@@ -347,16 +339,27 @@ public class DebugSessionImpl implements DebugSession {
   }
 
   public void resumeExecution(String id) {
-    SuspendedExecutionImpl suspendedExecution = null;
+    SuspendedExecutionImpl suspendedExecution = findSuspendedExecution(id);
+    if(suspendedExecution != null) {
+      suspendedExecution.resume();
+    }
+  }
+
+  protected SuspendedExecutionImpl findSuspendedExecution(String id) {
     synchronized (suspendedExecutions) {
       for (SuspendedExecutionImpl execution : suspendedExecutions) {
         if(execution.getId().equals(id)) {
-          suspendedExecution = execution;
+          return execution;
         }
       }
     }
+    return null;
+  }
+
+  public void stepExecution(String executionId) {
+    SuspendedExecutionImpl suspendedExecution = findSuspendedExecution(executionId);
     if(suspendedExecution != null) {
-      suspendedExecution.resume();
+      suspendedExecution.step();
     }
   }
 

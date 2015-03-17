@@ -18,8 +18,7 @@
         </div>
 
         <div class="dbg-breakpoint-pos">
-          <span class="glyphicon glyphicon-arrow-right"
-            title="BEFORE activity"></span>
+          <span ng-click="processDebugger.breakpointManager.toggleBreakpointType(bp)">{{bp.typeName()}}</span>
         </div>
         <div class="dbg-breakpoint-text">
           <h4>

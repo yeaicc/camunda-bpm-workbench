@@ -14,7 +14,12 @@
 'use strict';
 
 var BEFORE_ACTIVITY = 'BEFORE_ACTIVITY';
-//var AFTER_ACTIVITY = 'AFTER_ACTIVITY';
+var AFTER_ACTIVITY = 'AFTER_ACTIVITY';
+var BREAKPOINT_NAMES = {};
+BREAKPOINT_NAMES[BEFORE_ACTIVITY] = 'Before';
+BREAKPOINT_NAMES[AFTER_ACTIVITY] = 'After';
+
+
 //var AT_TRANSITION = 'AT_TRANSITION';
 
 var Breakpoint = (function() {
@@ -34,6 +39,10 @@ var Breakpoint = (function() {
     this.isActive = true;
     this.condition = {script: null, scriptLanguage: 'Javascript'};
   }
+
+  Breakpoint.prototype.typeName = function() {
+    return BREAKPOINT_NAMES[this.type];
+  };
 
   /**
    * @returns {string} a human presentable string representation 
@@ -98,6 +107,20 @@ var BreakpointManager = (function() {
       this.serverSession.setBreakpoints(breakpointDtos);
     }
 
+  };
+
+  BreakpointManager.prototype.toggleBreakpointType = function(bp) {
+
+    this.workbench.eventBus.fireEvent('breakpoint-removed', bp);
+
+    // toggle type
+    bp.type = BEFORE_ACTIVITY === bp.type ? AFTER_ACTIVITY : BEFORE_ACTIVITY;
+
+    // update breakpoints on server
+    this.updateBreakpoints();
+
+    // fire event
+    this.workbench.eventBus.fireEvent('breakpoint-added', bp);
   };
 
   /**

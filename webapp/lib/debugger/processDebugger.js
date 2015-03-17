@@ -157,10 +157,14 @@ var ProcessDebugger = (function() {
   };
 
   ProcessDebugger.prototype.step = function() {
+    var execution = this.executionManager.selectedExecution;
+    if(!!execution) {
+      this.executionManager.stepExecution(execution);
+    }
   };
 
   ProcessDebugger.prototype.canStep = function() {
-    return false;
+    return this.executionManager.selectedExecution !== null;
   };
 
   ProcessDebugger.prototype.stop = function() {

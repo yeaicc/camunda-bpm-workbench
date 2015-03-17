@@ -95,6 +95,10 @@ public class BreakPoint {
     return id;
   }
 
+  public BreakPointSpec getBreakPointSpec() {
+    return breakPointSpec;
+  }
+
   @Override
   public int hashCode() {
     final int prime = 31;

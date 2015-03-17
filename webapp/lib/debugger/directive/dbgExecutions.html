@@ -13,12 +13,8 @@
       ng-class="{'dbg-execution-selected': processDebugger.executionManager.isSelected(ex)}"
       ng-click="processDebugger.executionManager.select(ex)">
 
-      <div class="dbg-execution-toggle">
-      </div>
-
       <div class="dbg-execution-pos">
-        <span class="glyphicon glyphicon-arrow-right"
-          title="suspended BEFORE activity"></span>
+        {{processDebugger.executionManager.breakPointTypeName(ex)}}
       </div>
       <div class="dbg-execution-text">
         <h4>
