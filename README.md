@@ -63,7 +63,7 @@ Open [http://localhost:9000](http://localhost:9000) in your browser.
 
 ## Docker
 
-Start the workbench embedded in the latest camunda-bpm-platform JBoss distro with:
+Start the workbench embedded in the latest camunda-bpm-platform tomcat distro with:
 
 ```
 docker run --name workbench -p 8080:8080 -p 8090:8090 -p 9090:9090 \

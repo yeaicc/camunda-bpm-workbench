@@ -1,19 +1,13 @@
-FROM camunda/camunda-bpm-platform:jboss-latest
+FROM camunda/camunda-bpm-platform:tomcat-latest
 
 ENV VERSION=1.0.0-alpha9 \
-    GITHUB=https://github.com/camunda/camunda-bpm-workbench \
-    MODULE=/camunda/modules/org/camunda/bpm/camunda-engine/main
+    GITHUB=https://github.com/camunda/camunda-bpm-workbench
 
-ADD ${GITHUB}/releases/download/${VERSION}/camunda-workbench-dist-embeddable-${VERSION}.jar ${MODULE}/
+ADD ${GITHUB}/releases/download/${VERSION}/camunda-workbench-dist-embeddable-${VERSION}.jar /camunda/lib/
 
-RUN xmlstarlet ed -L -s //_:resources -t elem -n TMP -v "" \
-      -i //TMP -t attr -n path -v "camunda-workbench-dist-embeddable-${VERSION}.jar" \
-      -r //TMP -v resource-root \
-      ${MODULE}/module.xml
-
-RUN xmlstarlet ed -L -N cam=urn:org.camunda.bpm.jboss:1.1 \
-      -s //cam:process-engines/cam:process-engine/cam:plugins -t elem -n TMP -v "" \
+RUN xmlstarlet ed -L \
+      -s //_:process-engine/_:plugins -t elem -n TMP -v "" \
       -s //TMP -t elem -n class -v "org.camunda.bpm.debugger.server.EmbeddableDebugWebsocketBootstrap" \
       -r //TMP -v plugin \
-      /camunda/standalone/configuration/standalone.xml
+      /camunda/conf/bpm-platform.xml
 

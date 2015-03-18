@@ -1,7 +1,7 @@
 # camunda BPM workbench docker image
 
 Test the latest version of the camunda-bpm-workbench embedded in the
-latest [camunda-bpm-platform JBoss distro][platform].
+latest [camunda-bpm-platform tomcat distro][platform].
 
 Use the image from the [registry][workbench]:
 
