@@ -30,7 +30,7 @@ var Controller = ['$scope', '$location', function($scope, $location) {
     }
   };
 
-  var serverUrl = "ws://localhost:9090/debug-session";
+  var serverUrl = "ws://" + $location.host() + ":9090/debug-session";
 
   // the global event bus
   var eventBus = new EventBus();
