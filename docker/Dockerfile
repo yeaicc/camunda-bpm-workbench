@@ -11,3 +11,4 @@ RUN xmlstarlet ed -L \
       -r //TMP -v plugin \
       /camunda/conf/bpm-platform.xml
 
+EXPOSE 8090 9090
