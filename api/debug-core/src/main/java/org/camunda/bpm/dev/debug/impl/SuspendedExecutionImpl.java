@@ -21,6 +21,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import org.camunda.bpm.dev.debug.BreakPoint;
 import org.camunda.bpm.dev.debug.SuspendedExecution;
 import org.camunda.bpm.engine.ProcessEngineServices;
+import org.camunda.bpm.engine.delegate.DelegateExecution;
 import org.camunda.bpm.engine.impl.persistence.entity.ExecutionEntity;
 import org.camunda.bpm.engine.impl.pvm.runtime.AtomicOperation;
 import org.camunda.bpm.engine.variable.VariableMap;
@@ -277,6 +278,18 @@ public class SuspendedExecutionImpl implements SuspendedExecution {
 
   public <T extends TypedValue> T getVariableLocalTyped(String variableName, boolean deserializeValue) {
     return executionEntity.getVariableLocalTyped(variableName, deserializeValue);
+  }
+
+  public DelegateExecution getProcessInstance() {
+    return executionEntity.getProcessInstance();
+  }
+
+  public DelegateExecution getSuperExecution() {
+    return executionEntity.getSuperExecution();
+  }
+
+  public boolean isCanceled() {
+    return executionEntity.isCanceled();
   }
 
 }
