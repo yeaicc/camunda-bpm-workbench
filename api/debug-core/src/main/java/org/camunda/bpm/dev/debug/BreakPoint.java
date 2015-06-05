@@ -65,7 +65,7 @@ public class BreakPoint {
     shouldBreak &= processDefinitionId.equals(execution.getProcessDefinitionId());
 
     if(AT_TRANSITION.equals(breakPointSpec)) {
-      shouldBreak &= transitionId.equals(execution.getTransitionBeingTaken().getId());
+      shouldBreak &= transitionId.equals(execution.getCurrentTransitionId());
     } else {
       shouldBreak &= activityId.equals(execution.getActivityId());
     }

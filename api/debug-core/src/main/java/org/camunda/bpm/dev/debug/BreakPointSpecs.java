@@ -25,7 +25,7 @@ public enum BreakPointSpecs implements BreakPointSpec {
   /**
    * Breakpoint before an activity
    */
-  BEFORE_ACTIVITY(PROCESS_START_INITIAL, ACTIVITY_START, TRANSITION_CREATE_SCOPE),
+  BEFORE_ACTIVITY(ACTIVITY_START_CREATE_SCOPE, TRANSITION_CREATE_SCOPE),
 
   /**
    * Breakpoint after an activity
