@@ -16,6 +16,16 @@
 var BpmnModeler = require('bpmn-js/lib/Modeler'),
     BpmnViewer = require('bpmn-js/lib/Viewer');
 
+var propertiesPanelModule = require('bpmn-js-properties-panel/lib'),
+    propertiesProviderModule = require('bpmn-js-properties-panel/lib/provider/camunda'),
+    camundaModdlePackage = require('bpmn-js-properties-panel/lib/provider/camunda/camunda-moddle');
+
+require('jquery');
+var $ = window.jQuery;
+
+var propertiesPanelConfig = {
+  "config.propertiesPanel": ['value', { parent: $('#prop-panel-container') }]
+}
 
 var DiagramManager = (function() {
 
@@ -137,44 +147,51 @@ var DiagramManager = (function() {
     var BpmnJS,
         additionalModules;
 
-    if (perspective === 'model') {
-      BpmnJS = BpmnModeler;
-
-      additionalModules = [
-        require('diagram-js-origin'),
-        require('./palette-extension'),
-        require('./property-update')
-      ];
-    } else {
-      BpmnJS = BpmnViewer;
-
-      additionalModules = [
-        require('diagram-js/lib/navigation/zoomscroll'),
-        require('diagram-js/lib/navigation/movecanvas'),
-        require('bpmn-js-debug-overlay'),
-        require('./debug-bridge'),
-        {
-          workbench: [ 'value', this.workbench ]
-        }
-      ];
-    }
-
     if (this.renderer) {
       this.renderer.destroy();
     }
 
-    // construct new renderer
-    this.renderer = new BpmnJS({
-      container: element,
-      position: 'absolute',
-      debugOverlay: {
-        buttons: {
-          'break': { className: 'glyphicon glyphicon-record' },
-          'resume': { className: 'glyphicon glyphicon-play' }
-        }
-      },
-      additionalModules: additionalModules
-    });
+    if (perspective === 'model') {
+      // construct new modeler
+      this.renderer = new BpmnModeler({
+        container: element,
+        position: 'absolute',
+        debugOverlay: {
+          buttons: {
+            'break': { className: 'glyphicon glyphicon-record' },
+            'resume': { className: 'glyphicon glyphicon-play' }
+          }
+        },
+        additionalModules: [
+          require('diagram-js-origin'),
+          propertiesPanelModule, propertiesProviderModule, propertiesPanelConfig
+//          require('./palette-extension'),
+//          require('./property-update')
+        ],
+        moddleExtensions: {camunda: camundaModdlePackage}
+      });
+    } else {
+      // construct new renderer
+      this.renderer = new BpmnViewer({
+        container: element,
+        position: 'absolute',
+        debugOverlay: {
+          buttons: {
+            'break': { className: 'glyphicon glyphicon-record' },
+            'resume': { className: 'glyphicon glyphicon-play' }
+          }
+        },
+        additionalModules: [
+          require('diagram-js/lib/navigation/zoomscroll'),
+          require('diagram-js/lib/navigation/movecanvas'),
+          require('bpmn-js-debug-overlay'),
+          require('./debug-bridge'),
+          {
+            workbench: [ 'value', this.workbench ]
+          }
+        ]
+      });
+    }
 
     // register listeners on the renderer
     registerListeners(this.renderer, this);

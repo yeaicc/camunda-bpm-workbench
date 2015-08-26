@@ -2,8 +2,8 @@
 
 var fs = require('fs');
 
-var angular = require('angular'),
-    PropertyPanel = require('./../propertyPanel');
+var angular = require('angular');
+    //PropertyPanel = require('./../propertyPanel');
 
 var directiveTemplate = fs.readFileSync(__dirname + '/propPanel.html', { encoding: 'utf-8' });
 
@@ -58,6 +58,7 @@ function(
   });
 
   // initialize a new property editor
+  /*
   var propertyPanel = new PropertyPanel(workbench, renderer);
 
   $scope.$watch(function() {
@@ -71,7 +72,7 @@ function(
     }
     propertyPanel.selectElement(element);
   });
-
+*/
 }];
 
 module.exports = function() {

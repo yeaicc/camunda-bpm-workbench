@@ -52,7 +52,7 @@
     "angular": "1.3.14",
     "bpmn-js": "^0.11.0",
     "bpmn-js-debug-overlay": "^0.3.0",
-//    "bpmn-js-properties-panel": "bpmn-io/bpmn-js-properties-panel",
+    "bpmn-js-properties-panel": "bpmn-io/bpmn-js-properties-panel",
     "diagram-js": "^0.11.0",
     "diagram-js-origin": "^0.11.1",
     "didi": "0.0.4",
