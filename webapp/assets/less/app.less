@@ -18,6 +18,7 @@ body {
 .wb-panel-toolbar,
 .wb-panel-header {
   .flex-fill(initial);
+  min-height: 25px;
 }
 
 .wb-panel-part,
@@ -27,6 +28,16 @@ body {
   .flex-fill(1);
 
   position: relative;
+  overflow: auto;
+}
+
+.wb-console-panel {
+  max-height: 250px;
+  //overflow: auto;
+
+//  .wb-panel-header {
+//    display: none;
+//  }
 }
 
 .wb-panel-rows {

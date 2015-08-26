@@ -49,20 +49,28 @@
               DIAGRAM
             </h2>
           </div>
-          <div class="wb-panel-part" dgr-panel workbench="workbench"></div>
+          <div class="wb-panel-part" dgr-panel workbench="workbench">
+          </div>
         </div>
 
         <div resizer></div>
 
-        <div class="wb-panel wb-properties-panel" layout-sizing="1">
+        <!--
+          console
+        -->
+        <div class="wb-console-panel wb-panel" layout-sizing="1">
           <div class="wb-panel-header">
             <h2>
-              <span class="glyphicon glyphicon-wrench"></span>
-              PROPERTIES
+              <span class="glyphicon glyphicon-cog"></span>
+              CONSOLE
             </h2>
           </div>
-          <div id="prop-panel-container"></div>
-          <!-- div class="wb-panel-part" prop-panel workbench="workbench"></div> -->
+          <div class="wb-panel-part"
+               dbg-console
+               dbg-cmd-id="dbgCmdId"
+               command-results="commandResults"
+               workbench="workbench">
+          </div>
         </div>
 
       </div>
@@ -88,23 +96,18 @@
 
         <div resizer ng-show="workbench.perspective === 'debug'"></div>
 
-        <!--
-          console
-        -->
-        <div class="wb-console-panel wb-panel" layout-sizing="2">
+        <!-- Properties Panel -->
+        <div class="wb-panel wb-properties-panel" layout-sizing="2">
           <div class="wb-panel-header">
             <h2>
-              <span class="glyphicon glyphicon-cog"></span>
-              CONSOLE
+              <span class="glyphicon glyphicon-wrench"></span>
+              PROPERTIES
             </h2>
           </div>
-          <div class="wb-panel-part"
-               dbg-console
-               dbg-cmd-id="dbgCmdId"
-               command-results="commandResults"
-               workbench="workbench">
-          </div>
+
+          <div id="prop-panel-container"></div>
         </div>
+
 
       </div>
 
