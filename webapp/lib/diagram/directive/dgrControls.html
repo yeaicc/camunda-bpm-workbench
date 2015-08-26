@@ -1,40 +1,65 @@
 <!-- #BEGIN diagram/directive/dgrControls.html -->
 <div class="navbar">
 
-  <button
-    class="btn btn-xs"
-    ng-click="newProcess()"
-    ng-show="workbench.perspective === 'model'"
-    title="Create a new Process">
-      <span class="glyphicon glyphicon-file"></span>
-      &nbsp; New
-  </button>
-  <button
-    class="btn btn-xs"
-    ng-click="openFsProcess()"
-    ng-show="workbench.perspective === 'model'"
-    title="Open process from your filesystem">
-      <span class="glyphicon glyphicon-folder-open"></span>
-      &nbsp; File System
-  </button>
+  <div class="pull-left">
 
-  <button
-    class="btn btn-xs"
-    ng-click="openDeployedProcess()"
-    ng-show="workbench.perspective === 'model'"
-    title="Open a deployed process">
-      <span class="glyphicon glyphicon-open"></span>
-      Deployed Process
-  </button>
+    <button
+      class="btn btn-xs"
+      ng-click="newProcess()"
+      ng-show="workbench.perspective === 'model'"
+      title="Create a new Process">
+        <span class="glyphicon glyphicon-file"></span>
+        &nbsp; New
+    </button>
+    <button
+      class="btn btn-xs"
+      ng-click="openFsProcess()"
+      ng-show="workbench.perspective === 'model'"
+      title="Open process from your filesystem">
+        <span class="glyphicon glyphicon-folder-open"></span>
+        &nbsp; File System
+    </button>
 
-  <button
-    class="btn btn-xs"
-    ng-click="debugDeployedProcess()"
-    ng-show="workbench.perspective === 'debug'"
-    title="Debug a deployed process">
-      <span class="glyphicon glyphicon-open"></span>
-      Deployed Process
-  </button>
+    <button
+      class="btn btn-xs"
+      ng-click="openDeployedProcess()"
+      ng-show="workbench.perspective === 'model'"
+      title="Open a deployed process">
+        <span class="glyphicon glyphicon-open"></span>
+        Deployed Process
+    </button>
+
+    <button
+      class="btn btn-xs"
+      ng-click="debugDeployedProcess()"
+      ng-show="workbench.perspective === 'debug'"
+      title="Debug a deployed process">
+        <span class="glyphicon glyphicon-open"></span>
+        Deployed Process
+    </button>
+
+    <div class="dropdown dgr-visualization-checkbox">
+      <button type="button" class="btn btn-xs  dropdown-toggle" data-toggle="dropdown" id="dropdown1" aria-haspopup="true" aria-expanded="true">
+        <span class="glyphicon glyphicon-eye-open"></span> Visualization <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdown1">
+        <li><a href="#" class="small" data-value="option2" tabIndex="-1"><input type="checkbox"/>&nbsp;Safe Points</a></li>
+        <li><a href="#" class="small" data-value="option3" tabIndex="-1"><input type="checkbox"/>&nbsp;Listeners</a></li>
+        <li><a href="#" class="small" data-value="option4" tabIndex="-1"><input type="checkbox"/>&nbsp;...</a></li>
+      </ul>
+    </div>
+
+    <div class="dropdown dgr-visualization-checkbox">
+      <button type="button" class="btn btn-xs  dropdown-toggle" data-toggle="dropdown" id="dropdown2" aria-haspopup="true" aria-expanded="true">
+        <span class="glyphicon glyphicon-play"></span> Run Action <span class="caret"></span>
+      </button>
+      <ul class="dropdown-menu" aria-labelledby="dropdown2">
+        <li><a href="#" class="small" data-value="option7" tabIndex="-1">&nbsp;Make Executable</a></li>
+        <li><a href="#" class="small" data-value="option8" tabIndex="-1">&nbsp;Option 2</a></li>
+      </ul>
+    </div>
+
+  </div>
 
   <div class="hidden">
     <input type="file" id="dgr-uploader" onchange="this.update()"></input>
