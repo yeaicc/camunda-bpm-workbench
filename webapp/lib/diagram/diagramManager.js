@@ -172,7 +172,7 @@ var DiagramManager = (function() {
       });
     } else {
       // construct new renderer
-      this.renderer = new BpmnViewer({
+      this.renderer = new BpmnModeler({
         container: element,
         position: 'absolute',
         debugOverlay: {
@@ -182,6 +182,7 @@ var DiagramManager = (function() {
           }
         },
         additionalModules: [
+          propertiesPanelModule, propertiesProviderModule, propertiesPanelConfig,
           require('diagram-js/lib/navigation/zoomscroll'),
           require('diagram-js/lib/navigation/movecanvas'),
           require('bpmn-js-debug-overlay'),
@@ -191,6 +192,29 @@ var DiagramManager = (function() {
           }
         ]
       });
+
+/*
+ this.renderer = new BpmnViewer({
+ container: element,
+ position: 'absolute',
+ debugOverlay: {
+ buttons: {
+ 'break': { className: 'glyphicon glyphicon-record' },
+ 'resume': { className: 'glyphicon glyphicon-play' }
+ }
+ },
+ additionalModules: [
+ require('diagram-js/lib/navigation/zoomscroll'),
+ require('diagram-js/lib/navigation/movecanvas'),
+ require('bpmn-js-debug-overlay'),
+ require('./debug-bridge'),
+ {
+ workbench: [ 'value', this.workbench ]
+ }
+ ]
+ });
+
+       */
     }
 
     // register listeners on the renderer
