@@ -26,8 +26,8 @@ var ProcessEngineConnection = (function() {
   var listeners = [];
 
 
-  function websocketGet(cmd, eventName, success) {
-      var wsConnection = new WsConnection(ProcessEngineConnection.currentServer);
+  function websocketGet(server, cmd, eventName, success) {
+      var wsConnection = new WsConnection(server);
       wsConnection.open();
 
       wsConnection.onMessage(function(msgPayload) {
@@ -65,7 +65,7 @@ var ProcessEngineConnection = (function() {
         "command": "list-process-definitions",
         "data": {}
       };
-      websocketGet(cmd, "process-definitions-list", success);
+      websocketGet(ProcessEngineConnection.currentServer, cmd, "process-definitions-list", success);
     }
     else { // REST
       $.get(ProcessEngineConnection.currentServer.url + "/process-definition?sortBy=key&sortOrder=asc&sortBy=version&sortOrder=desc", function (data) {
@@ -83,7 +83,7 @@ var ProcessEngineConnection = (function() {
         "command" : "get-process-definition-xml",
         "data": processDefinitionId
       };
-      websocketGet(cmd, "process-definition-xml", success);
+      websocketGet(ProcessEngineConnection.currentServer, cmd, "process-definition-xml", success);
     }
     else { // REST
       $.get( ProcessEngineConnection.currentServer.url + "/process-definition/" + processDefinitionId + "/xml", function( data ) {
@@ -92,6 +92,22 @@ var ProcessEngineConnection = (function() {
     }
   };
 
+  ProcessEngineConnection.prototype.validateOnEngine = function(workbench) {
+     workbench.diagramProvider.getBpmnXml(function(error, xml) {
+        var server = workbench.connectionManager.getDefaultServer();
+        var cmd = {
+          "command" : "validate-process",
+          "data":  { 
+            "resourceName": "process.bpmn",
+            "resourceData": xml 
+          } 
+        };      
+        websocketGet(server, cmd, "process-validated", function(validationErrorList) {
+           console.log(validationErrorList);
+           workbench.diagramProvider.addHighlights(validationErrorList, 'wb-validation-error-overlay', 'wb-validation-error-highlight');
+        });
+     });
+  }
 
   return ProcessEngineConnection;
 

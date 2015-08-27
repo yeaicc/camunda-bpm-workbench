@@ -30,7 +30,16 @@
         </exclusion>
       </exclusions>
     </dependency>
-
+    <!-- 
+    https://github.com/camunda/camunda-consulting/tree/bpmn-validation-visualizer/snippets/bpmn-validation-visualizer
+    
+    class copied into project for convenience (for now)
+<dependency>
+  <groupId>com.camunda.demo</groupId>
+  <artifactId>bpmn-validation-visualizer</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  </dependency>
+  -->
     <dependency>
       <groupId>org.camunda.bpm.workbench</groupId>
       <artifactId>camunda-workbench-api-debug-core</artifactId>

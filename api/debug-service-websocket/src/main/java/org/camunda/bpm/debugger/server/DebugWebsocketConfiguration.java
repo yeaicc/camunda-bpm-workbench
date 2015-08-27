@@ -27,6 +27,7 @@ import org.camunda.bpm.debugger.server.protocol.cmd.SetBreakPointsCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.StartProcessCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.StepExecutionCmd;
 import org.camunda.bpm.debugger.server.protocol.cmd.UpdateScriptCmd;
+import org.camunda.bpm.debugger.server.protocol.cmd.ValidateProcessDefinitionCmd;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -106,6 +107,7 @@ public class DebugWebsocketConfiguration {
       protocol.registerCommandHandler(GetScriptCmd.NAME, GetScriptCmd.class);
       protocol.registerCommandHandler(UpdateScriptCmd.NAME, UpdateScriptCmd.class);
       protocol.registerCommandHandler(StepExecutionCmd.NAME, StepExecutionCmd.class);
+      protocol.registerCommandHandler(ValidateProcessDefinitionCmd.NAME, ValidateProcessDefinitionCmd.class);
 
     }
   }

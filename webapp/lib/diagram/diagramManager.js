@@ -74,6 +74,33 @@ var DiagramManager = (function() {
         }
       },
 
+      addHighlights: function(highlighContent, errorMessageCssClass, highlightCssClass) {
+        var overlays = diagramManager.renderer.get('overlays');
+        var canvas = diagramManager.renderer.get('canvas');
+
+
+        for (var key in highlighContent) {
+            var errors = highlighContent[key];
+
+            var errorText = "";
+            for (var i=0; i < errors.length; i++) {
+                errorText = errorText + errors[i] + "<br>";
+            }
+
+            // attach an overlay to a node
+            overlays.add(key, {
+              position: {
+                bottom: -10,
+                left: 10
+              },
+              html: '<div class="'+errorMessageCssClass+'">'+errorText+'</div>'
+            });
+
+            canvas.addMarker(key, highlightCssClass)
+
+        };
+      },
+
       getBpmnXml : function(done) {
 
         var cachedXML = diagramManager.cachedXML;

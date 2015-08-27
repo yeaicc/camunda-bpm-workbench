@@ -50,6 +50,9 @@ var Controller = ['$scope', function($scope) {
     return !!$scope.workbench.processDebugger.processDefinitionId;
   };
 
+  $scope.validateOnEngine = function() {
+    $scope.workbench.processEngineConnection.validateOnEngine( $scope.workbench );
+  }
 }];
 
 
