@@ -1,6 +1,6 @@
 var angular = require('angular');
 
-var ngModule = angular.module('developer.propertypanel', [
+var ngModule = angular.module('developer.help', [
   require('./directive').name
 ]);
 

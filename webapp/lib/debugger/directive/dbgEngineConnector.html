@@ -1,0 +1,22 @@
+
+<div class="dropdown" wb-debugger-connect-dropdown>
+  <button type="button" class="btn btn-xs  dropdown-toggle" data-toggle="dropdown" id="dropdown1" aria-haspopup="true" aria-expanded="true">
+    <span class="small" ng-show="processDebugger.currentServer">{{processDebugger.currentServer.name}}</span>
+    <span class="small" ng-show="!processDebugger.currentServer">SELECT</span> 
+    <span class="caret"></span>
+  </button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown1">
+      <li ng-repeat="server in workbench.connectionManager.getServerList(true)">
+          <a ng-click="processDebugger.switchServer( server )" tabIndex="-1">{{server.name}}</a>
+      </li>
+      <li><a ng-click="openAddServerDialog()" tabIndex="-1">NEW ...</a></li>
+  </ul>
+</div>
+
+<div ng-show="processDebugger.isSessionOpen()">
+   <a ng-show="processDebugger.canCloseSession()" ng-click="processDebugger.closeSession()" title="disconnect"><span class="glyphicon glyphicon-log-out"></span></a>
+</div>
+
+<div ng-show="!processDebugger.isSessionOpen()">
+   <a ng-click="processDebugger.openSession()" title="connect"><span class="glyphicon glyphicon-log-in"></span></a>
+</div>

@@ -17,6 +17,8 @@ var ServerSession = require('./../serverSession'),
     WsConnection = require('./../../util/wsConnection'),
     EventBus = require('./../../util/eventBus'),
     ProcessDebugger = require('../../debugger/processDebugger'),
+    ProcessEngineConnection = require('./../../util/processEngineConnection'),
+    ConnectionManager = require('./../../util/connectionManager'),
     Workbench = require('./../workbench');
 
 
@@ -29,16 +31,22 @@ var Controller = ['$scope', '$location', function($scope, $location) {
       this.$apply(fn);
     }
   };
-
-  var serverUrl = "ws://" + $location.host() + ":9090/debug-session";
+  
+  var serverUrl;
+  if ($location.host()) { // capture URL for default server if present
+    // TODO: Make more robust
+    serverUrl = "ws://" + $location.host() + ":9090/debug-session";
+  }
 
   // the global event bus
   var eventBus = new EventBus();
 
   // bootstrap the application services
-  var connection = new WsConnection(serverUrl);
+  var connectionManager = new ConnectionManager(serverUrl);
+  var connection = new WsConnection(connectionManager.getDefaultServer());
   var serverSession = new ServerSession(connection, eventBus);
   var workbench = new Workbench();
+  var processEngineConnection = new ProcessEngineConnection();
 
   if ($location.path() === '/debug') {
     workbench.perspective = 'debug';
@@ -53,6 +61,9 @@ var Controller = ['$scope', '$location', function($scope, $location) {
   // register the debugsession
   workbench.serverSession = serverSession;
 
+  workbench.processEngineConnection = processEngineConnection;
+  workbench.connectionManager = connectionManager;
+
   // register the update function
   workbench.update = function() {
     $scope.safeDigest();
@@ -64,7 +75,7 @@ var Controller = ['$scope', '$location', function($scope, $location) {
     workbench.update();
   });
 
-  var processDebugger = new ProcessDebugger(workbench);
+  var processDebugger = new ProcessDebugger(workbench, connectionManager.getDefaultServer());
   workbench.processDebugger = processDebugger;
 
   // expose the workbench
@@ -77,7 +88,9 @@ var Controller = ['$scope', '$location', function($scope, $location) {
   $scope.commandResults = [];
 
   // open the connection to the server
-  connection.open();
+  // TODO: THink about lifecycle. At the moment I don't wanted to open the connection at startup already
+  // as we only need this in the DEBUG perspective and might even select a different engine to connect to
+  //connection.open();
 }];
 
 module.exports = Controller;

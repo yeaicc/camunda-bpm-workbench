@@ -1,7 +1,7 @@
 <button
-  ng-class="{ 'active pull-right': isActive('model') }"
-  ng-click="switchPerspective('model')">MODEL</button>
+  ng-class="{ 'active': isActive('model') }"
+  ng-click="switchPerspective('model')">MODEL</button><!-- pull-right -->
 
 <button
-  ng-class="{ 'active pull-right': isActive('debug') }"
+  ng-class="{ 'active ': isActive('debug') }"
   ng-click="switchPerspective('debug')">DEBUG</button>

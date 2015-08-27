@@ -29,15 +29,14 @@ var DiagramController = ['$scope', '$modal', function($scope, $modal) {
 
   function chooseProcess() {
     // open dialog
-    return $modal.open(new OpenDeployedProcessModal($scope.workbench.serverSession)).result;
+    return $modal.open(new OpenDeployedProcessModal($scope.workbench)).result;
   }
 
   function openProcess(processDef) {
     // dialog closed
 
-    return $scope.workbench.serverSession
-      .getProcessDefinitionXml(processDef.id)
-      .success(function(data) {
+    return $scope.workbench.processEngineConnection
+      .getProcessDefinitionXml(processDef.id, function(data) {
         // open the diagram
         $scope.diagramManager.openProcess({
           xml: data,

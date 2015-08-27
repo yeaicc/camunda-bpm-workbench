@@ -1,0 +1,38 @@
+<div id="help-panel-container">
+
+    <div>
+
+    	<input class="wb-help-search-query" type="text" ng-model="searchQuery" ng-enter="executeSearch()" />
+
+        <div ng-show="searchResultCount" class="wb-help-search-hint">
+            Search for '<em>{{lastSearchQuery}}</em>' found <em>{{searchResultCount}}</em> results
+        </div>
+
+        <div ng-repeat="bp in bestPractices" class="wb-help-ressource wb-help-best-practice">
+
+            <span class="wb-help-type-icon glyphicon glyphicon-thumbs-up" title="Best Practice"> </span>
+
+            <a target="_blank" ng-href="{{bp.link}}">{{bp.title}}</a>
+
+            <div class="wb-help-text">
+            {{bp.description}} <a ng-href="{{bp.link}}">read more</a>
+            </div>
+
+        </div>
+
+    	<div ng-repeat="result in searchResults" class="wb-help-ressource">
+
+            <span ng-show="result.isDocumentation" class="wb-help-type-icon glyphicon glyphicon-book" title="Documentation"> </span>
+            <span ng-show="result.isForum" class="wb-help-type-icon glyphicon glyphicon-comment" title="Forum"> </span>
+            <span ng-show="result.isExample" class="wb-help-type-icon glyphicon glyphicon-wrench" title="Example"> </span>
+
+	        <a target="_blank" ng-href="{{result.link}}">{{result.title}}</a>
+
+            <div class="wb-help-text" ng-bind-html="result.snippet"></div>
+
+            <a class="wb-help-text" target="_blank" ng-href="{{result.link}}">read more</a>
+    	</div>
+
+    </div>
+
+</div>

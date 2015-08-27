@@ -13,7 +13,7 @@ var ngModule = angular.module('developer', [
   require('./diagram').name,
   require('./debugger').name,
   require('./console').name,
-  require('./property-panel').name,
+  require('./help').name,
   'ui.ace'
 ]);
 

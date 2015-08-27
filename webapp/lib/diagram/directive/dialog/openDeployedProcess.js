@@ -4,15 +4,27 @@ var fs = require('fs');
 var dialogTemplate = fs.readFileSync(__dirname + '/openDeployedProcess.html', { encoding: 'utf-8' });
 
 
-var DialogController = ['$scope', '$modalInstance', 'serverSession',
-    function($scope, $modalInstance, serverSession) {
+var DialogController = ['$scope', '$modalInstance', 'workbench', 'processEngineConnection',
+    function($scope, $modalInstance, workbench, processEngineConnection) {
 
-  $scope.processList = [];
+  $scope.processList = [];  
+  $scope.workbench = workbench;
 
-  serverSession.listProcessDefinitions().success(function(definitions) {
-    $scope.processList = definitions;
-    $scope.$digest();
-  });
+      function loadProcessDefinitions() {
+        $scope.processList = processEngineConnection.listProcessDefinitions(function(data) {
+          //console.log(data);
+          $scope.$apply(function () {
+            $scope.processList = data;
+          });
+        });
+      }
+
+      processEngineConnection.addEngineChangedListener(function() {
+        loadProcessDefinitions();
+      });
+
+       // TODO: Think about loading order
+      //loadProcessDefinitions();
 
   $scope.cancel = function() {
     $modalInstance.dismiss('cancel');
@@ -23,14 +35,18 @@ var DialogController = ['$scope', '$modalInstance', 'serverSession',
   };
 }];
 
-function OpenDeployedProcessModal(serverSession) {
+function OpenDeployedProcessModal(workbench) {
   return {
     template: dialogTemplate,
     controller: DialogController,
     resolve: {
-      serverSession: function() {
-        return serverSession;
+      processEngineConnection: function() {
+        return workbench.processEngineConnection;
+      },
+      workbench : function() {
+        return workbench;
       }
+
     }
   }
 };

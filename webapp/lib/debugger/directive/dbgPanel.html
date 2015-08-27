@@ -13,8 +13,11 @@
     </div>
 
     <div class="wb-panel-content dbg-disabled" ng-show="!processDebugger.isSessionOpen()">
-      No connection to process engine.
-      Please <a href ng-click="processDebugger.openSession()">connect</a> in order to use the debugger.
+      No connection to process engine. Please connect:
+
+      <div dbg-engine-connector workbench="workbench">
+      </div> 
+    
     </div>
   </div>
 

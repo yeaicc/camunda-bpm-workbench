@@ -2,24 +2,22 @@ var fs = require('fs');
 
 var angular = require('angular');
 
-var ngModule = angular.module('developer.navigation.perspectiveSwitcher', []);
+var ngModule = angular.module('developer.debugger.engineConnector', []);
 
-var directiveTemplate = fs.readFileSync(__dirname + '/navPerspectiveSwitcher.html', { encoding: 'utf-8' });
+var directiveTemplate = fs.readFileSync(__dirname + '/dbgEngineConnector.html', { encoding: 'utf-8' });
 
-ngModule.directive('navPerspectiveSwitcher', [ '$location', function($location) {
+module.exports = function() {
 
   return {
-    restrict: 'A',
     scope: {
       workbench: '='
     },
     template: directiveTemplate,
-    link: function(scope, element, attrs) {
+    link: function($scope, element, attrs) {
 
-      var workbench = scope.workbench;
-
-
-
+      var workbench = $scope.workbench;
+      $scope.processDebugger = workbench.processDebugger;
+/*
       scope.switchPerspective = function(newPerspective) {
 
         if (newPerspective === workbench.perspective) {
@@ -35,14 +33,10 @@ ngModule.directive('navPerspectiveSwitcher', [ '$location', function($location) 
             processDebugger.openSession();
           }
 
-          // lazy deploy after connection was successfully opened
-          scope.workbench.eventBus.on('OPEN', function(evt) {
-            processDebugger.deployProcess(function(data) {
-              console.debug('deployed process', data);
-              workbench.perspective = 'debug';
-            });            
-          });          
-
+          processDebugger.deployProcess(function(data) {
+            console.debug('deployed process', data);
+            workbench.perspective = 'debug';
+          });
         } else {
           workbench.perspective = newPerspective;
         }
@@ -51,8 +45,7 @@ ngModule.directive('navPerspectiveSwitcher', [ '$location', function($location) 
       scope.isActive = function(perspective) {
         return workbench.perspective === perspective;
       };
+      */
     }
   };
-}]);
-
-module.exports = ngModule;
+};

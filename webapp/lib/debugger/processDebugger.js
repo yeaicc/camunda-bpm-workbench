@@ -55,7 +55,7 @@ var ProcessDebugger = (function() {
    *
    * @param {Workbench} workbench
    */
-  function ProcessDebugger(workbench) {
+  function ProcessDebugger(workbench, defaultServer) {
 
     /** @member the workbench */
     this.workbench = workbench;
@@ -63,6 +63,9 @@ var ProcessDebugger = (function() {
     this.breakpointManager = new BreakpointManager(workbench);
 
     this.executionManager = new ExecutionManager(workbench);
+
+    // URL to connect to
+    this.currentServer = defaultServer; 
 
     /** @member {String} the Id of the currently associated process definition or 'null'*/
     this.processDefinitionId = null;
@@ -72,7 +75,7 @@ var ProcessDebugger = (function() {
 
     // initialize
     registerListeners(workbench.eventBus, this);
-  }
+  }  
 
   /** deploy the current diagram */
   ProcessDebugger.prototype.deployProcess = function(callback) {
@@ -90,6 +93,11 @@ var ProcessDebugger = (function() {
 
     });
   };
+
+  ProcessDebugger.prototype.switchServer = function(server) {
+    this.currentServer = server;
+    this.workbench.serverSession.wsConnection.serverUrl = server.url;
+  }
 
   ProcessDebugger.prototype.isSessionOpen = function() {
     return this.workbench.serverSession.isOpen();

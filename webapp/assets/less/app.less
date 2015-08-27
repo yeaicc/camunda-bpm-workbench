@@ -32,7 +32,7 @@ body {
 }
 
 .wb-console-panel {
-  max-height: 250px;
+  max-height: 150px;
   //overflow: auto;
 
 //  .wb-panel-header {
@@ -41,9 +41,12 @@ body {
 }
 
 
+
 .wb-help-panel {
   min-height: 250px;
 }
+
+
 
 .wb-panel-rows {
   .flex-container(row);
@@ -176,6 +179,7 @@ body {
 .wb-perspective-switcher {
 
   margin: 7px 10px;
+  display: inline-block;
 
   button {
 
@@ -207,6 +211,74 @@ body {
       cursor: default;
     }
   }
+}
+
+.wb-engine-connector {
+  display: inline-block;
+
+  font-size: 16px;
+  color: white;
+
+  margin-left: 5px;
+  border-radius: 5px;
+//  border: solid 1px darken(@navbar-inverse-bg, 15%);
+  padding: 5px 10px;
+
+  div {
+    display: inline-block;
+  }
+  a {
+    color: white;
+  }
+}
+
+.wb-help-ressource {
+  padding: 10px;
+  a {
+    color: #b5152b;
+  }
+}
+
+
+.wb-help-text {
+  font-size: 75%;
+  padding-top: 5px;
+  a {
+    color: #b5152b;
+  }
+  em {
+    background-color: yellow;
+  }
+}
+
+.wb-help-type-icon {
+  padding-right: 5px;
+}
+
+.wb-help-search-query {
+  width: 95%;
+  margin: 10px;
+  em {
+    font-weight: bold;
+  }
+}
+
+.wb-help-search-hint {
+    padding-left: 10px;
+    padding-bottom: 5px;
+    font-size: 100%;
+}
+
+.wb-help-best-practice {
+  background-color: rgba(135, 206, 250, 0.5);
+}
+
+.wb-debugger-connect-dropdown {
+  display: inline-block;
+}
+
+.wb-debugger-connect-button {
+  display: inline-block;
 }
 
 /** customizations for camunda simple grid */

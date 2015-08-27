@@ -21,11 +21,14 @@ var WsConnection = (function() {
    *
    * The connection may be open and closed.
    */
-  function WsConnection(serverUrl) {
+  function WsConnection(server) {
 
-    /**
-     * @member {string} the url of the server to connect to */
-    this.serverUrl = serverUrl;
+    this.serverUrl;
+    if (server) {
+      /**
+       * @member {string} the url of the server to connect to */
+      this.serverUrl = server.url;
+    }
 
     /**
      * @member {array} a list of listers which are invoked if 

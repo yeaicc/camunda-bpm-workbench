@@ -22,6 +22,7 @@ var ngModule = angular.module('developer.debugger.directive', [
   .directive('dbgControls', require('./dbgControls'))
   .directive('dbgExecutions', require('./dbgExecutions'))
   .directive('dbgBreakpoints', require('./dbgBreakpoints'))
-  .directive('dbgVariables', require('./dbgVariables'));
+  .directive('dbgVariables', require('./dbgVariables'))
+  .directive('dbgEngineConnector', require('./dbgEngineConnector'));
 
 module.exports = ngModule;

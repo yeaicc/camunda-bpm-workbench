@@ -220,7 +220,8 @@ var DiagramManager = (function() {
     // register listeners on the renderer
     registerListeners(this.renderer, this);
 
-    if (this.diagramLoaded) {
+    // TODO: Here is something REALLY broken now - investigate!!!!!!
+    if (this.diagramLoaded && this.cachedXML) {
       this.openProcess();
     }
   };

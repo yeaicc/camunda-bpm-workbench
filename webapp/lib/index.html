@@ -7,8 +7,6 @@
 
     <title>camunda BPM workbench</title>
 
-    <base href="/" />
-
     <link href="css/workbench.css" rel="stylesheet">
 
     <link href="vendor/diagram-js/diagram-js.css" rel="stylesheet">
@@ -26,10 +24,12 @@
     <!-- navbar -->
     <div class="navbar navbar-inverse" role="navigation" layout-sizing="initial">
       <div class="navbar-header">
-        <a class="navbar-brand" href="#">{ camunda : workbench }</a>
+        <a class="navbar-brand" href="#">Camunda Workbench</a>
       </div>
 
-      <div class="wb-perspective-switcher pull-right" nav-perspective-switcher workbench="workbench"></div>
+      <div class="wb-perspective-switcher pull-right">
+        <div class="wb-perspective-switcher" nav-perspective-switcher workbench="workbench"></div>
+      </div>
     </div>
 
     <div layout-sizing="fill" layout-horizontal>
@@ -110,12 +110,16 @@
 
         <div resizer></div>
 
-        <div class="wb-panel wb-help-panel" layout-sizing="1">
+        <!-- HELP PANEL -->
+        <div class="wb-panel wb-help-panel" layout-sizing="1" ng-show="workbench.perspective === 'model'">
           <div class="wb-panel-header">
             <h2>
               <span class="glyphicon glyphicon glyphicon-info-sign"></span>
               HELP
             </h2>
+          </div>
+          <div class="wb-panel-part" help-panel workbench="workbench">
+
           </div>
         </div>
 

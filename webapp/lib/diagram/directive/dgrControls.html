@@ -26,7 +26,16 @@
       ng-show="workbench.perspective === 'model'"
       title="Open a deployed process">
         <span class="glyphicon glyphicon-open"></span>
-        Deployed Process
+        From Engine
+    </button>
+
+    <button
+            class="btn btn-xs"
+            ng-click="deployProcess()"
+            ng-show="workbench.perspective === 'model'"
+            title="Deploy the process">
+      <span class="glyphicon glyphicon-save"></span>
+      Deploy to Engine
     </button>
 
     <button
@@ -40,7 +49,7 @@
 
     <div class="dropdown dgr-visualization-checkbox">
       <button type="button" class="btn btn-xs  dropdown-toggle" data-toggle="dropdown" id="dropdown1" aria-haspopup="true" aria-expanded="true">
-        <span class="glyphicon glyphicon-eye-open"></span> Visualization <span class="caret"></span>
+        Visualizations... <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" aria-labelledby="dropdown1">
         <li><a href="#" class="small" data-value="option2" tabIndex="-1"><input type="checkbox"/>&nbsp;Safe Points</a></li>
@@ -51,7 +60,7 @@
 
     <div class="dropdown dgr-visualization-checkbox">
       <button type="button" class="btn btn-xs  dropdown-toggle" data-toggle="dropdown" id="dropdown2" aria-haspopup="true" aria-expanded="true">
-        <span class="glyphicon glyphicon-play"></span> Run Action <span class="caret"></span>
+        Actions... <span class="caret"></span>
       </button>
       <ul class="dropdown-menu" aria-labelledby="dropdown2">
         <li><a href="#" class="small" data-value="option7" tabIndex="-1">&nbsp;Make Executable</a></li>
@@ -65,7 +74,7 @@
     <input type="file" id="dgr-uploader" onchange="this.update()"></input>
   </div>
 
-  <div class="pull-right">
+  <div class="pull-right" ng-show="workbench.perspective === 'debug'">
     <span class="badge alert-info" ng-show="isDeployed()">Deployed</span>
     <span class="badge alert-warning" ng-show="!isDeployed()">Not Deployed</span>
   </div>
