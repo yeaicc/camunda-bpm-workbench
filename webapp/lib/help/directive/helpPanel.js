@@ -50,7 +50,7 @@ var HelpPanelController = [
                             link: docs[i].link,
                             isDocumentation: (docs[i].type=='Documentation'),
                             isForum: (docs[i].type=='Forum Discussion'),
-                            isExample: (docs[i].type=='Example Project')                            
+                            isExample: (docs[i].type=='Example Project')
                         }
                         if (snippets[ docs[i].id ]) {
                              //$scope.thisCanBeusedInsideNgBindHtml = $sce.trustAsHtml(someHtmlVar);
@@ -59,7 +59,7 @@ var HelpPanelController = [
                         $scope.searchResults.push( searchResult );
                     }
                 });
-            });            
+            });
         }
 
         function changeElement(element) {
@@ -71,7 +71,7 @@ var HelpPanelController = [
                 $scope.searchQuery = "";
             }
 
-            $.get( "http://ec2-52-19-129-229.eu-west-1.compute.amazonaws.com:8080/best-practices/index.json", function( data ) {
+            $.get( "https://ec2-52-19-129-229.eu-west-1.compute.amazonaws.com:8080/best-practices/index.json", function( data ) {
                 var results = [];
                 if (element) {
                     for (var i = 0; i < data.length; i++) {
