@@ -41,7 +41,7 @@ public class DebugCommandContext extends CommandContext {
     this.debugSessionFactory = debugSessionFactory;
   }
 
-  public void performOperation(AtomicOperation executionOperation, ExecutionEntity execution) {
+  public void performOperation(AtomicOperation executionOperation, ExecutionEntity execution, boolean async) {
     List<DebugSession> openSessions = debugSessionFactory.getSessions();
     final ExecutionEntity executionEntity = (ExecutionEntity) execution;
 
@@ -49,7 +49,7 @@ public class DebugCommandContext extends CommandContext {
       if(debugSessionFactory.isSuspend()) {
         debugSessionFactory.waitForOpenSession(new SuspendedExecutionImpl(executionEntity, executionOperation));
       } else {
-        super.performOperation(executionOperation, executionEntity);
+        super.performOperation(executionOperation, executionEntity, async);
         return;
       }
     }
@@ -118,7 +118,7 @@ public class DebugCommandContext extends CommandContext {
     }
 
     try {
-      super.performOperation(executionOperation, execution);
+      super.performOperation(executionOperation, execution, async);
       if(currentSession != null) {
         // check whether process instance is ended:
         ExecutionEntity processInstance = execution.getProcessInstance();

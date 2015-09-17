@@ -28,7 +28,7 @@ var HelpPanelController = [
         $scope.executeSearch = function() {
             var q = "q=" + encodeURIComponent($scope.searchQuery.replace(' ', '+'));
             var fragSize = 300; // length of snippet
-            var getUrl = "http://ec2-52-19-129-229.eu-west-1.compute.amazonaws.com:8080/solr/" + "hackdays" + "/select?" + q + "&fl=title,link,type,id&wt=json&hl=true&hl.fl=text&hl.fragsize=" + fragSize;
+            var getUrl = "https://ec2-52-19-129-229.eu-west-1.compute.amazonaws.com:8080/solr/" + "hackdays" + "/select?" + q + "&fl=title,link,type,id&wt=json&hl=true&hl.fl=text&hl.fragsize=" + fragSize;
             $scope.lastSearchQuery = $scope.searchQuery;
 
             console.log(getUrl);
@@ -60,7 +60,7 @@ var HelpPanelController = [
                         $scope.searchResults.push( searchResult );
                     }
                 });
-            });            
+            });
         }
 
         function changeElement(element) {
@@ -72,7 +72,7 @@ var HelpPanelController = [
                 $scope.searchQuery = "";
             }
 
-            $.get( "http://ec2-52-19-129-229.eu-west-1.compute.amazonaws.com:8080/best-practices/index.json", function( data ) {
+            $.get( "https://ec2-52-19-129-229.eu-west-1.compute.amazonaws.com:8080/best-practices/index.json", function( data ) {
                 var results = [];
                 if (element) {
                     for (var i = 0; i < data.length; i++) {
