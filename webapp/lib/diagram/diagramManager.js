@@ -21,6 +21,7 @@ var propertiesPanelModule = require('bpmn-js-properties-panel/lib'),
     camundaModdlePackage = require('bpmn-js-properties-panel/lib/provider/camunda/camunda-moddle');
 
 require('jquery');
+var angular = require('angular');
 var $ = window.jQuery;
 
 var propertiesPanelConfig = {
@@ -74,29 +75,55 @@ var DiagramManager = (function() {
         }
       },
 
+      triggerSearch: function(searchText) {
+        diagramManager.latestSearch = searchText;
+      },
+      getLatestSearch: function() {
+        return diagramManager.latestSearch;
+      },
+
       addHighlights: function(highlighContent, errorMessageCssClass, highlightCssClass) {
         var overlays = diagramManager.renderer.get('overlays');
         var canvas = diagramManager.renderer.get('canvas');
 
+        for (var i=0; i<diagramManager.activeOverlays.length; i++) {
+          overlays.remove(diagramManager.activeOverlays[i]);
+        }
+
+        diagramManager.activeOverlays = [];
 
         for (var key in highlighContent) {
             var errors = highlighContent[key];
 
             var errorText = "";
+            var searchText = "";
             for (var i=0; i < errors.length; i++) {
                 errorText = errorText + errors[i] + "<br>";
+                searchText = searchText + errors[i] + " ";
             }
 
-            // attach an overlay to a node
-            overlays.add(key, {
-              position: {
-                bottom: -10,
-                left: 10
-              },
-              html: '<div class="'+errorMessageCssClass+'">'+errorText+'</div>'
-            });
+            searchText = searchText.replace(/'/g, '');
 
-            canvas.addMarker(key, highlightCssClass)
+            var html = '<div class="'+errorMessageCssClass+'"><div class="'+errorMessageCssClass+'-icon pull-right">' +
+                '<span class="glyphicon glyphicon-search" ng-click="triggerSearch(\''  +  searchText +  '\')"></span></div>'+errorText+'</div>';
+            var helpOverlay = angular.element(html);
+
+            diagramManager.$compile(helpOverlay)(diagramManager.$scope);
+
+            try {
+              // attach an overlay to a node
+              var overlayId = overlays.add(key, {
+                position: {
+                  bottom: -10,
+                  left: 10
+                },
+                html: helpOverlay
+              });
+              diagramManager.activeOverlays.push(overlayId);
+
+              canvas.addMarker(key, highlightCssClass)
+            }
+            catch (e) {} // we get elements that are not visualized (like messageEventDefinition) - igfnore for now (TODO)
 
         };
       },
@@ -147,7 +174,7 @@ var DiagramManager = (function() {
    * @classdesc manages the Bpmn-js resources
    * @param {Workbench} the workbench
    */
-  function DiagramManager(workbench) {
+  function DiagramManager(workbench, $scope, $compile) {
 
     /** @member {Workbench} the current workbench */
     this.workbench = workbench;
@@ -162,6 +189,13 @@ var DiagramManager = (function() {
     this.selectedElements = [];
 
     this.workbench.diagramProvider = getDiagramProvider(this);
+
+    this.latestSearch = null;
+
+    this.activeOverlays = [];
+
+    this.$scope = $scope;
+    this.$compile = $compile;
   }
 
   /**
@@ -182,6 +216,7 @@ var DiagramManager = (function() {
       // construct new modeler
       this.renderer = new BpmnModeler({
         container: element,
+        keyboard: { bindTo: document.body },        
         position: 'absolute',
         debugOverlay: {
           buttons: {

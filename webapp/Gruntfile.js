@@ -145,7 +145,9 @@ module.exports = function (grunt) {
         files: [
           'lib/index.html',
           'assets/img/**.*',
-          'assets/font/workbench.*'
+          'assets/font/workbench.*',
+          'lib/**/*.js',
+          'lib/**/*.html'
         ],
         tasks: [ 'copy:resources' ]
       }
@@ -156,6 +158,16 @@ module.exports = function (grunt) {
           port: 9000,
           hostname: '*',
           base: 'dist/'
+/*          middleware: function(connect, options, middlewares) {
+            middlewares.unshift(function(req, res, next) {
+              console.info('res.setHeader', res.setHeader)
+                res.setHeader('Access-Control-Allow-Origin', '*');
+                res.setHeader('Access-Control-Allow-Methods', '*');
+                next();
+            });
+
+            return middlewares;
+          }*/
         }
       }
     }

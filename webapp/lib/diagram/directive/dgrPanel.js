@@ -21,11 +21,15 @@ var OpenDeployedProcessModal = require('./dialog/openDeployedProcess');
 
 var directiveTemplate = fs.readFileSync(__dirname + '/dgrPanel.html', { encoding: 'utf-8' });
 
-var DiagramController = ['$scope', '$modal', function($scope, $modal) {
+var DiagramController = ['$scope', '$modal', '$compile', function($scope, $modal, $compile) {
 
   // initialize a new diagram manager
-  $scope.diagramManager = new DiagramManager($scope.workbench);
+  $scope.diagramManager = new DiagramManager($scope.workbench, $scope, $compile);
 
+
+  $scope.triggerSearch = function (searchText) {
+        $scope.diagramManager.latestSearch = searchText;
+  };
 
   function chooseProcess() {
     // open dialog

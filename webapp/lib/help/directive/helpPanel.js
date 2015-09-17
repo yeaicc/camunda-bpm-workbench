@@ -50,7 +50,8 @@ var HelpPanelController = [
                             link: docs[i].link,
                             isDocumentation: (docs[i].type=='Documentation'),
                             isForum: (docs[i].type=='Forum Discussion'),
-                            isExample: (docs[i].type=='Example Project')                            
+                            isExample: (docs[i].type=='Example Project'),                           
+                            isCommunityExtension: (docs[i].type=='Community Extension')                            
                         }
                         if (snippets[ docs[i].id ]) {
                              //$scope.thisCanBeusedInsideNgBindHtml = $sce.trustAsHtml(someHtmlVar);
@@ -106,6 +107,15 @@ var HelpPanelController = [
             }
 
             changeElement(element)
+        });
+
+        $scope.$watch(function() {
+            if(!!workbench.diagramProvider) {
+                return workbench.diagramProvider.getLatestSearch();
+            }
+        }, function(searchText) {
+            $scope.searchQuery = searchText;
+            $scope.executeSearch();
         });
 
 }];
