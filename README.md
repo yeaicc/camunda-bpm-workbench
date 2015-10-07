@@ -76,6 +76,9 @@ Or use the [`docker-compose.yml`](docker/docker-compose.yml) in the [`docker/`](
 docker-compose up workbench
 ```
 
+# License
+
+This project is licensed under the GNU AFFERO GENERAL PUBLIC LICENSE (AGPL)
 
 [ace]: http://ace.c9.io
 [bpmnio]: http://bpmn.io
