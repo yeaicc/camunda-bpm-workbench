@@ -55,7 +55,7 @@
     "diagram-js": "^0.9.0",
     "diagram-js-origin": "^0.4.0",
     "didi": "0.0.4",
-    "jquery": "^2.1.1",
+    "jquery": "^3.5.0",
     "lodash": "^3.0.0",
     "min-dom": "^0.2.0"
   }
